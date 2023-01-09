@@ -1,7 +1,7 @@
 
-#include <iostream>
+#include "Graphics/GE.h"
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+int main(int argc, char * args[]) {
+    GraphicsEngine ge;
+    return ge._execute();;
 }
