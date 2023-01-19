@@ -22,7 +22,13 @@ set(src
         src/Graphics/GE.h
         src/Graphics/GE_init.cpp
         src/Graphics/GE_close.cpp
-        src/Graphics/GE_rend.cpp)
+        src/Graphics/GE_rend.cpp
+        src/Game/GameObject.cpp
+        src/Game/GameObject.h
+        src/Game/GameSprite.cpp
+        src/Game/GameSprite.h
+        src/Game/GameConfiguration.cpp
+        src/Game/GameConfiguration.h)
 
 add_executable(${project_name} ${src})
 

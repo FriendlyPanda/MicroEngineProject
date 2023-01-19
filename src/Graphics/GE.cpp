@@ -1,14 +1,15 @@
 //
-// Created by adamh on 03/01/2023.
+// Created by JFH on 03/01/2023.
 //
 
 #include "GE.h"
 
 GraphicsEngine::GraphicsEngine() {
     geWindow = nullptr;
-    geScreenSurface = nullptr;
-    geCurrentSurface = nullptr;
+    geTexture = nullptr;
+    geRenderer = nullptr;
     exit = false;
+    imgFlags = IMG_INIT_PNG;
 }
 
 int GraphicsEngine::_execute() {
@@ -17,19 +18,30 @@ int GraphicsEngine::_execute() {
         return -1;
     }
 
-    geCurrentSurface = SDL_LoadBMP("Assets/Hello.bmp");
-    if(geCurrentSurface == nullptr){
-        printf("ERROR:\tCould not load image\nSDL_ERROR: %s\n", SDL_GetError());
-        _close();
-        return -1;
-    }
-    SDL_BlitSurface(geCurrentSurface, nullptr, geScreenSurface, nullptr);
-    SDL_UpdateWindowSurface(geWindow);
+    geTexture = loadTexture("Assets/Err.png");
+
+
 
     while(!exit){
+
+        while (SDL_PollEvent(&event) != 0) {
+            if (event.type == SDL_QUIT) {
+                exit = true;
+            }
+        }
+
         _render();
     }
 
     _close();
     return 0;
+}
+
+SDL_Texture * GraphicsEngine::loadTexture(std::string path) {
+    SDL_Texture * finalTexture = IMG_LoadTexture(geRenderer, path.c_str());
+    if(finalTexture == nullptr){
+        printf("ERROR:\t\tCould not create texture.\nSDL_ERROR: %s\n", SDL_GetError());
+    }
+
+    return finalTexture;
 }

@@ -1,5 +1,5 @@
 //
-// Created by adamh on 03/01/2023.
+// Created by JFH on 03/01/2023.
 //
 
 
@@ -22,25 +22,31 @@
 
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#include <SDL_image.h>
 #include <cstdio>
+#include <string>
 
 #define DEFAULT_SCREEN_WIDTH 640
 #define DEFAULT_SCREEN_HEIGHT 480
 
+
 class GraphicsEngine{
 private:
     SDL_Window * geWindow;
-    SDL_Surface * geScreenSurface;
-    SDL_Surface * geCurrentSurface;
-    SDL_Event event;
+    SDL_Event event{};
     bool exit;
+    int imgFlags;
+    SDL_Texture * geTexture;
+    SDL_Renderer * geRenderer;
+    SDL_Rect geRect;
 public:
     GraphicsEngine();
     int _execute();
+    void _close();
 private:
     int _init();
     int _render();
-    void _close();
+    SDL_Texture * loadTexture(std::string path);
 };
 
 

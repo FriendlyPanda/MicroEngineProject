@@ -1,17 +1,13 @@
 //
-// Created by adamh on 08/01/2023.
+// Created by JFH on 08/01/2023.
 //
 #include "GE.h"
 
 int GraphicsEngine::_render() {
 
-    //get updates
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            exit = true;
-        }
-    }
-
+    SDL_RenderClear(geRenderer);
+    SDL_RenderCopy(geRenderer,geTexture, nullptr, &geRect);
+    SDL_RenderPresent(geRenderer);
     return 0;
 
 }
