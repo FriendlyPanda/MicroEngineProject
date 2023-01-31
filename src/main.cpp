@@ -3,20 +3,28 @@
 #include "Graphics/GE.h"
 #include "Game/GameConfiguration.h"
 
+
+
+
+
 int main(int argc, char * args[]) {
     GameConfiguration gc;
-    std::string message1 = "Hello";
-    std::string message2 = "World";
-    int val = 69;
-    gc.set("FirstMessage", &message1);
-    gc.set("SecondMessage", &message2);
-    gc.set("intVal", &val);
-    gc.print();
-
-    std::cout <<  *gc.get<std::string>("FirstMessage") << " " <<  *gc.get<std::string>("SecondMessage") << " " << *(gc.get<int>("intVal"))<< std::endl;
     gc.clean();
-    //GraphicsEngine ge;
-    //ge._close();
-    return 0;
-    //return ge._execute();;
+    int gameSpeed = 60;
+    gc.set(GAME_SPEED, &gameSpeed);
+
+#ifndef NDEBUG
+    spdlog::set_level(spdlog::level::debug);
+// debug code
+    spdlog::warn("Debug mode.");
+    spdlog::info("Value for SCREEN_HEIGHT = {0}",SCREEN_HEIGHT);
+    spdlog::info("Value for SCREEN_WIDTH = {0}",SCREEN_WIDTH);
+    spdlog::info("Value for FILLER = {0}",FILLER);
+    spdlog::info("Value for RENDER = {0}",RENDER);
+#endif
+
+
+
+    GraphicsEngine * ge = new GraphicsEngine(&gc);
+    return ge->_execute();
 }

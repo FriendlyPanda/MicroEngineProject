@@ -21,11 +21,11 @@ bool GameConfiguration::saveToFile(std::string path) {
     return false;
 }
 
-void GameConfiguration::set(const std::string& key, void * val) {
+void GameConfiguration::set(config key, void * val) {
     settings[key] = val;
 }
 
-void GameConfiguration::remove(const std::string& key) {
+void GameConfiguration::remove(config key) {
     settings[key] = nullptr;
     settings.erase(key);
 }

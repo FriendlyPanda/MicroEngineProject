@@ -25,6 +25,7 @@
 #include <SDL_image.h>
 #include <cstdio>
 #include <string>
+#include "../Game/GameConfiguration.h"
 
 #define DEFAULT_SCREEN_WIDTH 640
 #define DEFAULT_SCREEN_HEIGHT 480
@@ -34,13 +35,15 @@ class GraphicsEngine{
 private:
     SDL_Window * geWindow;
     SDL_Event event{};
-    bool exit;
+    bool exit = false;
     int imgFlags;
     SDL_Texture * geTexture;
     SDL_Renderer * geRenderer;
     SDL_Rect geRect;
+    GameConfiguration * gc;
 public:
     GraphicsEngine();
+    GraphicsEngine(GameConfiguration * gameConfig);
     int _execute();
     void _close();
 private:

@@ -10,6 +10,7 @@ GraphicsEngine::GraphicsEngine() {
     geRenderer = nullptr;
     exit = false;
     imgFlags = IMG_INIT_PNG;
+    gc = nullptr;
 }
 
 int GraphicsEngine::_execute() {
@@ -44,4 +45,13 @@ SDL_Texture * GraphicsEngine::loadTexture(std::string path) {
     }
 
     return finalTexture;
+}
+
+GraphicsEngine::GraphicsEngine(GameConfiguration * gameConfig) {
+    geWindow = nullptr;
+    geTexture = nullptr;
+    geRenderer = nullptr;
+    exit = false;
+    imgFlags = IMG_INIT_PNG;
+    gc = gameConfig;
 }

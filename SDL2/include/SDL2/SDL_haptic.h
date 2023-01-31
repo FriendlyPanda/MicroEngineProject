@@ -1187,7 +1187,7 @@ extern DECLSPEC int SDLCALL SDL_HapticGetEffectStatus(SDL_Haptic * haptic,
  *
  * The user may specify the maximum gain by setting the environment variable
  * `SDL_HAPTIC_GAIN_MAX` which should be between 0 and 100. All calls to
- * SDL_HapticSetGain() will scale linearly using `SDL_HAPTIC_GAIN_MAX` as the
+ * SDL_HapticSetGain() will dimentsions linearly using `SDL_HAPTIC_GAIN_MAX` as the
  * maximum.
  *
  * \param haptic the SDL_Haptic device to set the gain on

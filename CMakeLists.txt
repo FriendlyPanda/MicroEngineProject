@@ -4,7 +4,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(project_name MEP)
 project(${project_name})
 
-
 # Current SDL2 version: 2.26.2
 set(SDL2_INCLUDE_DIR SDL2/include/SDL2)
 set(SDL2_LIB_DIR SDL2/lib)
@@ -15,6 +14,21 @@ set(SDL2_IMAGE_LIB_DIR SDL2_image/lib)
 include_directories(${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR})
 
 link_directories(${SDL2_LIB_DIR} ${SDL2_IMAGE_LIB_DIR})
+
+set(LIBS SDL2main SDL2 SDL2_image)
+message(${CMAKE_BUILD_TYPE})
+IF(${CMAKE_BUILD_TYPE} MATCHES Debug)
+    message("debug mode")
+    set(spdlog_DIR spdlog)
+
+    if(NOT TARGET spdlog)
+        # Stand-alone build
+        find_package(spdlog REQUIRED)
+    endif()
+
+    set(LIBS ${LIBS} spdlog::spdlog)
+ENDIF(${CMAKE_BUILD_TYPE} MATCHES Debug)
+message(${LIBS})
 
 set(src
         src/main.cpp
@@ -28,9 +42,10 @@ set(src
         src/Game/GameSprite.cpp
         src/Game/GameSprite.h
         src/Game/GameConfiguration.cpp
-        src/Game/GameConfiguration.h)
+        src/Game/GameConfiguration.h
+        src/Game/GameNode.h src/Graphics/TextureManager.h)
 
 add_executable(${project_name} ${src})
 
-set(LIBS SDL2main SDL2 SDL2_image)
+
 target_link_libraries(${project_name} ${LIBS})

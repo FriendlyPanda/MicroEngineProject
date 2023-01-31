@@ -1120,7 +1120,7 @@ extern "C" {
 #define SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH "SDL_MOUSE_FOCUS_CLICKTHROUGH"
 
 /**
- *  \brief  A variable setting the speed scale for mouse motion, in floating point, when the mouse is not in relative mode
+ *  \brief  A variable setting the speed dimentsions for mouse motion, in floating point, when the mouse is not in relative mode
  */
 #define SDL_HINT_MOUSE_NORMAL_SPEED_SCALE    "SDL_MOUSE_NORMAL_SPEED_SCALE"
 
@@ -1163,7 +1163,7 @@ extern "C" {
 #define SDL_HINT_MOUSE_RELATIVE_SCALING "SDL_MOUSE_RELATIVE_SCALING"
 
 /**
- *  \brief  A variable setting the scale for mouse motion, in floating point, when the mouse is in relative mode
+ *  \brief  A variable setting the dimentsions for mouse motion, in floating point, when the mouse is in relative mode
  */
 #define SDL_HINT_MOUSE_RELATIVE_SPEED_SCALE    "SDL_MOUSE_RELATIVE_SPEED_SCALE"
 
@@ -1174,7 +1174,7 @@ extern "C" {
  *    "0"       - Relative mouse motion will be unscaled (the default)
  *    "1"       - Relative mouse motion will be scaled using the system mouse acceleration curve.
  *
- *    If SDL_HINT_MOUSE_RELATIVE_SPEED_SCALE is set, that will override the system speed scale.
+ *    If SDL_HINT_MOUSE_RELATIVE_SPEED_SCALE is set, that will override the system speed dimentsions.
  */
 #define SDL_HINT_MOUSE_RELATIVE_SYSTEM_SCALE    "SDL_MOUSE_RELATIVE_SYSTEM_SCALE"
 
@@ -2036,7 +2036,7 @@ extern "C" {
  *  This hint must be set before initializing the video subsystem.
  *
  *  The main purpose of declaring DPI awareness is to disable OS bitmap scaling of SDL windows on monitors with 
- *  a DPI scale factor.
+ *  a DPI dimentsions factor.
  * 
  *  This hint is equivalent to requesting DPI awareness via external means (e.g. calling SetProcessDpiAwarenessContext)
  *  and does not cause SDL to use a virtualized coordinate system, so it will generally give you 1 SDL coordinate = 1 pixel
@@ -2052,7 +2052,7 @@ extern "C" {
  *    "permonitor"   - Request per-monitor DPI awareness. (Windows 8.1 and later).
  *    "permonitorv2" - Request per-monitor V2 DPI awareness. (Windows 10, version 1607 and later).
  *                     The most visible difference from "permonitor" is that window title bar will be scaled
- *                     to the visually correct size when dragging between monitors with different scale factors.
+ *                     to the visually correct size when dragging between monitors with different dimentsions factors.
  *                     This is the preferred DPI awareness level.
  *
  * If the requested DPI awareness is not available on the currently running OS, SDL will try to request the best
@@ -2074,10 +2074,10 @@ extern "C" {
  * 
  *  This variable can be set to the following values:
  *    "0"       - SDL coordinates equal Windows coordinates. No automatic window resizing when dragging
- *                between monitors with different scale factors (unless this is performed by
+ *                between monitors with different dimentsions factors (unless this is performed by
  *                Windows itself, which is the case when the process is DPI unaware).
  *    "1"       - SDL coordinates are in DPI-scaled points. Automatically resize windows as needed on
- *                displays with non-100% scale factors.
+ *                displays with non-100% dimentsions factors.
  */
 #define SDL_HINT_WINDOWS_DPI_SCALING "SDL_WINDOWS_DPI_SCALING"
 

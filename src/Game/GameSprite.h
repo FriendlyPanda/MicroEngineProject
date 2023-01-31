@@ -8,22 +8,39 @@
 
 #include <string>
 #include "SDL.h"
+#include <SDL_image.h>
+#include "GameNode.h"
 
-class GameSprite {
+/**
+ * Sprite node inheriting from GameNode
+ * this node holds graphical information for the objects, it is not required for an object to have a sprite,
+ * but all sprites require parents.
+ */
+class GameSprite: private GameNode{
 private:
     SDL_Texture * gTexture;
-    unsigned int gTWidth;
-    unsigned int gTHeight;
+    float spriteAnimationSpeed = 1;
+    unsigned int frame = 0;
+    unsigned int numberOfFrames = 0;
+    clock_t frameTimer; // used for determining how fast to change the frames.
+    SDL_Rect * frames;
+    SDL_Point dimentsions;
 public:
     GameSprite();
-
-    GameSprite(SDL_Texture *gTexture, unsigned int gTWidth, unsigned int gTHeight);
-
-    SDL_Texture * loadTexture(std::string path);
+    GameSprite(SDL_Texture *gTexture);
+    SDL_Texture * loadTexture(const std::string& path, int numbOfFrames, int numbOfFramesVer, int numbOfFramesHor, SDL_Point frameSize);
+    unsigned int getTextureWidth();
+    unsigned int getTextureHeight();
     unsigned int getWidth();
     unsigned int getHeight();
+    [[nodiscard]] unsigned int getCurrentFrame() const;
+    void setFrame(int frameIndex);
+    [[nodiscard]] unsigned int getNumberOfFrames() const;
+    void render();
     ~GameSprite();
     void free();
+private:
+    static SDL_Point getsize(SDL_Texture *texture);
 };
 
 

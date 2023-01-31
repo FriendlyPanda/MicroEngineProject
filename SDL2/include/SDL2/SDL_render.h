@@ -509,9 +509,9 @@ extern DECLSPEC int SDLCALL SDL_GetTextureBlendMode(SDL_Texture * texture,
                                                     SDL_BlendMode *blendMode);
 
 /**
- * Set the scale mode used for texture scale operations.
+ * Set the dimentsions mode used for texture dimentsions operations.
  *
- * If the scale mode is not supported, the closest supported mode is chosen.
+ * If the dimentsions mode is not supported, the closest supported mode is chosen.
  *
  * \param texture The texture to update.
  * \param scaleMode the SDL_ScaleMode to use for texture scaling.
@@ -525,10 +525,10 @@ extern DECLSPEC int SDLCALL SDL_SetTextureScaleMode(SDL_Texture * texture,
                                                     SDL_ScaleMode scaleMode);
 
 /**
- * Get the scale mode used for texture scale operations.
+ * Get the dimentsions mode used for texture dimentsions operations.
  *
  * \param texture the texture to query.
- * \param scaleMode a pointer filled in with the current scale mode.
+ * \param scaleMode a pointer filled in with the current dimentsions mode.
  * \return 0 on success, or -1 if the texture is not valid.
  *
  * \since This function is available since SDL 2.0.12.
@@ -958,7 +958,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_RenderIsClipEnabled(SDL_Renderer * renderer
 
 
 /**
- * Set the drawing scale for rendering on the current target.
+ * Set the drawing dimentsions for rendering on the current target.
  *
  * The drawing coordinates are scaled by the x/y scaling factors before they
  * are used by the renderer. This allows resolution independent drawing with a
@@ -983,9 +983,9 @@ extern DECLSPEC int SDLCALL SDL_RenderSetScale(SDL_Renderer * renderer,
                                                float scaleX, float scaleY);
 
 /**
- * Get the drawing scale for the current target.
+ * Get the drawing dimentsions for the current target.
  *
- * \param renderer the renderer from which drawing scale should be queried
+ * \param renderer the renderer from which drawing dimentsions should be queried
  * \param scaleX a pointer filled in with the horizontal scaling factor
  * \param scaleY a pointer filled in with the vertical scaling factor
  *
