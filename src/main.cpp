@@ -10,7 +10,7 @@
 int main(int argc, char * args[]) {
     GameConfiguration gc;
     gc.clean();
-    int gameSpeed = 60;
+    int gameSpeed = 10;
     gc.set(GAME_SPEED, &gameSpeed);
 
 #ifndef NDEBUG

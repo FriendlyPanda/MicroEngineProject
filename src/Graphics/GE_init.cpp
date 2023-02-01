@@ -44,11 +44,5 @@ int GraphicsEngine::_init() {
         _close();
         return -1;
     }
-
-    geRect.h = 64;
-    geRect.w = 64;
-    geRect.x = 0;
-    geRect.y = 0;
-
     return 0;
 }

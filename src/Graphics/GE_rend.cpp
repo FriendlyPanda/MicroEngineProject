@@ -6,7 +6,7 @@
 int GraphicsEngine::_render() {
 
     SDL_RenderClear(geRenderer);
-    SDL_RenderCopy(geRenderer,geTexture, nullptr, &geRect);
+    geTexture->render();
     SDL_RenderPresent(geRenderer);
     return 0;
 

@@ -2,11 +2,13 @@
 // Created by JFH on 03/01/2023.
 //
 
+#include <cmath>
 #include "GE.h"
+
 
 GraphicsEngine::GraphicsEngine() {
     geWindow = nullptr;
-    geTexture = nullptr;
+    geTexture = new GameSprite();
     geRenderer = nullptr;
     exit = false;
     imgFlags = IMG_INIT_PNG;
@@ -19,11 +21,19 @@ int GraphicsEngine::_execute() {
         return -1;
     }
 
-    geTexture = loadTexture("Assets/Err.png");
+    GameSprite newTexture = GameSprite();
+    SDL_Point scale;
+    scale.x = 32;
+    scale.y = 32;
+    newTexture.setConfig(gc);
+    newTexture.loadTexture("Assets/Err.png",4,2,2,scale);
+    newTexture.setSpeed(0.1);
 
-
+    geTexture = &newTexture;
 
     while(!exit){
+
+        Uint64 start = SDL_GetPerformanceCounter();
 
         while (SDL_PollEvent(&event) != 0) {
             if (event.type == SDL_QUIT) {
@@ -32,6 +42,11 @@ int GraphicsEngine::_execute() {
         }
 
         _render();
+
+        Uint64 end = SDL_GetPerformanceCounter();
+
+        float elapsedMS = (float)(end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f; // get the ms
+        SDL_Delay(std::floor((1000.0f/((float)*gc->get<int>(GAME_SPEED))) - elapsedMS));
     }
 
     _close();

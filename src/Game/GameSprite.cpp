@@ -10,11 +10,12 @@
  */
 GameSprite::GameSprite(){
     gTexture = nullptr;
-    dimentsions.x = 1;
-    dimentsions.y = 1;
-    frames = new SDL_Rect[10];
-    clock_t currentTime = clock();
-    frameTimer = currentTime + (long)(CLOCKS_PER_SEC / ((*getConfig()->get<float>(GAME_SPEED)) * spriteAnimationSpeed));
+    dimentions.x = 1;
+    dimentions.y = 1;
+    frames = new SDL_Rect[1];
+    frames[0] = sdlRect(0,0,0,0);
+    spriteAnimationSpeed = 0;
+    frameTimer = 0;
 }
 
 /**
@@ -36,25 +37,34 @@ SDL_Texture * GameSprite::loadTexture(const std::string& path, int numbOfFrames,
         printf("Warning, more frames than possible combinations, defoulting to maximum");
         numbOfFrames = (numbOfFramesHor * numbOfFramesVer);
     }
-    this->numberOfFrames = numbOfFrames;
-    frames = new SDL_Rect[numberOfFrames];
 
-    SDL_Rect frameRect;
-    for(int yy = 0; yy < numbOfFramesVer; yy++){
-        for(int xx = 0; xx < numbOfFramesHor; xx++){
-            frames[(yy * numbOfFramesHor)+(xx)] = sdlRect(xx * frameSize.x, yy * frameSize.y, frameSize.x, frameSize.y);
-            if(((yy * numbOfFramesHor)+(xx)) > numbOfFrames){
-                break;
+    numberOfFrames = numbOfFrames;
+
+    if(numberOfFrames > 1){
+        this->numberOfFrames = numbOfFrames;
+        frames = new SDL_Rect[numberOfFrames];
+
+        for(int yy = 0; yy < numbOfFramesVer; yy++){
+            for(int xx = 0; xx < numbOfFramesHor; xx++){
+                frames[(yy * numbOfFramesHor)+(xx)] = sdlRect(xx * frameSize.x, yy * frameSize.y, frameSize.x, frameSize.y);
+                if(((yy * numbOfFramesHor)+(xx)) > numbOfFrames){
+                    break;
+                }
             }
         }
+    }else{
+        this->numberOfFrames = 0;
+        frames = new SDL_Rect[1];
+        frames[0] = sdlRect(0, 0, frameSize.x, frameSize.y);
     }
 
-    SDL_Texture * finalTexture = IMG_LoadTexture(getConfig()->get<SDL_Renderer>(RENDER), path.c_str());
+    GameConfiguration * coolGC = getConfig();
+    SDL_Texture * finalTexture = IMG_LoadTexture(coolGC->get<SDL_Renderer>(RENDER), path.c_str());
     if(finalTexture == nullptr){
         printf("ERROR:\t\tCould not create texture.\nSDL_ERROR: %s\n", SDL_GetError());
     }
     gTexture = finalTexture;
-    dimentsions = getsize(gTexture);
+    dimentions = getsize(gTexture);
 
     return finalTexture;
 }
@@ -64,7 +74,7 @@ SDL_Texture * GameSprite::loadTexture(const std::string& path, int numbOfFrames,
  * @return width of the Texture in pixels
  */
 unsigned int GameSprite::getTextureWidth() {
-    return dimentsions.x;
+    return dimentions.x;
 }
 
 /**
@@ -79,7 +89,7 @@ GameSprite::~GameSprite() {
  * @return unsigned int representing height
  */
 unsigned int GameSprite::getTextureHeight() {
-    return dimentsions.y;
+    return dimentions.y;
 }
 
 
@@ -87,8 +97,10 @@ unsigned int GameSprite::getTextureHeight() {
  * free the resources from the memory
  */
 void GameSprite::free() {
-    SDL_DestroyTexture(gTexture);
-    gTexture = nullptr;
+    if(gTexture != nullptr) {
+        SDL_DestroyTexture(gTexture);
+        gTexture = nullptr;
+    }
     delete frames;
 }
 
@@ -99,7 +111,7 @@ void GameSprite::render() {
     if(numberOfFrames > 0){
         clock_t currentTime = clock();
         if(currentTime > frameTimer){ // this will definitely not come back to bite me later on lol [foreshadowing]
-            frameTimer = currentTime + (long)(CLOCKS_PER_SEC / ((*getConfig()->get<float>(GAME_SPEED)) * spriteAnimationSpeed));
+            frameTimer = currentTime + (long)(CLOCKS_PER_SEC / ((*getConfig()->get<float>(GAME_SPEED)) / spriteAnimationSpeed));
 
             SDL_RenderCopy(getConfig()->get<SDL_Renderer>(RENDER),gTexture,&frames[frame],&frames[frame]);
             frame++;
@@ -118,9 +130,9 @@ GameSprite::GameSprite(SDL_Texture *gTexture) {
     numberOfFrames = 0;
     frame = 0;
     this->gTexture = gTexture;
-    dimentsions = getsize(gTexture);
+    dimentions = getsize(gTexture);
     frames = new SDL_Rect[numberOfFrames + 1];
-    frames[frame] = sdlRect(0,0,dimentsions.x, dimentsions.y);
+    frames[frame] = sdlRect(0, 0, dimentions.x, dimentions.y);
 }
 
 /**
@@ -172,4 +184,8 @@ unsigned int GameSprite::getWidth() {
  */
 unsigned int GameSprite::getHeight() {
     return frames[frame].h;
+}
+
+void GameSprite::setSpeed(float speed) {
+    spriteAnimationSpeed = speed;
 }

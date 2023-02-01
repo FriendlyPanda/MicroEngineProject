@@ -5,7 +5,8 @@
 #include "GE.h"
 
 void GraphicsEngine::_close() {
-    SDL_DestroyTexture(geTexture);
+    delete geTexture;
+    geTexture = nullptr;
     SDL_DestroyRenderer(geRenderer);
     SDL_DestroyWindow(geWindow);
 

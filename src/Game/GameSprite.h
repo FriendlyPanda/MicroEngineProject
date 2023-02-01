@@ -16,7 +16,7 @@
  * this node holds graphical information for the objects, it is not required for an object to have a sprite,
  * but all sprites require parents.
  */
-class GameSprite: private GameNode{
+class GameSprite: public GameNode{
 private:
     SDL_Texture * gTexture;
     float spriteAnimationSpeed = 1;
@@ -24,7 +24,7 @@ private:
     unsigned int numberOfFrames = 0;
     clock_t frameTimer; // used for determining how fast to change the frames.
     SDL_Rect * frames;
-    SDL_Point dimentsions;
+    SDL_Point dimentions;
 public:
     GameSprite();
     GameSprite(SDL_Texture *gTexture);
@@ -39,6 +39,7 @@ public:
     void render();
     ~GameSprite();
     void free();
+    void setSpeed(float speed);
 private:
     static SDL_Point getsize(SDL_Texture *texture);
 };

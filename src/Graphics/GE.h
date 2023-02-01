@@ -26,6 +26,8 @@
 #include <cstdio>
 #include <string>
 #include "../Game/GameConfiguration.h"
+#include "../Game/GameSprite.h"
+//#include "../Game/GameSprite.h"
 
 #define DEFAULT_SCREEN_WIDTH 640
 #define DEFAULT_SCREEN_HEIGHT 480
@@ -37,7 +39,7 @@ private:
     SDL_Event event{};
     bool exit = false;
     int imgFlags;
-    SDL_Texture * geTexture;
+    GameSprite * geTexture;
     SDL_Renderer * geRenderer;
     SDL_Rect geRect;
     GameConfiguration * gc;

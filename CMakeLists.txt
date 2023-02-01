@@ -43,7 +43,7 @@ set(src
         src/Game/GameSprite.h
         src/Game/GameConfiguration.cpp
         src/Game/GameConfiguration.h
-        src/Game/GameNode.h src/Graphics/TextureManager.h)
+        src/Game/GameNode.h src/Graphics/TextureManager.h src/Game/GameNode.cpp)
 
 add_executable(${project_name} ${src})
 
