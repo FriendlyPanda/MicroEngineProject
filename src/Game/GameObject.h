@@ -8,8 +8,9 @@
 
 
 #include "SDL.h"
+#include "GameNode.h"
 
-class GameObject {
+class GameObject: GameNode {
 public:
     virtual int init() = 0;
     void setTexture();

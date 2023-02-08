@@ -7,7 +7,6 @@
 
 #ifndef NDEBUG
 // debug code
-#include "spdlog/spdlog.h"
 #endif
 
 

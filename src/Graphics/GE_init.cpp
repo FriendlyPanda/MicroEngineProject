@@ -7,18 +7,14 @@ int GraphicsEngine::_init() {
 
     //initialize SDL
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
-#ifndef NDEBUG
-        spdlog::error("SDL could not initialize.SDL_ERROR: {0}", SDL_GetError());
-#endif
+        printf("SDL could not initialize.SDL_ERROR: %s", SDL_GetError());
         _close();
         return -1;
     }
     // create window
     geWindow = SDL_CreateWindow("SDL_WINDOW", SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
     if(geWindow == nullptr){
-#ifndef NDEBUG
-        spdlog::error("Could not create a window. SDL_ERROR: {0}", SDL_GetError());
-#endif
+        printf("Could not create a window. SDL_ERROR: %s", SDL_GetError());
         _close();
         return -1;
     }
@@ -26,9 +22,7 @@ int GraphicsEngine::_init() {
     //create renderer
     geRenderer = SDL_CreateRenderer(geWindow, -1, SDL_RENDERER_ACCELERATED);
     if(geRenderer == nullptr){
-#ifndef NDEBUG
-        spdlog::error("Could not create a renderer. SDL_ERROR: {0}", SDL_GetError());
-#endif
+        printf("Could not create a renderer. SDL_ERROR: %s", SDL_GetError());
         _close();
         return -1;
     }else{
@@ -38,9 +32,7 @@ int GraphicsEngine::_init() {
 
     // initialize SDL_Image
     if( !(IMG_Init(imgFlags) & imgFlags)){
-#ifndef NDEBUG
-        spdlog::error("Could not initialize sdl_imgae.\nSDL_Image_ERROR: {0}", IMG_GetError());
-#endif
+        printf("Could not initialize sdl_imgae.\nSDL_Image_ERROR: %s", IMG_GetError());
         _close();
         return -1;
     }

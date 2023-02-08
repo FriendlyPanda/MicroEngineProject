@@ -17,17 +17,7 @@ link_directories(${SDL2_LIB_DIR} ${SDL2_IMAGE_LIB_DIR})
 
 set(LIBS SDL2main SDL2 SDL2_image)
 message(${CMAKE_BUILD_TYPE})
-IF(${CMAKE_BUILD_TYPE} MATCHES Debug)
-    message("debug mode")
-    set(spdlog_DIR spdlog)
 
-    if(NOT TARGET spdlog)
-        # Stand-alone build
-        find_package(spdlog REQUIRED)
-    endif()
-
-    set(LIBS ${LIBS} spdlog::spdlog)
-ENDIF(${CMAKE_BUILD_TYPE} MATCHES Debug)
 message(${LIBS})
 
 set(src
@@ -43,7 +33,7 @@ set(src
         src/Game/GameSprite.h
         src/Game/GameConfiguration.cpp
         src/Game/GameConfiguration.h
-        src/Game/GameNode.h src/Graphics/TextureManager.h src/Game/GameNode.cpp)
+        src/Game/GameNode.h src/Graphics/TextureManager.h src/Game/GameNode.cpp src/Game/NodeSystem.cpp src/Game/NodeSystem.h)
 
 add_executable(${project_name} ${src})
 

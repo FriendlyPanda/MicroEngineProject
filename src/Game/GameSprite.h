@@ -16,7 +16,7 @@
  * this node holds graphical information for the objects, it is not required for an object to have a sprite,
  * but all sprites require parents.
  */
-class GameSprite: public GameNode{
+class GameSprite:public GameNode{
 private:
     SDL_Texture * gTexture;
     float spriteAnimationSpeed = 1;

@@ -11,10 +11,11 @@ GameNode::GameNode() {
     position = &newPosition;
     gc = nullptr;
     parent = nullptr;
-    for(GameNode * i : children){
-        i = nullptr;
+    children = new GameNode * [maxChildren];
+    for(int i = 0; i < maxChildren; i++){
+        children[i] = nullptr;
     }
-    nodeID = 0;
+    nodeID = -1;
 }
 
 /**
@@ -29,15 +30,17 @@ void GameNode::setParent(GameNode *newParent) {
  * add a child to the next available space, if no spaces are available, print out an error
  * @param newChild the child to insert
  */
-void GameNode::addChild(GameNode *newChild) {
-    for(GameNode * node : children){
-        if(node == nullptr){
-            node = newChild;
-            node->setParent(this);
-            return;
+bool GameNode::addChild(GameNode *newChild) {
+
+    for(int i = 0; i < maxChildren; i++){
+        if(children[i] == nullptr){
+            children[i] = newChild;
+            children[i]->setParent(this);
+            return true;
         }
     }
-    printf("ERROR: not enough space for children");
+    printf("WARNING: not enough space for children");
+    return false;
 }
 
 /**
@@ -122,14 +125,11 @@ GameConfiguration *GameNode::getConfig() {
  */
 GameNode::~GameNode() {
     parent = nullptr;
-    delete position;
+    //delete position;
     position = nullptr;
 
     gc = nullptr;
-    for(GameNode * node : children){
-        delete node;
-        node = nullptr;
-    }
+    freeChildren();
 }
 
 /**
@@ -209,7 +209,7 @@ SDL_Rect GameNode::sdlRect(int x, int y, int w, int h) {
  * Helper function to make points easier
  * @param x x position
  * @param y y position
- * @return the complete point
+ * @return SDL_Point the complete point
  */
 SDL_Point GameNode::sdlPoint(int x, int y){
     SDL_Point point = SDL_Point();
@@ -228,10 +228,82 @@ SDL_Rect GameNode::sdlRectFromPoints(SDL_Point p1, SDL_Point p2) {
     return sdlRect(p1.x, p1.y, p2.x, p2.y);
 }
 
+/**
+ * Returns the parent of the node, if node doesn't have a parent, return null
+ * @return GameNode parent
+ */
 GameNode *GameNode::getParent() {
     return parent;
 }
 
+/**
+ * set the Game Configuration
+ * @param newgc new GameConfiguration
+ */
 void GameNode::setConfig(GameConfiguration *newgc) {
     this->gc = newgc;
+}
+
+/**
+ * get the ID of the node
+ * @return node ID
+ */
+unsigned int GameNode::getNodeID() {
+    return nodeID;
+}
+
+/**
+ * set the ID of the node
+ * @param newID new ID
+ */
+void GameNode::setNodeID(unsigned int newID) {
+    nodeID = newID;
+}
+
+/**
+ * recursively find the node with the given ID
+ * @param id ID to look for
+ * @return the GameNode that contains that ID
+ */
+GameNode *GameNode::findNodeByID(unsigned int id) {
+    if(nodeID == id){
+        return this;
+    }
+
+    for(int i = 0; i < maxChildren; i++){
+        if(children[i] != nullptr){
+            GameNode * j = children[i]->findNodeByID(id);
+            if(j != nullptr){return j;}
+        }
+    }
+    return nullptr;
+}
+
+/**
+ * free children from the memory
+ */
+void GameNode::freeChildren() {
+    for(int i = 0; i < maxChildren; i++){
+        freeChild(i);
+    }
+}
+
+/**
+ * free a child at a given index
+ * @param index the index that the child is at
+ */
+void GameNode::freeChild(int index) {
+    if(children[index] != nullptr) {
+        delete children[index];
+        children[index] = nullptr;
+    }
+}
+
+void GameNode::print() {
+    printf("NodeID: %d\n", nodeID);
+    for(int i = 0; i < maxChildren; i++){
+        if(children[i] != nullptr){
+            children[i]->print();
+        }
+    }
 }

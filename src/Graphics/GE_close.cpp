@@ -6,7 +6,6 @@
 
 void GraphicsEngine::_close() {
     delete geTexture;
-    geTexture = nullptr;
     SDL_DestroyRenderer(geRenderer);
     SDL_DestroyWindow(geWindow);
 

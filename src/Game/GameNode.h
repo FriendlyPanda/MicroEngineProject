@@ -14,8 +14,10 @@
  */
 class GameNode {
 protected:
+    static const int maxChildren = 16;
+    int numbOfChildren = 0;
     GameNode * parent;
-    GameNode * children[16];
+    GameNode ** children;
     unsigned int nodeID;
     bool relativePosition = false;
     bool relativeRotation = false;
@@ -26,7 +28,7 @@ public:
     GameNode();
     void setParent(GameNode * newParent);
     GameNode * getParent();
-    void addChild(GameNode * newChild);
+    bool addChild(GameNode * newChild);
     void setChild(int index, GameNode * newChild);
     GameNode * getChild(int index);
     GameNode ** getChildren();
@@ -40,12 +42,18 @@ public:
     int getScreenRelativeY();
     int getX();
     int getY();
+    GameNode * findNodeByID(unsigned int id);
     void setConfig(GameConfiguration * newgc);
     GameConfiguration * getConfig();
     ~GameNode();
     SDL_Rect sdlRect(int x, int y, int w, int h);
     SDL_Point sdlPoint(int x, int y);
     SDL_Rect sdlRectFromPoints(SDL_Point p1, SDL_Point p2);
+    unsigned int getNodeID();
+    void setNodeID(unsigned int newID);
+    void freeChildren();
+    void freeChild(int index);
+    void print();
 };
 
 
