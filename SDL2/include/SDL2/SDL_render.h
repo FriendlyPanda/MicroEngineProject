@@ -90,7 +90,7 @@ typedef struct SDL_RendererInfo
  */
 typedef struct SDL_Vertex
 {
-    SDL_FPoint position;        /**< Vertex position, in SDL_Renderer coordinates  */
+    SDL_FPoint position;        /**< Vertex positionAndDimention, in SDL_Renderer coordinates  */
     SDL_Color  color;           /**< Vertex color */
     SDL_FPoint tex_coord;       /**< Normalized texture coordinates, if needed */
 } SDL_Vertex;

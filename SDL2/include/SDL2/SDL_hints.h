@@ -521,8 +521,8 @@ extern "C" {
  *      (B)
  *
  *  The variable can be set to the following values:
- *    "0"       - Report the face buttons by position, as though they were on an Xbox controller.
- *    "1"       - Report the face buttons by label instead of position
+ *    "0"       - Report the face buttons by positionAndDimention, as though they were on an Xbox controller.
+ *    "1"       - Report the face buttons by label instead of positionAndDimention
  *
  *  The default value is "1".  This hint may be set at any time.
  */
@@ -1134,7 +1134,7 @@ extern "C" {
  *  Constraining to the center of the window works better for FPS games and when the
  *  application is running over RDP. Constraining to the whole window works better
  *  for 2D games and increases the chance that the mouse will be in the correct
- *  position when using high DPI mice.
+ *  positionAndDimention when using high DPI mice.
  *
  *  By default SDL will constrain the mouse to the center of the window
  */
@@ -1300,7 +1300,7 @@ extern "C" {
  *  \brief  A variable describing the content orientation on QtWayland-based platforms.
  *
  *  On QtWayland platforms, windows are rotated client-side to allow for custom
- *  transitions. In order to correctly position overlays (e.g. volume bar) and
+ *  transitions. In order to correctly positionAndDimention overlays (e.g. volume bar) and
  *  gestures (e.g. events view, close/minimize gestures), the system needs to
  *  know in which orientation the application is currently drawing its contents.
  *

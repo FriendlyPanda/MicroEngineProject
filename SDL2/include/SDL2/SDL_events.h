@@ -113,7 +113,7 @@ typedef enum
     /* Joystick events */
     SDL_JOYAXISMOTION  = 0x600, /**< Joystick axis motion */
     SDL_JOYBALLMOTION,          /**< Joystick trackball motion */
-    SDL_JOYHATMOTION,           /**< Joystick hat position change */
+    SDL_JOYHATMOTION,           /**< Joystick hat positionAndDimention change */
     SDL_JOYBUTTONDOWN,          /**< Joystick button pressed */
     SDL_JOYBUTTONUP,            /**< Joystick button released */
     SDL_JOYDEVICEADDED,         /**< A new joystick has been inserted into the system */
@@ -355,7 +355,7 @@ typedef struct SDL_JoyBallEvent
 } SDL_JoyBallEvent;
 
 /**
- *  \brief Joystick hat position change event structure (event.jhat.*)
+ *  \brief Joystick hat positionAndDimention change event structure (event.jhat.*)
  */
 typedef struct SDL_JoyHatEvent
 {
@@ -363,7 +363,7 @@ typedef struct SDL_JoyHatEvent
     Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
     SDL_JoystickID which; /**< The joystick instance id */
     Uint8 hat;          /**< The joystick hat index */
-    Uint8 value;        /**< The hat position value.
+    Uint8 value;        /**< The hat positionAndDimention value.
                          *   \sa ::SDL_HAT_LEFTUP ::SDL_HAT_UP ::SDL_HAT_RIGHTUP
                          *   \sa ::SDL_HAT_LEFT ::SDL_HAT_CENTERED ::SDL_HAT_RIGHT
                          *   \sa ::SDL_HAT_LEFTDOWN ::SDL_HAT_DOWN ::SDL_HAT_RIGHTDOWN

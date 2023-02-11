@@ -10,13 +10,12 @@
  */
 GameSprite::GameSprite(){
     gTexture = nullptr;
-    dimentions.x = 1;
-    dimentions.y = 1;
     frames = new SDL_Rect[1];
     frames[0] = sdlRect(0,0,0,0);
     spriteAnimationSpeed = 0;
     frameTimer = 0;
 }
+
 
 /**
  * load texture from path, and create frames for animated sprite.
@@ -104,22 +103,11 @@ void GameSprite::free() {
     delete frames;
 }
 
-/**
- * simple render
- */
-void GameSprite::render() {
-    if(numberOfFrames > 0){
-        clock_t currentTime = clock();
-        if(currentTime > frameTimer){ // this will definitely not come back to bite me later on lol [foreshadowing]
-            frameTimer = currentTime + (long)(CLOCKS_PER_SEC / ((*getConfig()->get<float>(GAME_SPEED)) / spriteAnimationSpeed));
 
-            SDL_RenderCopy(getConfig()->get<SDL_Renderer>(RENDER),gTexture,&frames[frame],&frames[frame]);
-            frame++;
-            if(frame >= numberOfFrames){frame = 0;}
-        }
-    }else{
-        SDL_RenderCopy(getConfig()->get<SDL_Renderer>(RENDER),gTexture, nullptr,&frames[0]);
-    }
+
+void GameSprite::nextFrame(){
+    frame++;
+    if(frame >= numberOfFrames){frame = 0;}
 }
 
 /**
@@ -188,4 +176,8 @@ unsigned int GameSprite::getHeight() {
 
 void GameSprite::setSpeed(float speed) {
     spriteAnimationSpeed = speed;
+}
+
+void GameSprite::render(SDL_Rect * pos) {
+    SDL_RenderCopy(getConfig()->get<SDL_Renderer>(RENDER),gTexture, &frames[frame],pos);
 }

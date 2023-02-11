@@ -44,13 +44,13 @@ extern "C" {
 #define SDL_WINDOW_LACKS_SHAPE -3
 
 /**
- * Create a window that can be shaped with the specified position, dimensions,
+ * Create a window that can be shaped with the specified positionAndDimention, dimensions,
  * and flags.
  *
  * \param title The title of the window, in UTF-8 encoding.
- * \param x The x position of the window, ::SDL_WINDOWPOS_CENTERED, or
+ * \param x The x positionAndDimention of the window, ::SDL_WINDOWPOS_CENTERED, or
  *          ::SDL_WINDOWPOS_UNDEFINED.
- * \param y The y position of the window, ::SDL_WINDOWPOS_CENTERED, or
+ * \param y The y positionAndDimention of the window, ::SDL_WINDOWPOS_CENTERED, or
  *          ::SDL_WINDOWPOS_UNDEFINED.
  * \param w The width of the window.
  * \param h The height of the window.

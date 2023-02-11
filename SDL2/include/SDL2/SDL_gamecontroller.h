@@ -543,7 +543,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_GameControllerGetAttached(SDL_GameControlle
  *
  * This function will give you a SDL_Joystick object, which allows you to use
  * the SDL_Joystick functions with a SDL_GameController object. This would be
- * useful for getting a joystick's position at any given time, even if it
+ * useful for getting a joystick's positionAndDimention at any given time, even if it
  * hasn't moved (moving it would produce an event, which would have the axis'
  * value).
  *

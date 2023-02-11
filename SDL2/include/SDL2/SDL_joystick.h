@@ -813,12 +813,12 @@ extern DECLSPEC int SDLCALL SDL_JoystickEventState(int state);
  * interface, so you know that a specific axis is the "left thumb stick," etc.
  *
  * The value returned by SDL_JoystickGetAxis() is a signed integer (-32768 to
- * 32767) representing the current position of the axis. It may be necessary
+ * 32767) representing the current positionAndDimention of the axis. It may be necessary
  * to impose certain tolerances on these values to account for jitter.
  *
  * \param joystick an SDL_Joystick structure containing joystick information
  * \param axis the axis to query; the axis indices start at index 0
- * \returns a 16-bit signed integer representing the current position of the
+ * \returns a 16-bit signed integer representing the current positionAndDimention of the
  *          axis or 0 on failure; call SDL_GetError() for more information.
  *
  * \since This function is available since SDL 2.0.0.
@@ -877,7 +877,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_JoystickGetAxisInitialState(SDL_Joystick *j
  *
  * \param joystick an SDL_Joystick structure containing joystick information
  * \param hat the hat index to get the state from; indices start at index 0
- * \returns the current hat position.
+ * \returns the current hat positionAndDimention.
  *
  * \since This function is available since SDL 2.0.0.
  *
@@ -896,8 +896,8 @@ extern DECLSPEC Uint8 SDLCALL SDL_JoystickGetHat(SDL_Joystick *joystick,
  *
  * \param joystick the SDL_Joystick to query
  * \param ball the ball index to query; ball indices start at index 0
- * \param dx stores the difference in the x axis position since the last poll
- * \param dy stores the difference in the y axis position since the last poll
+ * \param dx stores the difference in the x axis positionAndDimention since the last poll
+ * \param dy stores the difference in the y axis positionAndDimention since the last poll
  * \returns 0 on success or a negative error code on failure; call
  *          SDL_GetError() for more information.
  *

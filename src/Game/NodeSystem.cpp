@@ -5,7 +5,7 @@
 #include "NodeSystem.h"
 
 /**
- * simple node constructor
+ * simple objNode constructor
  */
 NodeSystem::NodeSystem() {
     headNode = new GameNode();
@@ -16,10 +16,17 @@ NodeSystem::NodeSystem() {
 
 /**
  * load Node tree from the file, specified in the path
- * @param path path to the node tree file
+ * @param path path to the objNode tree file
  * @return whether the read was successful
  */
 bool NodeSystem::loadNodeTree(std::string path) {
+    std::string nodeString;
+    std::ifstream file(path);
+
+    while(std::getline(file, nodeString)){
+
+    }
+
     return false;
 }
 
@@ -33,16 +40,16 @@ bool NodeSystem::saveNodeTree(std::string path) {
 }
 
 /**
- * get the head node of the node tree
- * @return head node
+ * get the head objNode of the objNode tree
+ * @return head objNode
  */
 GameNode * NodeSystem::getHeadNode() {
     return headNode;
 }
 
 /**
- * remove the node that has an ID of nodeID
- * @param nodeID the ID of the node to remove
+ * remove the objNode that has an ID of nodeID
+ * @param nodeID the ID of the objNode to remove
  */
 void NodeSystem::remove(int nodeID) {
     delete get(nodeID);
@@ -50,24 +57,24 @@ void NodeSystem::remove(int nodeID) {
 }
 
 /**
- * get the node with the nodeID
- * @param nodeID the ID of the node
- * @return GameNode pointer to a node
+ * get the objNode with the nodeID
+ * @param nodeID the ID of the objNode
+ * @return GameNode pointer to a objNode
  */
 GameNode * NodeSystem::get(int nodeID) {
     return headNode->findNodeByID(nodeID);
 }
 
 /**
- * add a new child to the parent node.
- * @param parentNodeID the parent to add the node to
- * @param newChild the new child node
+ * add a new child to the parent objNode.
+ * @param parentNodeID the parent to add the objNode to
+ * @param newChild the new child objNode
  * @return whether the addition was successful
  */
 bool NodeSystem::add(int parentNodeID, GameNode * newChild) {
     GameNode * parentNode = get(parentNodeID);
     if(parentNode != nullptr){
-        newChild->setNodeID(size);
+        newChild->setNodeID(nextID);
         parentNode->addChild(newChild);
         size++;
         nextID++;
@@ -76,9 +83,9 @@ bool NodeSystem::add(int parentNodeID, GameNode * newChild) {
 }
 
 /**
- * set an existing node, existing children will be removed
- * @param nodeID ID of an existing node
- * @param node node that replaces the node
+ * set an existing objNode, existing children will be removed
+ * @param nodeID ID of an existing objNode
+ * @param node objNode that replaces the objNode
  * @return whether the replacement was successful
  */
 bool NodeSystem::set(int nodeID, GameNode * node) {
@@ -93,9 +100,9 @@ bool NodeSystem::set(int nodeID, GameNode * node) {
 }
 
 /**
- * check whether the node with the nodeID existss in the tree.
- * @param nodeID ID of the node
- * @return whether the node exists or not
+ * check whether the objNode with the nodeID existss in the tree.
+ * @param nodeID ID of the objNode
+ * @return whether the objNode exists or not
  */
 bool NodeSystem::nodeExists(int nodeID) {
     headNode->findNodeByID(nodeID);
@@ -105,7 +112,7 @@ bool NodeSystem::nodeExists(int nodeID) {
 
 
 /**
- * simple node destructor
+ * simple objNode destructor
  */
 NodeSystem::~NodeSystem() {
     delete headNode;

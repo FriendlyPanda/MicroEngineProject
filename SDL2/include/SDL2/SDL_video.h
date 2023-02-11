@@ -131,7 +131,7 @@ typedef enum
 } SDL_WindowFlags;
 
 /**
- *  \brief Used to indicate that you don't care what the window position is.
+ *  \brief Used to indicate that you don't care what the window positionAndDimention is.
  */
 #define SDL_WINDOWPOS_UNDEFINED_MASK    0x1FFF0000u
 #define SDL_WINDOWPOS_UNDEFINED_DISPLAY(X)  (SDL_WINDOWPOS_UNDEFINED_MASK|(X))
@@ -140,7 +140,7 @@ typedef enum
             (((X)&0xFFFF0000) == SDL_WINDOWPOS_UNDEFINED_MASK)
 
 /**
- *  \brief Used to indicate that the window position should be centered.
+ *  \brief Used to indicate that the window positionAndDimention should be centered.
  */
 #define SDL_WINDOWPOS_CENTERED_MASK    0x2FFF0000u
 #define SDL_WINDOWPOS_CENTERED_DISPLAY(X)  (SDL_WINDOWPOS_CENTERED_MASK|(X))
@@ -167,7 +167,7 @@ typedef enum
     SDL_WINDOWEVENT_MINIMIZED,      /**< Window has been minimized */
     SDL_WINDOWEVENT_MAXIMIZED,      /**< Window has been maximized */
     SDL_WINDOWEVENT_RESTORED,       /**< Window has been restored to normal size
-                                         and position */
+                                         and positionAndDimention */
     SDL_WINDOWEVENT_ENTER,          /**< Window has gained mouse focus */
     SDL_WINDOWEVENT_LEAVE,          /**< Window has lost mouse focus */
     SDL_WINDOWEVENT_FOCUS_GAINED,   /**< Window has gained keyboard focus */
@@ -707,7 +707,7 @@ extern DECLSPEC void* SDLCALL SDL_GetWindowICCProfile(SDL_Window * window, size_
 extern DECLSPEC Uint32 SDLCALL SDL_GetWindowPixelFormat(SDL_Window * window);
 
 /**
- * Create a window with the specified position, dimensions, and flags.
+ * Create a window with the specified positionAndDimention, dimensions, and flags.
  *
  * `flags` may be any of the following OR'd together:
  *
@@ -762,9 +762,9 @@ extern DECLSPEC Uint32 SDLCALL SDL_GetWindowPixelFormat(SDL_Window * window);
  * in a future version of SDL.
  *
  * \param title the title of the window, in UTF-8 encoding
- * \param x the x position of the window, `SDL_WINDOWPOS_CENTERED`, or
+ * \param x the x positionAndDimention of the window, `SDL_WINDOWPOS_CENTERED`, or
  *          `SDL_WINDOWPOS_UNDEFINED`
- * \param y the y position of the window, `SDL_WINDOWPOS_CENTERED`, or
+ * \param y the y positionAndDimention of the window, `SDL_WINDOWPOS_CENTERED`, or
  *          `SDL_WINDOWPOS_UNDEFINED`
  * \param w the width of the window, in screen coordinates
  * \param h the height of the window, in screen coordinates
@@ -922,7 +922,7 @@ extern DECLSPEC void *SDLCALL SDL_GetWindowData(SDL_Window * window,
                                                 const char *name);
 
 /**
- * Set the position of a window.
+ * Set the positionAndDimention of a window.
  *
  * The window coordinate origin is the upper left of the display.
  *
@@ -940,15 +940,15 @@ extern DECLSPEC void SDLCALL SDL_SetWindowPosition(SDL_Window * window,
                                                    int x, int y);
 
 /**
- * Get the position of a window.
+ * Get the positionAndDimention of a window.
  *
  * If you do not need the value for one of the positions a NULL may be passed
  * in the `x` or `y` parameter.
  *
  * \param window the window to query
- * \param x a pointer filled in with the x position of the window, in screen
+ * \param x a pointer filled in with the x positionAndDimention of the window, in screen
  *          coordinates, may be NULL
- * \param y a pointer filled in with the y position of the window, in screen
+ * \param y a pointer filled in with the y positionAndDimention of the window, in screen
  *          coordinates, may be NULL
  *
  * \since This function is available since SDL 2.0.0.
@@ -1243,7 +1243,7 @@ extern DECLSPEC void SDLCALL SDL_MaximizeWindow(SDL_Window * window);
 extern DECLSPEC void SDLCALL SDL_MinimizeWindow(SDL_Window * window);
 
 /**
- * Restore the size and position of a minimized or maximized window.
+ * Restore the size and positionAndDimention of a minimized or maximized window.
  *
  * \param window the window to restore
  *

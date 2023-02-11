@@ -9,21 +9,30 @@
 
 #include "SDL.h"
 #include "GameNode.h"
+#include "GameSprite.h"
+#include "GameMisc.h"
 
-class GameObject: GameNode {
+class GameObject{
+    unsigned int objectID;
+    GameNode * objNode;
+    GameSprite * objTexture;
+    GameObject * parent;
+    SDL_Rect * positionAndDimention;
+    float angle = 0; // gonna use radians lol, 0 rad is right
+
 public:
-    virtual int init() = 0;
-    void setTexture();
-    void setID();
-    void step();
-    void draw();
-private:
-    unsigned int ID;
-    SDL_Rect dimensionAndCoords;
-    SDL_Rect collision;
-    SDL_Texture * sprite;
+    GameObject();
+    void render();
+    void setPos(int x, int y);
+    int * x();
+    int * y();
+    SDL_Point getPos();
+    void setObjectID(unsigned int newObjectID);
+    unsigned int getObjectID();
+    void nextFrame();
+    void setNode(GameNode * node);
 
-
+    ~GameObject();
 };
 
 

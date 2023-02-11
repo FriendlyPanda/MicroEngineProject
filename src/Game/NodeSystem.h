@@ -8,6 +8,7 @@
 
 #include "GameNode.h"
 #include <typeinfo>
+#include <fstream>
 
 class NodeSystem {
 private:

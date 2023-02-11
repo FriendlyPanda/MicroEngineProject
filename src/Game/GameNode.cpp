@@ -7,19 +7,15 @@
  * basic constructor
  */
 GameNode::GameNode() {
-    SDL_Point newPosition = sdlPoint(0,0);
-    position = &newPosition;
+    nodeName = "node_nan";
     gc = nullptr;
     parent = nullptr;
-    children = new GameNode * [maxChildren];
-    for(int i = 0; i < maxChildren; i++){
-        children[i] = nullptr;
-    }
-    nodeID = -1;
+    numbOfChildren = 0;
+    children.resize(maxChildren);
 }
 
 /**
- * Set a new parent to the node.
+ * Set a new parent to the objNode.
  * @param newParent parent GameNode to set to.
  */
 void GameNode::setParent(GameNode *newParent) {
@@ -31,42 +27,57 @@ void GameNode::setParent(GameNode *newParent) {
  * @param newChild the child to insert
  */
 bool GameNode::addChild(GameNode *newChild) {
-
-    for(int i = 0; i < maxChildren; i++){
-        if(children[i] == nullptr){
-            children[i] = newChild;
-            children[i]->setParent(this);
-            return true;
-        }
+    if(numbOfChildren != maxChildren){
+        newChild->setParent(this);
+        children[numbOfChildren] = newChild;
+        numbOfChildren++;
+        return true;
     }
     printf("WARNING: not enough space for children");
     return false;
 }
 
 /**
- * set a child at a indexed position.
+ * set a child at a indexed positionAndDimention.
  * @param index the index at which to put the child.
  * @param newChild the pointer to the new child.
  */
 void GameNode::setChild(int index, GameNode *newChild) {
-    delete (children[index]);
-    children[index] = newChild;
+    children.assign(index, newChild);
+
+    /*
+    if(index >= 0 && index < maxChildren){
+        if(index < numbOfChildren){
+            delete (children[index]);
+            children[index] = newChild;
+        }else if(index >= numbOfChildren){
+            addChild(newChild);
+        }
+    }
+     */
 }
 
 /**
- * get a pointer to a child at specific index
- * @param index  the position of the child
- * @return the pointer to the child node
+ * get a pointer to a child at specific index, if index is further than the number of children then return the last child
+ * @param index  the positionAndDimention of the child
+ * @return the pointer to the child objNode
  */
 GameNode *GameNode::getChild(int index) {
-    return children[index];
+
+
+    return children.at(index);
+    if(index < numbOfChildren){
+        return children[index];
+    }else{
+        return children[numbOfChildren - 1];
+    }
 }
 
 /**
- * Get a list of children of the node
+ * Get a list of children of the objNode
  * @return list of pointers to children nodes
  */
-GameNode **GameNode::getChildren() {
+std::vector<GameNode *> GameNode::getChildren() {
     return children;
 }
 
@@ -103,8 +114,8 @@ void GameNode::setRelativeRotation(bool rot) {
 }
 
 /**
- * Retrieves the config object pointer, if no pointer to an config object is set, the node asks the parent for the config object pointer, and sets it for itself.
- * The config object pointer can be set at any child node, and consequent child nodes will use the new config object pointer.
+ * Retrieves the config object pointer, if no pointer to an config object is set, the objNode asks the parent for the config object pointer, and sets it for itself.
+ * The config object pointer can be set at any child objNode, and consequent child nodes will use the new config object pointer.
  * @return GameConfiguration [pointer]
  */
 GameConfiguration *GameNode::getConfig() {
@@ -125,111 +136,14 @@ GameConfiguration *GameNode::getConfig() {
  */
 GameNode::~GameNode() {
     parent = nullptr;
-    //delete position;
-    position = nullptr;
-
     gc = nullptr;
     freeChildren();
 }
 
-/**
- * get X position relative to the window, is not affected by relative positioning
- * @return X position relative to window
- */
-int GameNode::getWindowRelativeX() {
-    if(relativePosition){
 
-    }else{
-
-    }
-    return 0;
-}
 
 /**
- * get Y position relative to the window, is not affected by relative positioning
- * @return Y position relative to window
- */
-int GameNode::getWindowRelativeY() {
-    return 0;
-}
-
-/**
- * This function returns X position relative to screen, does not matter if relative positioning is turned on or not.
- * @return X position relative to screen
- */
-int GameNode::getScreenRelativeX() {
-    return 0;
-}
-
-/**
- * This function returns Y position relative to screen, does not matter if relative positioning is turned on or not.
- * @return Y position relative to screen
- */
-int GameNode::getScreenRelativeY() {
-    return 0;
-}
-
-/**
- * A function to get x position of the node, if relative positioning is enabled the X will be relative to parent node origin
- * @return X position
- */
-int GameNode::getX() {
-    if(relativePosition){
-
-    }
-    return 0;
-}
-
-/**
- * Similar to getX, this function gets Y position
- * @return Y position
- */
-int GameNode::getY() {
-    return 0;
-}
-
-/**
- * Helper function to make rectangles easier
- * @param x x position
- * @param y y position
- * @param w width of the rectangle
- * @param h height of the rectangle
- * @return the complete rectangle
- */
-SDL_Rect GameNode::sdlRect(int x, int y, int w, int h) {
-    SDL_Rect rectangle = SDL_Rect();
-    rectangle.x = x;
-    rectangle.y = y;
-    rectangle.w = w;
-    rectangle.h = h;
-    return rectangle;
-}
-
-/**
- * Helper function to make points easier
- * @param x x position
- * @param y y position
- * @return SDL_Point the complete point
- */
-SDL_Point GameNode::sdlPoint(int x, int y){
-    SDL_Point point = SDL_Point();
-    point.x = x;
-    point.y = y;
-    return point;
-}
-
-/**
- * Helper function to make rectangle from 2 points easier
- * @param p1 determines the x and y
- * @param p2 determines the w and h
- * @return SDL_Rect from 2 points
- */
-SDL_Rect GameNode::sdlRectFromPoints(SDL_Point p1, SDL_Point p2) {
-    return sdlRect(p1.x, p1.y, p2.x, p2.y);
-}
-
-/**
- * Returns the parent of the node, if node doesn't have a parent, return null
+ * Returns the parent of the objNode, if objNode doesn't have a parent, return null
  * @return GameNode parent
  */
 GameNode *GameNode::getParent() {
@@ -244,35 +158,36 @@ void GameNode::setConfig(GameConfiguration *newgc) {
     this->gc = newgc;
 }
 
-/**
- * get the ID of the node
- * @return node ID
- */
-unsigned int GameNode::getNodeID() {
-    return nodeID;
-}
 
 /**
- * set the ID of the node
+ * set the ID of the objNode
  * @param newID new ID
  */
-void GameNode::setNodeID(unsigned int newID) {
-    nodeID = newID;
+void GameNode::setNodeName(std::string newName) {
+    nodeName = newName;
 }
 
 /**
- * recursively find the node with the given ID
+ * get the name of the objNode.
+ * @return name of the objNode
+ */
+std::string GameNode::getNodeName(){
+    return nodeName;
+}
+
+/**
+ * recursively find the objNode with the given ID
  * @param id ID to look for
  * @return the GameNode that contains that ID
  */
-GameNode *GameNode::findNodeByID(unsigned int id) {
-    if(nodeID == id){
+GameNode *GameNode::findNodeByName(std::string name) {
+    if(nodeName == name){
         return this;
     }
 
-    for(int i = 0; i < maxChildren; i++){
+    for(int i = 0; i < numbOfChildren; i++){
         if(children[i] != nullptr){
-            GameNode * j = children[i]->findNodeByID(id);
+            GameNode * j = children[i]->findNodeByName(name);
             if(j != nullptr){return j;}
         }
     }
@@ -283,9 +198,10 @@ GameNode *GameNode::findNodeByID(unsigned int id) {
  * free children from the memory
  */
 void GameNode::freeChildren() {
-    for(int i = 0; i < maxChildren; i++){
-        freeChild(i);
+    for(int i = 0; i < numbOfChildren; i++){
+        freeChild(0);
     }
+    numbOfChildren = 0;
 }
 
 /**
@@ -293,15 +209,24 @@ void GameNode::freeChildren() {
  * @param index the index that the child is at
  */
 void GameNode::freeChild(int index) {
-    if(children[index] != nullptr) {
-        delete children[index];
-        children[index] = nullptr;
+    if(index < numbOfChildren && index >= 0) {
+        if(index == numbOfChildren - 1){    // child is the last one in the queue
+            children[index]->freeChildren();
+            delete children[index];
+            children[index] = nullptr;
+        }else{                              // child is not last in the queue
+            children[index]->freeChildren();
+            delete children[index];
+            // put the last child in the deleted child spot
+            children[index] = children[numbOfChildren - 1];
+        }
     }
+    numbOfChildren--;
 }
 
 void GameNode::print() {
-    printf("NodeID: %d\n", nodeID);
-    for(int i = 0; i < maxChildren; i++){
+    printf("NodeID: %s\n", nodeName.c_str());
+    for(int i = 0; i < numbOfChildren; i++){
         if(children[i] != nullptr){
             children[i]->print();
         }

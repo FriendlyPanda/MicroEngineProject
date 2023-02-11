@@ -23,17 +23,25 @@ int GraphicsEngine::_execute() {
 
     GameSprite newTexture = GameSprite();
     SDL_Point scale;
-    scale.x = 32;
-    scale.y = 32;
+    scale.x = 320;
+    scale.y = 240;
     newTexture.setConfig(gc);
-    newTexture.loadTexture("Assets/Err.png",4,2,2,scale);
+    newTexture.loadTexture("Assets/Err.png",4,3,2,scale);
     newTexture.setSpeed(0.1);
 
     geTexture = &newTexture;
 
+    Uint64 start;
+    Uint64 end;
+    Uint64 animationTrigger = 0;
     while(!exit){
 
-        Uint64 start = SDL_GetPerformanceCounter();
+         start = SDL_GetPerformanceCounter();
+
+         if(animationTrigger <= start){
+             animationTrigger = start + 20000*(1000/GAME_SPEED);
+             geTexture->nextFrame();
+         }
 
         while (SDL_PollEvent(&event) != 0) {
             if (event.type == SDL_QUIT) {
@@ -41,12 +49,13 @@ int GraphicsEngine::_execute() {
             }
         }
 
+
         _render();
 
-        Uint64 end = SDL_GetPerformanceCounter();
+         end = SDL_GetPerformanceCounter();
 
-        float elapsedMS = (float)(end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f; // get the ms
-        SDL_Delay(std::floor((1000.0f/((float)*gc->get<int>(GAME_SPEED))) - elapsedMS));
+        float frameRate = (float)(end - start) / (float)SDL_GetPerformanceFrequency(); // get the ms
+        printf("FPS: %f\n", (1.0f/frameRate));
     }
 
     _close();

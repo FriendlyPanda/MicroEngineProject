@@ -12,8 +12,8 @@
 #include "GameNode.h"
 
 /**
- * Sprite node inheriting from GameNode
- * this node holds graphical information for the objects, it is not required for an object to have a sprite,
+ * Sprite objNode inheriting from GameNode
+ * this objNode holds graphical information for the objects, it is not required for an object to have a sprite,
  * but all sprites require parents.
  */
 class GameSprite:public GameNode{
@@ -36,10 +36,11 @@ public:
     [[nodiscard]] unsigned int getCurrentFrame() const;
     void setFrame(int frameIndex);
     [[nodiscard]] unsigned int getNumberOfFrames() const;
-    void render();
+    void render(SDL_Rect * pos);
     ~GameSprite();
     void free();
     void setSpeed(float speed);
+    void nextFrame();
 private:
     static SDL_Point getsize(SDL_Texture *texture);
 };

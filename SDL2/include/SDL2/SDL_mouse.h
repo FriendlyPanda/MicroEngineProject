@@ -86,12 +86,12 @@ extern DECLSPEC SDL_Window * SDLCALL SDL_GetMouseFocus(void);
  * The current button state is returned as a button bitmask, which can be
  * tested using the `SDL_BUTTON(X)` macros (where `X` is generally 1 for the
  * left, 2 for middle, 3 for the right button), and `x` and `y` are set to the
- * mouse cursor position relative to the focus window. You can pass NULL for
+ * mouse cursor positionAndDimention relative to the focus window. You can pass NULL for
  * either `x` or `y`.
  *
- * \param x the x coordinate of the mouse cursor position relative to the
+ * \param x the x coordinate of the mouse cursor positionAndDimention relative to the
  *          focus window
- * \param y the y coordinate of the mouse cursor position relative to the
+ * \param y the y coordinate of the mouse cursor positionAndDimention relative to the
  *          focus window
  * \returns a 32-bit button bitmask of the current button state.
  *
@@ -113,9 +113,9 @@ extern DECLSPEC Uint32 SDLCALL SDL_GetMouseState(int *x, int *y);
  * track the mouse while dragging a window, where coordinates relative to a
  * window might not be in sync at all times.
  *
- * Note: SDL_GetMouseState() returns the mouse position as SDL understands it
+ * Note: SDL_GetMouseState() returns the mouse positionAndDimention as SDL understands it
  * from the last pump of the event queue. This function, however, queries the
- * OS for the current mouse position, and as such, might be a slightly less
+ * OS for the current mouse positionAndDimention, and as such, might be a slightly less
  * efficient function. Unless you know what you're doing and have a good
  * reason to use this function, you probably want SDL_GetMouseState() instead.
  *
@@ -152,7 +152,7 @@ extern DECLSPEC Uint32 SDLCALL SDL_GetGlobalMouseState(int *x, int *y);
 extern DECLSPEC Uint32 SDLCALL SDL_GetRelativeMouseState(int *x, int *y);
 
 /**
- * Move the mouse cursor to the given position within the window.
+ * Move the mouse cursor to the given positionAndDimention within the window.
  *
  * This function generates a mouse motion event if relative mode is not
  * enabled. If relative mode is enabled, you can force mouse events for the
@@ -174,7 +174,7 @@ extern DECLSPEC void SDLCALL SDL_WarpMouseInWindow(SDL_Window * window,
                                                    int x, int y);
 
 /**
- * Move the mouse to the given position in global screen space.
+ * Move the mouse to the given positionAndDimention in global screen space.
  *
  * This function generates a mouse motion event.
  *
@@ -200,7 +200,7 @@ extern DECLSPEC int SDLCALL SDL_WarpMouseGlobal(int x, int y);
  *
  * While the mouse is in relative mode, the cursor is hidden, and the driver
  * will try to report continuous motion in the current window. Only relative
- * motion events will be delivered, the mouse position will not change.
+ * motion events will be delivered, the mouse positionAndDimention will not change.
  *
  * Note that this function will not be able to provide continuous relative
  * motion when used over Microsoft Remote Desktop, instead motion is limited
@@ -306,9 +306,9 @@ extern DECLSPEC SDL_bool SDLCALL SDL_GetRelativeMouseMode(void);
  * \param w the width of the cursor
  * \param h the height of the cursor
  * \param hot_x the X-axis location of the upper left corner of the cursor
- *              relative to the actual mouse position
+ *              relative to the actual mouse positionAndDimention
  * \param hot_y the Y-axis location of the upper left corner of the cursor
- *              relative to the actual mouse position
+ *              relative to the actual mouse positionAndDimention
  * \returns a new cursor with the specified parameters on success or NULL on
  *          failure; call SDL_GetError() for more information.
  *
@@ -327,8 +327,8 @@ extern DECLSPEC SDL_Cursor *SDLCALL SDL_CreateCursor(const Uint8 * data,
  * Create a color cursor.
  *
  * \param surface an SDL_Surface structure representing the cursor image
- * \param hot_x the x position of the cursor hot spot
- * \param hot_y the y position of the cursor hot spot
+ * \param hot_x the x positionAndDimention of the cursor hot spot
+ * \param hot_y the y positionAndDimention of the cursor hot spot
  * \returns the new cursor on success or NULL on failure; call SDL_GetError()
  *          for more information.
  *

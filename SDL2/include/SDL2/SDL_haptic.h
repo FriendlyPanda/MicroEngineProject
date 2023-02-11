@@ -222,10 +222,10 @@ typedef struct _SDL_Haptic SDL_Haptic;
 #define SDL_HAPTIC_RAMP       (1u<<6)
 
 /**
- *  \brief Spring effect supported - uses axes position.
+ *  \brief Spring effect supported - uses axes positionAndDimention.
  *
  *  Condition haptic effect that simulates a spring.  Effect is based on the
- *  axes position.
+ *  axes positionAndDimention.
  *
  *  \sa SDL_HapticCondition
  */
@@ -436,8 +436,8 @@ typedef struct _SDL_Haptic SDL_Haptic;
  *
  *  // Cartesian directions
  *  direction.type = SDL_HAPTIC_CARTESIAN; // Using cartesian direction encoding.
- *  direction.dir[0] = 0; // X position
- *  direction.dir[1] = 1; // Y position
+ *  direction.dir[0] = 0; // X positionAndDimention
+ *  direction.dir[1] = 1; // Y positionAndDimention
  *  // Assuming the device has 2 axes, we don't need to specify third parameter.
  *
  *  // Polar directions
@@ -588,7 +588,7 @@ typedef struct SDL_HapticPeriodic
  *  \brief A structure containing a template for a Condition effect.
  *
  *  The struct handles the following effects:
- *   - ::SDL_HAPTIC_SPRING: Effect based on axes position.
+ *   - ::SDL_HAPTIC_SPRING: Effect based on axes positionAndDimention.
  *   - ::SDL_HAPTIC_DAMPER: Effect based on axes velocity.
  *   - ::SDL_HAPTIC_INERTIA: Effect based on axes acceleration.
  *   - ::SDL_HAPTIC_FRICTION: Effect based on axes movement.
