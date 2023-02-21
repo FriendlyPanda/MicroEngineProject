@@ -9,7 +9,7 @@ void GraphicsEngine::_close() {
     SDL_DestroyRenderer(geRenderer);
     SDL_DestroyWindow(geWindow);
 
-    geTexture = nullptr;
+    //geTexture = nullptr;
     geRenderer = nullptr;
     geWindow = nullptr;
 

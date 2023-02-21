@@ -5,17 +5,16 @@
 #ifndef MEP_GAMEOBJECT_H
 #define MEP_GAMEOBJECT_H
 
-
-
 #include "SDL.h"
-#include "GameNode.h"
-#include "GameSprite.h"
-#include "GameMisc.h"
+#include "NodeEmpty.h"
+#include "NodeSprite.h"
+#include "../misc/GameMisc.h"
 
 class GameObject{
+    /** object ID will be used when there are multiple instances of the same object */
     unsigned int objectID;
-    GameNode * objNode;
-    GameSprite * objTexture;
+    NodeEmpty * objNode;
+    NodeSprite * objTexture;
     GameObject * parent;
     SDL_Rect * positionAndDimention;
     float angle = 0; // gonna use radians lol, 0 rad is right
@@ -30,7 +29,7 @@ public:
     void setObjectID(unsigned int newObjectID);
     unsigned int getObjectID();
     void nextFrame();
-    void setNode(GameNode * node);
+    void setNode(NodeEmpty * node);
 
     ~GameObject();
 };

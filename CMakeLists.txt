@@ -22,18 +22,29 @@ message(${LIBS})
 
 set(src
         src/main.cpp
-        src/Graphics/GE.cpp
-        src/Graphics/GE.h
-        src/Graphics/GE_init.cpp
-        src/Graphics/GE_close.cpp
-        src/Graphics/GE_rend.cpp
-        src/Game/GameObject.cpp
-        src/Game/GameObject.h
-        src/Game/GameSprite.cpp
-        src/Game/GameSprite.h
+        src/Game/Graphics/GE.cpp
+        src/Game/Graphics/GE.h
+        src/Game/Graphics/GE_init.cpp
+        src/Game/Graphics/GE_close.cpp
+        src/Game/Graphics/GE_rend.cpp
+        src/Game/Nodes/GameObject.cpp
+        src/Game/Nodes/GameObject.h
+        src/Game/Nodes/NodeSprite.cpp
+        src/Game/Nodes/NodeSprite.h
         src/Game/GameConfiguration.cpp
         src/Game/GameConfiguration.h
-        src/Game/GameNode.h src/Graphics/TextureManager.h src/Game/GameNode.cpp src/Game/NodeSystem.cpp src/Game/NodeSystem.h src/Game/GameMisc.h)
+        src/Game/Nodes/NodeEmpty.cpp
+        src/Game/Nodes/NodeEmpty.h
+        src/Game/Graphics/TextureManager.h
+        src/Game/Nodes/NodeSystem.cpp
+        src/Game/Nodes/NodeSystem.h
+        src/Game/misc/Box.h
+        src/Game/misc/Quadtree.h
+        src/Game/misc/Vector2.h
+        src/Game/misc/GameMisc.cpp
+        src/Game/misc/GameMisc.h
+        src/Game/Nodes/Node.cpp
+        src/Game/Nodes/Node.h)
 
 add_executable(${project_name} ${src})
 

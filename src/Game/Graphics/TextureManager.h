@@ -6,14 +6,14 @@
 #define MEP_TEXTUREMANAGER_H
 
 
-#include "../Game/GameSprite.h"
+#include "../Nodes/NodeSprite.h"
 
 class TextureManager {
 private:
-    GameSprite * sprites[256];
+    NodeSprite * sprites[256];
 public:
     TextureManager();
-    GameSprite getSprite(int index);
+    NodeSprite getSprite(int index);
     void drawSprite();
 };
 

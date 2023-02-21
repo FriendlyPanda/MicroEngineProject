@@ -1,11 +1,4 @@
-//
-// Created by User on 09/02/2023.
-//
-
-#ifndef MEP_GAMEMISC_H
-#define MEP_GAMEMISC_H
-
-#include "SDL_rect.h"
+#include "GameMisc.h"
 
 /**
  * Helper function to make rectangles easier
@@ -46,6 +39,3 @@ SDL_Point sdlPoint(int x, int y){
 SDL_Rect sdlRectFromPoints(SDL_Point p1, SDL_Point p2) {
     return sdlRect(p1.x, p1.y, p2.x, p2.y);
 }
-
-
-#endif //MEP_GAMEMISC_H

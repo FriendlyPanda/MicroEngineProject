@@ -3,17 +3,15 @@
 //
 
 
-#include "GameSprite.h"
+#include "NodeSprite.h"
 
 /**
  * basic constructor, that sets parameters to default values.
  */
-GameSprite::GameSprite(){
+NodeSprite::NodeSprite(){
     gTexture = nullptr;
     frames = new SDL_Rect[1];
     frames[0] = sdlRect(0,0,0,0);
-    spriteAnimationSpeed = 0;
-    frameTimer = 0;
 }
 
 
@@ -26,11 +24,8 @@ GameSprite::GameSprite(){
  * @param frameSize the width (x) and height (y) of a single frame
  * @return the pointer to a texture
  */
-SDL_Texture * GameSprite::loadTexture(const std::string& path, int numbOfFrames, int numbOfFramesVer, int numbOfFramesHor, SDL_Point frameSize) {
-    // the x is the width and y is the height of the point
-
+SDL_Texture * NodeSprite::loadTexture(const std::string& path, int numbOfFrames, int numbOfFramesVer, int numbOfFramesHor, SDL_Point frameSize) {
     free();
-
 
     if(numbOfFrames > (numbOfFramesHor * numbOfFramesVer)){
         printf("Warning, more frames than possible combinations, defoulting to maximum");
@@ -72,14 +67,14 @@ SDL_Texture * GameSprite::loadTexture(const std::string& path, int numbOfFrames,
  * return the width of the texture
  * @return width of the Texture in pixels
  */
-unsigned int GameSprite::getTextureWidth() {
+unsigned int NodeSprite::getTextureWidth() const {
     return dimentions.x;
 }
 
 /**
  * object destructor
  */
-GameSprite::~GameSprite() {
+NodeSprite::~NodeSprite() {
     free();
 }
 
@@ -87,7 +82,7 @@ GameSprite::~GameSprite() {
  * returns the height of the texture
  * @return unsigned int representing height
  */
-unsigned int GameSprite::getTextureHeight() {
+unsigned int NodeSprite::getTextureHeight() const {
     return dimentions.y;
 }
 
@@ -95,7 +90,7 @@ unsigned int GameSprite::getTextureHeight() {
 /**
  * free the resources from the memory
  */
-void GameSprite::free() {
+void NodeSprite::free() {
     if(gTexture != nullptr) {
         SDL_DestroyTexture(gTexture);
         gTexture = nullptr;
@@ -104,8 +99,10 @@ void GameSprite::free() {
 }
 
 
-
-void GameSprite::nextFrame(){
+/**
+ * change the frame to the next one, if reached the end, loop back to the first frame
+ */
+void NodeSprite::nextFrame(){
     frame++;
     if(frame >= numberOfFrames){frame = 0;}
 }
@@ -114,7 +111,7 @@ void GameSprite::nextFrame(){
  * single frame texture loading
  * @param gTexture
  */
-GameSprite::GameSprite(SDL_Texture *gTexture) {
+NodeSprite::NodeSprite(SDL_Texture *gTexture) {
     numberOfFrames = 0;
     frame = 0;
     this->gTexture = gTexture;
@@ -127,7 +124,7 @@ GameSprite::GameSprite(SDL_Texture *gTexture) {
  * returns current frame that is being displayed.
  * @return index of a frame.
  */
-unsigned int GameSprite::getCurrentFrame() const {
+unsigned int NodeSprite::getCurrentFrame() const {
     return frame;
 }
 
@@ -135,7 +132,7 @@ unsigned int GameSprite::getCurrentFrame() const {
  * set frame of the animation
  * @param frameIndex set frame index to the new index.
  */
-void GameSprite::setFrame(int frameIndex) {
+void NodeSprite::setFrame(int frameIndex) {
     frame = frameIndex;
 }
 
@@ -143,7 +140,7 @@ void GameSprite::setFrame(int frameIndex) {
  * returns the number of the frames in the animation bank
  * @return number of frames
  */
-unsigned int GameSprite::getNumberOfFrames() const {
+unsigned int NodeSprite::getNumberOfFrames() const {
     return numberOfFrames;
 }
 
@@ -152,9 +149,9 @@ unsigned int GameSprite::getNumberOfFrames() const {
  * @param texture the texture to measure
  * @return the point dimension of the given texture
  */
-SDL_Point GameSprite::getsize(SDL_Texture *texture) {
+SDL_Point NodeSprite::getsize(SDL_Texture *texture) {
     SDL_Point size;
-    SDL_QueryTexture(texture, NULL, NULL, &size.x, &size.y);
+    SDL_QueryTexture(texture, nullptr, nullptr, &size.x, &size.y);
     return size;
 }
 
@@ -162,7 +159,7 @@ SDL_Point GameSprite::getsize(SDL_Texture *texture) {
  * returns the width of the frame displayed
  * @return the width of the frame
  */
-unsigned int GameSprite::getWidth() {
+unsigned int NodeSprite::getWidth() {
     return frames[frame].w;
 }
 
@@ -170,14 +167,14 @@ unsigned int GameSprite::getWidth() {
  * returns the height of the frame displayed
  * @return the height of the frame
  */
-unsigned int GameSprite::getHeight() {
+unsigned int NodeSprite::getHeight() {
     return frames[frame].h;
 }
 
-void GameSprite::setSpeed(float speed) {
-    spriteAnimationSpeed = speed;
-}
-
-void GameSprite::render(SDL_Rect * pos) {
+/**
+ * simple render command
+ * @param pos the position at which to render the texture at
+ */
+void NodeSprite::render(SDL_Rect * pos) {
     SDL_RenderCopy(getConfig()->get<SDL_Renderer>(RENDER),gTexture, &frames[frame],pos);
 }

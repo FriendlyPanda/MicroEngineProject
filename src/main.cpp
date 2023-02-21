@@ -1,22 +1,31 @@
 
-
-#include "Graphics/GE.h"
+#include "Game/Graphics/GE.h"
 #include "Game/GameConfiguration.h"
-#include "Game/NodeSystem.h"
-#include "Game/GameSprite.h"
+#include "Game/Nodes/NodeSystem.h"
+#include "Game/Nodes/NodeSprite.h"
 
 
 int main(int argc, char * args[]) {
-    GameNode * node1 = new GameNode();
-    GameSprite * sprite1 = new GameSprite();
-    GameSprite * sprite2 = new GameSprite();
+    NodeSprite * sprite1 = new NodeSprite();
+    NodeSprite * sprite2 = new NodeSprite();
 
     NodeSystem ns = NodeSystem();
-    ns.add(ns.getHeadNode()->getNodeID(), node1);
-    ns.add(node1->getNodeID(), sprite1);
-    ns.add(node1->getNodeID(), sprite2);
+    ns.add(ns.getHeadNode()->getName(), nullptr, "test1");
+    ns.add("test1", sprite1, "sprite1");
+    ns.add("test1", sprite2, "sprite2");
     ns.print();
 
+    std::vector<NodeSprite *> spriteList;
+    ns.getNodesOfType(&spriteList);
+
+    if(spriteList.empty()){
+        printf("No sprites found!\n");
+    }else{
+        printf("Sprites Found!\n");
+        for(NodeSprite * i: spriteList){
+            printf("Node: %s\n\t%d x %d\n", ((Node*)i->getHost())->getName().c_str(), i->getWidth(), i->getHeight());
+        }
+    }
 
     GameConfiguration gc;
     gc.clean();
@@ -24,7 +33,8 @@ int main(int argc, char * args[]) {
     gc.set(GAME_SPEED, &gameSpeed);
 
 
-
     GraphicsEngine * ge = new GraphicsEngine(&gc);
     return ge->_execute();
+
+    return 0;
 }

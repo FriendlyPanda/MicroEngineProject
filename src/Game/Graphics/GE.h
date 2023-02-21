@@ -21,14 +21,14 @@
 #endif
 
 #define SDL_MAIN_HANDLED
-#include <SDL.h>
-#include <SDL_image.h>
+#include "SDL.h"
+#include "SDL_image.h"
 #include <cstdio>
 #include <string>
-#include "../Game/GameConfiguration.h"
-#include "../Game/GameSprite.h"
-#include "../Game/GameObject.h"
-//#include "../Game/GameSprite.h"
+#include "../GameConfiguration.h"
+#include "../Nodes/NodeSprite.h"
+#include "../Nodes/GameObject.h"
+//#include "../Game/NodeSprite.h"
 
 #define DEFAULT_SCREEN_WIDTH 640
 #define DEFAULT_SCREEN_HEIGHT 480

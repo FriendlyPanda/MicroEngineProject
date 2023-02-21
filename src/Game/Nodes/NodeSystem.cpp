@@ -4,14 +4,14 @@
 
 #include "NodeSystem.h"
 
+#include <utility>
+
 /**
  * simple objNode constructor
  */
 NodeSystem::NodeSystem() {
-    headNode = new GameNode();
-    headNode->setNodeID(0);
-    size = 1;
-    nextID = 1;
+    headNode = new Node();
+    headNode->setNodeName("GAME_HEAD_NODE");
 }
 
 /**
@@ -43,7 +43,7 @@ bool NodeSystem::saveNodeTree(std::string path) {
  * get the head objNode of the objNode tree
  * @return head objNode
  */
-GameNode * NodeSystem::getHeadNode() {
+Node * NodeSystem::getHeadNode() {
     return headNode;
 }
 
@@ -51,33 +51,39 @@ GameNode * NodeSystem::getHeadNode() {
  * remove the objNode that has an ID of nodeID
  * @param nodeID the ID of the objNode to remove
  */
-void NodeSystem::remove(int nodeID) {
-    delete get(nodeID);
-    size--;
+void NodeSystem::remove(std::string nodeName) {
+    delete get(std::move(nodeName));
 }
 
 /**
  * get the objNode with the nodeID
  * @param nodeID the ID of the objNode
- * @return GameNode pointer to a objNode
+ * @return NodeEmpty pointer to a objNode
  */
-GameNode * NodeSystem::get(int nodeID) {
-    return headNode->findNodeByID(nodeID);
+Node * NodeSystem::get(std::string nodeName) {
+    return headNode->getNodeOfName(std::move(nodeName));
 }
 
 /**
  * add a new child to the parent objNode.
- * @param parentNodeID the parent to add the objNode to
+ * @param parentName the parent to add the objNode to
  * @param newChild the new child objNode
+ * @param newNodeName the name of the new node
  * @return whether the addition was successful
  */
-bool NodeSystem::add(int parentNodeID, GameNode * newChild) {
-    GameNode * parentNode = get(parentNodeID);
-    if(parentNode != nullptr){
-        newChild->setNodeID(nextID);
-        parentNode->addChild(newChild);
-        size++;
-        nextID++;
+bool NodeSystem::add(std::string parentName, NodeEmpty * newChild, std::string newNodeName) {
+    Node * childNode = new Node();
+    childNode->setNodeName(std::move(newNodeName));
+    childNode->setContent(newChild);
+    if(newChild != nullptr){
+        newChild->setHost(childNode);
+    }
+    if(get(parentName) != nullptr){
+        get(parentName)->addNode(childNode);
+        return true;
+
+    }else{
+        printf("ERROR: parent is nullptr");
     }
     return false;
 }
@@ -88,12 +94,11 @@ bool NodeSystem::add(int parentNodeID, GameNode * newChild) {
  * @param node objNode that replaces the objNode
  * @return whether the replacement was successful
  */
-bool NodeSystem::set(int nodeID, GameNode * node) {
-    GameNode * nodeToReplace = get(nodeID);
+bool NodeSystem::set(std::string nodeName, Node * node) {
+    Node * nodeToReplace = get(std::move(nodeName));
     if(nodeToReplace != nullptr){
-        nodeToReplace->freeChildren();
-        node->setNodeID(nodeToReplace->getNodeID());
-        *nodeToReplace = *node;
+        delete nodeToReplace;
+        nodeToReplace = node;
         return true;
     }
     return false;
@@ -104,9 +109,9 @@ bool NodeSystem::set(int nodeID, GameNode * node) {
  * @param nodeID ID of the objNode
  * @return whether the objNode exists or not
  */
-bool NodeSystem::nodeExists(int nodeID) {
-    headNode->findNodeByID(nodeID);
-    return (get(nodeID) != nullptr);
+bool NodeSystem::nodeExists(const std::string& nodeName) {
+    headNode->getNodeOfName(nodeName);
+    return (get(nodeName) != nullptr);
 }
 
 
@@ -117,31 +122,8 @@ bool NodeSystem::nodeExists(int nodeID) {
 NodeSystem::~NodeSystem() {
     delete headNode;
     headNode = nullptr;
-    size = 0;
 }
 
 void NodeSystem::print() {
-    headNode->print();
-}
-
-template<typename T>
-T **NodeSystem::getNodesOfType() {
-
-    int numbOfNodes = 0;
-    T * nodes[0];
-    for(int i = 0; i < size; i++){
-        GameNode * nodeToCheck = get(i);
-        if(nodeToCheck != nullptr){
-            if(typeid(*nodeToCheck) == typeid(T)){
-                numbOfNodes++;
-                T * temp = nodes;
-                nodes = new T*[numbOfNodes];
-                for(int j = 0; j < numbOfNodes - 1; j++){
-                    nodes[j] = temp[j];
-                }
-                delete[] temp;
-            }
-        }
-    }
-    return nodes;
+    printf("Hello World\n");
 }

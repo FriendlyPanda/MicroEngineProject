@@ -4,11 +4,12 @@
 
 #include <cmath>
 #include "GE.h"
+#include "../Nodes/Node.h"
 
 
 GraphicsEngine::GraphicsEngine() {
     geWindow = nullptr;
-    geTexture = new GameSprite();
+    //geTexture = new NodeSprite();
     geRenderer = nullptr;
     exit = false;
     imgFlags = IMG_INIT_PNG;
@@ -21,15 +22,14 @@ int GraphicsEngine::_execute() {
         return -1;
     }
 
-    GameSprite newTexture = GameSprite();
+    NodeSprite newTexture = NodeSprite();
     SDL_Point scale;
     scale.x = 320;
     scale.y = 240;
-    newTexture.setConfig(gc);
+    ((Node*) newTexture.getHost())->setConfig(gc);
     newTexture.loadTexture("Assets/Err.png",4,3,2,scale);
-    newTexture.setSpeed(0.1);
 
-    geTexture = &newTexture;
+    //geTexture = &newTexture;
 
     Uint64 start;
     Uint64 end;
@@ -40,7 +40,7 @@ int GraphicsEngine::_execute() {
 
          if(animationTrigger <= start){
              animationTrigger = start + 20000*(1000/GAME_SPEED);
-             geTexture->nextFrame();
+             //geTexture->nextFrame();
          }
 
         while (SDL_PollEvent(&event) != 0) {
@@ -73,7 +73,7 @@ SDL_Texture * GraphicsEngine::loadTexture(std::string path) {
 
 GraphicsEngine::GraphicsEngine(GameConfiguration * gameConfig) {
     geWindow = nullptr;
-    geTexture = nullptr;
+    //geTexture = nullptr;
     geRenderer = nullptr;
     exit = false;
     imgFlags = IMG_INIT_PNG;

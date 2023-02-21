@@ -6,7 +6,7 @@
 int GraphicsEngine::_render() {
 
     SDL_RenderClear(geRenderer);
-    geTexture->render();
+    //geTexture->render();
     SDL_RenderPresent(geRenderer);
     return 0;
 
