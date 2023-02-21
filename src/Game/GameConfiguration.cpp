@@ -8,7 +8,6 @@
 
 
 GameConfiguration::GameConfiguration() {
-
 }
 
 bool GameConfiguration::loadFromFile(std::string path) {

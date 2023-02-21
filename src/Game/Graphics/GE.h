@@ -28,6 +28,7 @@
 #include "../GameConfiguration.h"
 #include "../Nodes/NodeSprite.h"
 #include "../Nodes/GameObject.h"
+#include "../Nodes/NodeSystem.h"
 //#include "../Game/NodeSprite.h"
 
 #define DEFAULT_SCREEN_WIDTH 640
@@ -44,13 +45,17 @@ private:
     SDL_Renderer * geRenderer;
     SDL_Rect geRect;
     GameConfiguration * gc;
+    std::vector<NodeSprite *> spriteList;
+    NodeSystem * nodeSys;
 public:
     GraphicsEngine();
     GraphicsEngine(GameConfiguration * gameConfig);
+    GraphicsEngine(GameConfiguration * gameConfig, std::vector<NodeSprite *> newSpriteList);
     int _execute();
     void _close();
-private:
     int _init();
+    void setNodeSystem(NodeSystem *);
+private:
     int _render();
     SDL_Texture * loadTexture(std::string path);
 };

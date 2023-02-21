@@ -3,6 +3,7 @@
 //
 
 #include <cmath>
+#include <utility>
 #include "GE.h"
 #include "../Nodes/Node.h"
 
@@ -14,22 +15,17 @@ GraphicsEngine::GraphicsEngine() {
     exit = false;
     imgFlags = IMG_INIT_PNG;
     gc = nullptr;
+    nodeSys = nullptr;
 }
 
 int GraphicsEngine::_execute() {
 
-    if(_init() != 0){
-        return -1;
-    }
-
     NodeSprite newTexture = NodeSprite();
-    SDL_Point scale;
-    scale.x = 320;
-    scale.y = 240;
-    ((Node*) newTexture.getHost())->setConfig(gc);
-    newTexture.loadTexture("Assets/Err.png",4,3,2,scale);
+    SDL_Point scale = sdlPoint(8,8);
+    nodeSys->add(nodeSys->getHeadNode()->getName(),&newTexture,"sprite3");
+    newTexture.loadTexture("Assets/basicSet.bmp",10,2,5,scale);
 
-    //geTexture = &newTexture;
+    nodeSys->getNodesOfType(&spriteList);
 
     Uint64 start;
     Uint64 end;
@@ -39,8 +35,10 @@ int GraphicsEngine::_execute() {
          start = SDL_GetPerformanceCounter();
 
          if(animationTrigger <= start){
-             animationTrigger = start + 20000*(1000/GAME_SPEED);
-             //geTexture->nextFrame();
+             animationTrigger = start + 10000*(1000/ *(gc->get<int>(GAME_SPEED)));
+             for(NodeSprite * sprite: spriteList){
+                 sprite->nextFrame();
+             }
          }
 
         while (SDL_PollEvent(&event) != 0) {
@@ -71,11 +69,25 @@ SDL_Texture * GraphicsEngine::loadTexture(std::string path) {
     return finalTexture;
 }
 
-GraphicsEngine::GraphicsEngine(GameConfiguration * gameConfig) {
+GraphicsEngine::GraphicsEngine(GameConfiguration * gameConfig, std::vector<NodeSprite *> newSpriteList) {
     geWindow = nullptr;
-    //geTexture = nullptr;
     geRenderer = nullptr;
     exit = false;
     imgFlags = IMG_INIT_PNG;
+    nodeSys = nullptr;
+    spriteList = std::move(newSpriteList);
     gc = gameConfig;
+}
+
+GraphicsEngine::GraphicsEngine(GameConfiguration *gameConfig) {
+    geWindow = nullptr;
+    geRenderer = nullptr;
+    exit = false;
+    nodeSys = nullptr;
+    imgFlags = IMG_INIT_PNG;
+    gc = gameConfig;
+}
+
+void GraphicsEngine::setNodeSystem(NodeSystem * newNodeSystem) {
+    nodeSys = newNodeSystem;
 }

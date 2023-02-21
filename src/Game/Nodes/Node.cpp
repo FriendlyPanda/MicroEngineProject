@@ -7,10 +7,15 @@
 Node::Node() {
     content = nullptr;
     nodeName = "";
+    gc = nullptr;
+    parentNode = nullptr;
 }
 
 Node::Node(NodeEmpty * data) {
-    content = std::move(data);
+    content = data;
+    nodeName = "";
+    gc = nullptr;
+    parentNode = nullptr;
 }
 
 

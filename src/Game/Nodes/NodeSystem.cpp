@@ -80,6 +80,7 @@ bool NodeSystem::add(std::string parentName, NodeEmpty * newChild, std::string n
     }
     if(get(parentName) != nullptr){
         get(parentName)->addNode(childNode);
+        childNode->setParentNode(get(parentName));
         return true;
 
     }else{
