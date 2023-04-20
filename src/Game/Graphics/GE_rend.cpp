@@ -6,17 +6,15 @@
 int GraphicsEngine::_render() {
 
     SDL_RenderClear(geRenderer);
-    SDL_Rect rect = sdlRect(0,100,32,32);
-    for(int i = 0; i < spriteList.size(); i++){
-        for(int xx = 0; xx < ((DEFAULT_SCREEN_WIDTH/32)/3); xx++){
-            for(int yy = 0; yy < (DEFAULT_SCREEN_HEIGHT/32); yy++){
-                rect.x = xx * ((32*3) * i);
-                rect.y = yy * (32);
-                spriteList.at(i)->render(&rect);
-            }
+    for(int xx = 0; xx < DEFAULT_SCREEN_WIDTH; xx++){
+        for(int yy = 0; yy < DEFAULT_SCREEN_HEIGHT; yy++){
+            SDL_SetRenderDrawColor(geRenderer, min(xx/2, 255),  min(yy/2, 255), 255, 255);
+            SDL_RenderDrawPoint(geRenderer, xx, yy);
         }
     }
+
+
+
     SDL_RenderPresent(geRenderer);
     return 0;
-
 }

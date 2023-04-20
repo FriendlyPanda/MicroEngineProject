@@ -52,6 +52,7 @@ Node::~Node() {
     nodes.clear();
     parentNode = nullptr;
     content = nullptr;
+    gc = nullptr;
 }
 
 Node *Node::getNodeOfName(std::string nodeName) {

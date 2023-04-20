@@ -16,8 +16,6 @@
     // appple systems
 #elif __linux__
     //linux based systems
-#else
-#   error "Unknown Compiller"
 #endif
 
 #define SDL_MAIN_HANDLED
@@ -31,8 +29,8 @@
 #include "../Nodes/NodeSystem.h"
 //#include "../Game/NodeSprite.h"
 
-#define DEFAULT_SCREEN_WIDTH 640
-#define DEFAULT_SCREEN_HEIGHT 480
+#define DEFAULT_SCREEN_WIDTH 1280
+#define DEFAULT_SCREEN_HEIGHT 720
 
 
 class GraphicsEngine{
@@ -47,6 +45,7 @@ private:
     GameConfiguration * gc;
     std::vector<NodeSprite *> spriteList;
     NodeSystem * nodeSys;
+    int tempFPS;
 public:
     GraphicsEngine();
     GraphicsEngine(GameConfiguration * gameConfig);
@@ -58,6 +57,8 @@ public:
 private:
     int _render();
     SDL_Texture * loadTexture(std::string path);
+
+    Uint8 min(int a, int b);
 };
 
 

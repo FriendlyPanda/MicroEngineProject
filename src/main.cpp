@@ -1,25 +1,32 @@
 
 #include "Game/Graphics/GE.h"
+#include "Game/Graphics_V2/GraphicalEngine.h"
 #include "Game/GameConfiguration.h"
 #include "Game/Nodes/NodeSystem.h"
 #include "Game/Nodes/NodeSprite.h"
 
 
 int main(int argc, char * args[]) {
+
     GameConfiguration gc;
     gc.clean();
     int gameSpeed = 30;
     gc.set(GAME_SPEED, &gameSpeed);
 
+
     GraphicsEngine * ge = new GraphicsEngine(&gc);
     ge->_init();
 
+    /*
     NodeSprite * sprite1 = new NodeSprite();
     NodeSprite * sprite2 = new NodeSprite();
-
+    NodeSprite * sprite3 = new NodeSprite();
+    */
 
     NodeSystem ns = NodeSystem();
     ge->setNodeSystem(&ns);
+
+    /*
     ns.getHeadNode()->setConfig(&gc);
     ns.add(ns.getHeadNode()->getName(), nullptr, "test1");
     ns.add("test1", sprite1, "sprite1");
@@ -27,6 +34,7 @@ int main(int argc, char * args[]) {
 
     sprite1->loadTexture("Assets/Err.png",4,2,2, sdlPoint(32,32));
     sprite2->loadTexture("Assets/Hello.bmp",10,2,5, sdlPoint(32,32));
+     */
 
     std::vector<NodeSprite *> spriteList;
     ns.getNodesOfType(&spriteList);
@@ -44,7 +52,24 @@ int main(int argc, char * args[]) {
 
 
 
-    return ge->_execute();
+    ge->_execute();
+
+
+    // clear everything and quit
+    delete ge;
+    gc.~GameConfiguration();
+    ns.~NodeSystem();
+
+
+    /*
+    delete sprite1;
+    delete sprite2;
+    delete sprite3;
+
+    sprite1 = nullptr;
+    sprite2 = nullptr;
+    sprite3 = nullptr;
+     */
 
     return 0;
 }

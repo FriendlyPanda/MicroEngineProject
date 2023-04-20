@@ -20,13 +20,14 @@ GraphicsEngine::GraphicsEngine() {
 
 int GraphicsEngine::_execute() {
 
+    /*
     NodeSprite newTexture = NodeSprite();
     SDL_Point scale = sdlPoint(8,8);
     nodeSys->add(nodeSys->getHeadNode()->getName(),&newTexture,"sprite3");
     newTexture.loadTexture("Assets/basicSet.bmp",10,2,5,scale);
 
     nodeSys->getNodesOfType(&spriteList);
-
+    */
     Uint64 start;
     Uint64 end;
     Uint64 animationTrigger = 0;
@@ -52,8 +53,8 @@ int GraphicsEngine::_execute() {
 
          end = SDL_GetPerformanceCounter();
 
-        float frameRate = (float)(end - start) / (float)SDL_GetPerformanceFrequency(); // get the ms
-        printf("FPS: %f\n", (1.0f/frameRate));
+        tempFPS = (int)((float)(end - start) / (float)SDL_GetPerformanceFrequency()); // get the ms
+        //printf("FPS: %f\n", (1.0f/frameRate));
     }
 
     _close();
@@ -90,4 +91,12 @@ GraphicsEngine::GraphicsEngine(GameConfiguration *gameConfig) {
 
 void GraphicsEngine::setNodeSystem(NodeSystem * newNodeSystem) {
     nodeSys = newNodeSystem;
+}
+
+Uint8 GraphicsEngine::min(int a, int b) {
+    if(a < b){
+        return a;
+    }else{
+        return b;
+    }
 }

@@ -1,5 +1,5 @@
 //
-// Created by adamh on 17/01/2023.
+// Created by janh on 17/01/2023.
 //
 
 #ifndef MEP_GAMECONFIGURATION_H

@@ -20,7 +20,7 @@ int GraphicsEngine::_init() {
     }
 
     //create renderer
-    geRenderer = SDL_CreateRenderer(geWindow, -1, SDL_RENDERER_ACCELERATED);
+    geRenderer = SDL_CreateRenderer(geWindow, -1, SDL_RENDERER_ACCELERATED || SDL_RENDERER_PRESENTVSYNC);
     if(geRenderer == nullptr){
         printf("Could not create a renderer. SDL_ERROR: %s", SDL_GetError());
         _close();
