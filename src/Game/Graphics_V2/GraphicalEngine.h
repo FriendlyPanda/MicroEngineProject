@@ -32,7 +32,7 @@ class GraphicalEngine {
 public:
     void run(){
         initWindow();
-        spdlog::info("Initializing Vulkan");
+        spdlog::info(messages->get("vulkan.begin"));
         initVulkan();
         mainLoop();
         cleanup();
