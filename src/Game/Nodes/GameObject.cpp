@@ -1,5 +1,5 @@
 //
-// Created by adamh on 14/01/2023.
+// Created by Jan F H on 14/01/2023.
 //
 
 #include "GameObject.h"
@@ -12,7 +12,7 @@ GameObject::GameObject() {
     objNode = nullptr;
     objTexture = nullptr;
     parent = nullptr;
-    *positionAndDimention = sdlRect(0,0,0,0);
+    *positionAndDimention = rect(0, 0, 0, 0);
 }
 
 /**
@@ -26,36 +26,36 @@ void GameObject::render() {
 
 /**
  * set the position of the object
- * @param x the x co-ordinate of the object
- * @param y the y co-ordinate of the object
+ * @param x the origin co-ordinate of the object
+ * @param y the dimensions co-ordinate of the object
  */
-void GameObject::setPos(int x, int y) {
-    positionAndDimention->x = x;
-    positionAndDimention->y = y;
+void GameObject::setPos(float x, float y) {
+    *positionAndDimention->getOrigin().X() = x;
+    *positionAndDimention->getOrigin().Y() = y;
 }
 
 /**
- * return the pointer to the x parameter
- * @return pointer to the x
+ * return the pointer to the origin parameter
+ * @return pointer to the origin
  */
-int *GameObject::x() {
-    return &positionAndDimention->x;
+float *GameObject::x() {
+    return positionAndDimention->getOrigin().X();
 }
 
 /**
- * return the pointer to the y parameter
- * @return pointer to the y
+ * return the pointer to the dimensions parameter
+ * @return pointer to the dimensions
  */
-int *GameObject::y() {
-    return &positionAndDimention->y;
+float *GameObject::y() {
+    return positionAndDimention->getOrigin().Y();
 }
 
 /**
  * get the position of the object
  * @return
  */
-SDL_Point GameObject::getPos() {
-    return sdlPoint(positionAndDimention->x, positionAndDimention->y);
+O_Point GameObject::getPos() {
+    return positionAndDimention->getOrigin();
 }
 
 /**

@@ -15,7 +15,6 @@
 
 #include <map>
 #include <any>
-#include "SDL.h"
 
 /*
  * This class holds configuration of the game, available globally
