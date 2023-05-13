@@ -10,19 +10,10 @@
 GameObject::GameObject() {
     objectID = 0;
     objNode = nullptr;
-    objTexture = nullptr;
     parent = nullptr;
     *positionAndDimention = rect(0, 0, 0, 0);
 }
 
-/**
- * a simple render command to pass to the sprite node
- */
-void GameObject::render() {
-    if(objTexture != nullptr){
-        objTexture->render(positionAndDimention);
-    }
-}
 
 /**
  * set the position of the object
@@ -75,20 +66,10 @@ unsigned int GameObject::getObjectID() {
 }
 
 /**
- * call the texture to set the frame to the next one
- */
-void GameObject::nextFrame() {
-    if(objTexture != nullptr){
-        objTexture->nextFrame();
-    }
-}
-
-/**
  * simple destructor
  */
 GameObject::~GameObject() {
     objNode = nullptr;
-    objTexture = nullptr;
     parent = nullptr;
     delete positionAndDimention;
     positionAndDimention = nullptr;

@@ -12,20 +12,19 @@ if(NOT TARGET spdlog)
     # Stand-alone build
     find_package(spdlog REQUIRED)
 endif()
-find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 find_package(glfw3 REQUIRED)
+find_package(glm REQUIRED)
+find_package(GLEW REQUIRED)
 
-set(GLM_INCLUDE_DIR E:/DEV/cpp/glm)
 
-include_directories(${GLM_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR})
+include_directories(${GLM_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
 
-set(LIBS glfw3 opengl32 spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+set(LIBS glfw ${GLEW_LIBRARIES} GL spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32> )
 message(${CMAKE_BUILD_TYPE})
 
 message(${LIBS})
 
 set(src
-        src/Game/Graphics/GE.cpp        src/Game/Graphics/GE.h
         src/Game/Nodes/GameObject.cpp   src/Game/Nodes/GameObject.h
         src/Game/GameConfiguration.cpp  src/Game/GameConfiguration.h
         src/Game/Nodes/NodeEmpty.cpp    src/Game/Nodes/NodeEmpty.h
@@ -33,7 +32,6 @@ set(src
         src/Game/misc/GameMisc.cpp      src/Game/misc/GameMisc.h
         src/Game/Nodes/Node.cpp         src/Game/Nodes/Node.h
         src/properties/MessageBoard.h
-        src/Game/graph/GX.cpp           src/Game/graph/GX.h
         src/main.cpp)
 
 add_executable(${PROJECT_NAME} ${src})

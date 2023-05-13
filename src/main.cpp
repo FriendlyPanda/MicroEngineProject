@@ -1,38 +1,43 @@
 
 
-//#include "Game/Nodes/NodeSystem.h"
-//#include "Game/Graphics/GE.h"
+#include "Game/Nodes/NodeSystem.h"
+#include "Game/Graphics/GE.h"
 #include <iostream>
-#include "Game/graph/GX.h"
-//#include "Game/Graphics/GE.cpp"
+#include "Game/Graphics/GE.cpp"
 
+/**
+ * simple multi sink logger to log to the file and
+ * @param name
+ * @return
+ */
+spdlog::logger getLogger(string name){
+    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+
+#ifdef NDEBUG
+    console_sink->set_level(spdlog::level::warn);
+    console_sink->set_pattern("[%H:%M:%S %z] [%^%l%$] %v");
+#else
+    console_sink->set_level(spdlog::level::trace);
+    console_sink->set_pattern("[%H:%M:%S %z] [debug] [%^%l%$] %v");
+#endif
+
+
+    auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("log.txt", true);
+    file_sink->set_level(spdlog::level::trace);
+
+    spdlog::logger logger(name, {console_sink, file_sink});
+    return logger;
+}
 
 int main(int argc, char * args[]) {
-    GX gx;
-    gx = GX();
-    std::cout << (gx.get_start_val()) << std::endl;
-    /*
-    GameConfiguration gc;
-    gc.clean();
-    int gameSpeed = 30;
-    gc.set(GAME_SPEED, &gameSpeed);
 
+    auto logger = getLogger("Graphics Engine");
 
-    auto * ge = new GraphicsEngine(&gc);
-    ge->_init();
+    GraphicsEngine ge(logger);
 
-
-    NodeSystem ns = NodeSystem();
-    ge->setNodeSystem(&ns);
-
-    ge->_execute();
-
-
-    // clear everything and quit
-    delete ge;
-    gc.~GameConfiguration();
-    ns.~NodeSystem();
-     */
+    ge._init();
+    ge._run();
+    ge._close();
 
     return 0;
 }

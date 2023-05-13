@@ -1,5 +1,5 @@
 //
-// Created by Jan F Halaczek on 08/03/2023.
+// Created by JFH on 08/03/2023.
 //
 
 #ifndef MEP_MESSAGEBOARD_H
@@ -47,12 +47,17 @@ public:
         ifstream file(filename);
         string line;
         while(getline(file, line)){
-            size_t pos = line.find('=');
-            if(pos != string::npos){
-                string key = line.substr(0, pos);
-                string value = line.substr(pos + 1);
-                messages[key] = value;
+            if(line.rfind('#', 0) == 0){
+                continue;
+            }else{
+                size_t pos = line.find('=');
+                if(pos != string::npos){
+                    string key = line.substr(0, pos);
+                    string value = line.substr(pos + 1);
+                    messages[key] = value;
+                }
             }
+
         }
         file.close();
     }

@@ -22,30 +22,37 @@
 #define DEFAULT_SCREEN_HEIGHT 720
 
 #include <cstdio>
-#include <string>
-#include "../GameConfiguration.h"
-#include "../Nodes/GameObject.h"
-#include "../Nodes/NodeSystem.h"
+#include <cstdlib>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+using namespace glm;
+
+#include "../../properties/MessageBoard.h"
+#include <spdlog/spdlog.h>
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 class GraphicsEngine{
 private:
-    //SDL_Window * geWindow;
-    //SDL_Event event{};
-    bool exit = false;
-    int imgFlags{};
-    GameObject * gameObject{};
-    //SDL_Renderer * geRenderer;
-    //SDL_Rect geRect;
-    GameConfiguration * gc{};
-    NodeSystem * nodeSys{};
-    int tempFPS{};
+    GLFWwindow * window;
+    MessageBoard * msg;
+    spdlog::logger logger;
+    GLuint VertexArrayID;
+    constexpr static const GLfloat g_vertex_buffer_data[] = {
+            -1.0f, -1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f,
+            0.0f,  1.0f, 0.0f,
+    };
 public:
-    GraphicsEngine();
-    explicit GraphicsEngine(GameConfiguration * gameConfig);
-    int _execute();
+    GraphicsEngine(spdlog::logger logger);
+    int _run();
     void _close();
     int _init();
-    void setNodeSystem(NodeSystem *);
+
+    virtual ~GraphicsEngine();
+private:
+    GLuint loadShaders(const char * vertex_file_path,const char * fragment_file_path);
 };
 
 
