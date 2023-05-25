@@ -6,33 +6,30 @@ project(
         VERSION 1.0.0
         LANGUAGES CXX)
 
+add_subdirectory(glfw)
+add_subdirectory(glew)
+
+set(CMAKE_PREFIX_PATH "C:/Program Files (x86)/GLFW/lib/cmake/glfw3")
 # spdlog version: 1.11.0
 # set(SPDLOG_INCLUDE_DIR libs/spdlog/include)
 if(NOT TARGET spdlog)
     # Stand-alone build
     find_package(spdlog REQUIRED)
 endif()
-find_package(glfw3 REQUIRED)
-find_package(glm REQUIRED)
-find_package(GLEW REQUIRED)
 
+set(LIBS glfw libglew_static spdlog::spdlog)
+message(STATUS ${CMAKE_BUILD_TYPE})
 
-include_directories(${GLM_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
-
-set(LIBS glfw ${GLEW_LIBRARIES} GL spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32> )
-message(${CMAKE_BUILD_TYPE})
-
-message(${LIBS})
+message(STATUS ${LIBS})
 
 set(src
-        src/Game/Nodes/GameObject.cpp   src/Game/Nodes/GameObject.h
-        src/Game/GameConfiguration.cpp  src/Game/GameConfiguration.h
-        src/Game/Nodes/NodeEmpty.cpp    src/Game/Nodes/NodeEmpty.h
-        src/Game/Nodes/NodeSystem.cpp   src/Game/Nodes/NodeSystem.h
-        src/Game/misc/GameMisc.cpp      src/Game/misc/GameMisc.h
-        src/Game/Nodes/Node.cpp         src/Game/Nodes/Node.h
         src/properties/MessageBoard.h
         src/main.cpp)
 
 add_executable(${PROJECT_NAME} ${src})
+
+target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/glfw/include)
+target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/glew/include)
+
+
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS} )

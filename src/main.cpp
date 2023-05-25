@@ -1,8 +1,8 @@
 
 
-#include "Game/Nodes/NodeSystem.h"
 #include "Game/Graphics/GE.h"
 #include <iostream>
+#include <utility>
 #include "Game/Graphics/GE.cpp"
 
 /**
@@ -25,11 +25,15 @@ spdlog::logger getLogger(string name){
     auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("log.txt", true);
     file_sink->set_level(spdlog::level::trace);
 
-    spdlog::logger logger(name, {console_sink, file_sink});
+    spdlog::logger logger(std::move(name), {console_sink, file_sink});
     return logger;
 }
 
 int main(int argc, char * args[]) {
+    std::cout << "Hello World" << std::endl;
+    if(argc > 0){
+        std::cout << args[0] << std::endl;
+    }
 
     auto logger = getLogger("Graphics Engine");
 
