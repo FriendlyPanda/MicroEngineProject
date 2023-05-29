@@ -9,7 +9,6 @@ project(
 add_subdirectory(glfw)
 add_subdirectory(glew)
 
-set(CMAKE_PREFIX_PATH "C:/Program Files (x86)/GLFW/lib/cmake/glfw3")
 # spdlog version: 1.11.0
 # set(SPDLOG_INCLUDE_DIR libs/spdlog/include)
 if(NOT TARGET spdlog)
@@ -23,6 +22,10 @@ message(STATUS ${CMAKE_BUILD_TYPE})
 message(STATUS ${LIBS})
 
 set(src
+        src/Game/Graphics/Shader.cpp
+        src/Game/Graphics/Shader.h
+        src/Game/InternalLogger.cpp
+        src/Game/InternalLogger.h
         src/properties/MessageBoard.h
         src/main.cpp)
 

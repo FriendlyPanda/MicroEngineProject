@@ -28,31 +28,39 @@
 #include <GLFW/glfw3.h>
 
 
-#include "../../properties/MessageBoard.h"
-#include <spdlog/spdlog.h>
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/basic_file_sink.h"
+#include "../InternalLogger.h"
+#include "Shader.h"
+
+#define DEFAULT_WIDTH 1280
+#define DEFAULT_HEIGHT 720
 
 class GraphicsEngine{
 private:
     GLFWwindow * window;
-    MessageBoard * msg;
-    spdlog::logger logger;
-    GLuint VertexArrayID;
-    constexpr static const GLfloat g_vertex_buffer_data[] = {
-            -1.0f, -1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f,
-            0.0f,  1.0f, 0.0f,
+    GLuint VAO, VBO, EBO;
+    Shader shaderProgram;
+    InternalLogger log = InternalLogger("Graphics");
+    GLfloat g_vertex_buffer_data[18]= {
+            -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
+            0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
+            0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
+            -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
+            0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
+            0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
     };
+    GLuint indicies[9] = {
+            0,3,5,
+            3,2,4,
+            5,4,1
+    };
+
 public:
-    GraphicsEngine(spdlog::logger logger);
+    GraphicsEngine();
     int _run();
     void _close();
     int _init();
 
     virtual ~GraphicsEngine();
-private:
-    GLuint loadShaders(const char * vertex_file_path,const char * fragment_file_path);
 };
 
 
