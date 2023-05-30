@@ -17,7 +17,7 @@ int GraphicsEngine::_run() {
     double lastTime = glfwGetTime();
     int nbFrames = 0;
 
-    do{
+    do {
 
 #ifdef NDEBUG
         // release version
@@ -26,16 +26,16 @@ int GraphicsEngine::_run() {
         // Measure speed
         GLdouble currentTime = glfwGetTime();
         nbFrames++;
-        if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1 sec ago
+        if (currentTime - lastTime >= 1.0) { // If last prinf() was more than 1 sec ago
             // printf and reset timer
-            printf("%f ms/frame\t : \t %f fps\n", 1000.0/GLdouble(nbFrames), GLdouble(nbFrames));
+            printf("%f ms/frame\t : \t %f fps\n", 1000.0 / GLdouble(nbFrames), GLdouble(nbFrames));
             nbFrames = 0;
             lastTime += 1.0;
         }
 #endif
 
         // clear the screen with clear color
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.1f, 0.23f, 0.4f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaderProgram.activate();
         glBindVertexArray(VAO);
@@ -44,7 +44,7 @@ int GraphicsEngine::_run() {
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-    }while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0);
+    } while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0);
     return 0;
 }
 
@@ -61,7 +61,7 @@ void GraphicsEngine::_close() {
 
 int GraphicsEngine::_init() {
     // initialise glfw
-    if(!glfwInit()){
+    if (!glfwInit()) {
         log.logger.error(log.msg->get("graphics_engine.glfw.failed_init"));
         return -1;
     }
@@ -73,14 +73,14 @@ int GraphicsEngine::_init() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // create a window using glfw
-    window = glfwCreateWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "BaseWindow",nullptr, nullptr);
-    if(window == nullptr){ // check if the window has successfully been created
+    window = glfwCreateWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "BaseWindow", nullptr, nullptr);
+    if (window == nullptr) { // check if the window has successfully been created
         log.logger.error(log.msg->get("graphics_engine.glfw.failed_window"));
         return -1;
     }
     glfwMakeContextCurrent(window);
 
-    if(glewInit() != GLEW_OK){ // initialise glew and check if it initialised correctly
+    if (glewInit() != GLEW_OK) { // initialise glew and check if it initialised correctly
         log.logger.error(log.msg->get("graphics_engine.glew.failed_init"));
         return -1;
     }
@@ -100,7 +100,7 @@ int GraphicsEngine::_init() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3 * sizeof(float),(void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);

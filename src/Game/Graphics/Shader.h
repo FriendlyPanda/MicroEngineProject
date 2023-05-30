@@ -15,18 +15,23 @@
 #include "../InternalLogger.h"
 
 
-std::string get_file_contents(const char * filename);
+std::string get_file_contents(const char *filename);
 
 class Shader {
 public:
     GLuint ID;
-    Shader(const char * vertexFile, const char * fragmentFile);
+
+    Shader(const char *vertexFile, const char *fragmentFile);
+
     Shader();
 
     void activate();
+
     void clear();
+
 private:
     InternalLogger log = InternalLogger("Shaders");
+
     GLuint loadShaders(const char *vertex_file_path, const char *fragment_file_path);
 };
 
