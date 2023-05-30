@@ -6,8 +6,9 @@ project(
         VERSION 1.0.0
         LANGUAGES CXX)
 
-add_subdirectory(glfw)
-add_subdirectory(glew)
+add_subdirectory(libs/glfw)
+add_subdirectory(libs/glew)
+add_subdirectory(libs/glm)
 
 # spdlog version: 1.11.0
 # set(SPDLOG_INCLUDE_DIR libs/spdlog/include)
@@ -16,7 +17,7 @@ if(NOT TARGET spdlog)
     find_package(spdlog REQUIRED)
 endif()
 
-set(LIBS glfw libglew_static spdlog::spdlog)
+set(LIBS glfw libglew_static glm spdlog::spdlog)
 message(STATUS ${CMAKE_BUILD_TYPE})
 
 message(STATUS ${LIBS})
@@ -31,8 +32,8 @@ set(src
 
 add_executable(${PROJECT_NAME} ${src})
 
-target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/glfw/include)
-target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/glew/include)
+target_link_directories(${PROJECT_NAME} PUBLIC libs/glfw/include)
+target_link_directories(${PROJECT_NAME} PUBLIC libs/glew/include)
 
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS} )

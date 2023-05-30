@@ -15,7 +15,7 @@ public:
     MessageBoard * msg;
     spdlog::logger logger = spdlog::logger("");
 
-    InternalLogger(string logger_name);
+    explicit InternalLogger(string logger_name);
     void clear();
 
 };

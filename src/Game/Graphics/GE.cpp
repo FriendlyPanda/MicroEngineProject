@@ -7,11 +7,6 @@
 GraphicsEngine::GraphicsEngine() {
     log.msg = new MessageBoard("Assets/properties/messages_en.properties");
     log.logger.info(log.msg->get("msg.test"));
-    const char * vertexFilepath = "Assets/Shaders/vertex.glsl";
-    const char * fragmentFilepath = "Assets/Shaders/fragment.glsl";
-
-    shaderProgram = Shader(vertexFilepath, fragmentFilepath);
-
 }
 
 int GraphicsEngine::_run() {
@@ -24,15 +19,21 @@ int GraphicsEngine::_run() {
 
     do{
 
+#ifdef NDEBUG
+        // release version
+#else
+        //debug version
         // Measure speed
         GLdouble currentTime = glfwGetTime();
         nbFrames++;
         if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1 sec ago
             // printf and reset timer
-            printf("%f ms/frame\n", 1000.0/GLdouble(nbFrames));
+            printf("%f ms/frame\t : \t %f fps\n", 1000.0/GLdouble(nbFrames), GLdouble(nbFrames));
             nbFrames = 0;
             lastTime += 1.0;
         }
+#endif
+
         // clear the screen with clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -72,7 +73,7 @@ int GraphicsEngine::_init() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // create a window using glfw
-    window = glfwCreateWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "Tutorial 01",nullptr, nullptr);
+    window = glfwCreateWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "BaseWindow",nullptr, nullptr);
     if(window == nullptr){ // check if the window has successfully been created
         log.logger.error(log.msg->get("graphics_engine.glfw.failed_window"));
         return -1;
@@ -105,6 +106,8 @@ int GraphicsEngine::_init() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    shaderProgram = Shader("Assets/Shaders/vertex.glsl", "Assets/Shaders/fragment.glsl");
 
     log.logger.info(log.msg->get("graphics_engine.misc.init_success"));
     return 0;
