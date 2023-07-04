@@ -3,7 +3,6 @@
 #include "Game/Graphics/GE.h"
 #include "Game/Graphics/GE.cpp"
 
-
 int main(int argc, char * args[]) {
 
     GraphicsEngine ge;

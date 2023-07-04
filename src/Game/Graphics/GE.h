@@ -27,9 +27,14 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Shaders/Shader.h"
+#include "VBO/VBO.h"
+#include "VAO/VAO.h"
+#include "EBO/EBO.h"
+
 
 #include "../InternalLogger.h"
-#include "Shader.h"
+#include "Shaders/Shader.h"
 
 #define DEFAULT_WIDTH 1280
 #define DEFAULT_HEIGHT 720
@@ -37,18 +42,25 @@
 class GraphicsEngine{
 private:
     GLFWwindow * window;
-    GLuint VAO, VBO, EBO;
+
+    VAO vao;
+    VBO vbo;
+    EBO ebo;
+
     Shader shaderProgram;
+
+    GLuint uniID;
+
     InternalLogger log = InternalLogger("Graphics");
-    GLfloat g_vertex_buffer_data[18]= {
-            -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
-            0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
-            0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
-            -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
-            0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
-            0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
+    GLfloat vertices[36]= {
+            -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,    0.8f, 0.3f, 0.02f, // Lower left corner
+            0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,     0.8f, 0.3f, 0.02f, // Lower right corner
+            0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f,  1.0f, 0.6f, 0.32f, // Upper corner
+            -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, 0.9f, 0.45f, 0.17f,// Inner left
+            0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f,  0.9f, 0.45f, 0.17f,// Inner right
+            0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f,      0.8f, 0.3f, 0.02f// Inner down
     };
-    GLuint indicies[9] = {
+    GLuint indices[9] = {
             0,3,5,
             3,2,4,
             5,4,1

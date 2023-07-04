@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.24.1)
 set(CMAKE_CXX_STANDARD 20)
 
 project(
@@ -23,12 +23,12 @@ message(STATUS ${CMAKE_BUILD_TYPE})
 message(STATUS ${LIBS})
 
 set(src
-        src/Game/Graphics/Shader.cpp
-        src/Game/Graphics/Shader.h
+        src/Game/Graphics/Shaders/Shader.cpp
+        src/Game/Graphics/Shaders/Shader.h
         src/Game/InternalLogger.cpp
         src/Game/InternalLogger.h
         src/properties/MessageBoard.h
-        src/main.cpp)
+        src/main.cpp src/Game/Graphics/VBO/VBO.cpp src/Game/Graphics/VBO/VBO.h src/Game/Graphics/EBO/EBO.cpp src/Game/Graphics/EBO/EBO.h src/Game/Graphics/VAO/VAO.cpp src/Game/Graphics/VAO/VAO.h)
 
 add_executable(${PROJECT_NAME} ${src})
 

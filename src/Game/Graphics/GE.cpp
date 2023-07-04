@@ -13,7 +13,6 @@ int GraphicsEngine::_run() {
     // set the clear colour
     glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
-
     double lastTime = glfwGetTime();
     int nbFrames = 0;
 
@@ -35,10 +34,11 @@ int GraphicsEngine::_run() {
 #endif
 
         // clear the screen with clear color
-        glClearColor(0.1f, 0.23f, 0.4f, 0.0f);
+        //glClearColor(0.1f, 0.23f, 0.4f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaderProgram.activate();
-        glBindVertexArray(VAO);
+        glUniform1f(uniID, 1.0f);
+        vao.bind();
 
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
@@ -50,9 +50,9 @@ int GraphicsEngine::_run() {
 
 void GraphicsEngine::_close() {
     glfwDestroyWindow(window);
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    vao.clear();
+    vbo.clear();
+    ebo.clear();
     shaderProgram.clear();
     glfwTerminate();
     log.logger.info(log.msg->get("graphics_engine.misc.close_success"));
@@ -67,8 +67,8 @@ int GraphicsEngine::_init() {
     }
     // set glfw samples, version and mode
     glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -87,27 +87,28 @@ int GraphicsEngine::_init() {
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-    // set up Vertex Array Object and Vertex Buffer Object
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
     shaderProgram = Shader("Assets/Shaders/vertex.glsl", "Assets/Shaders/fragment.glsl");
+
+    uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+
+    // set up Vertex Array Object and Vertex Buffer Object
+
+    vao.VAO_create();
+    vao.bind();
+
+    vbo = VBO(vertices, sizeof(vertices));
+    ebo = EBO(indices, sizeof(indices));
+
+    vao.link_attribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void *)(0 * sizeof(float)));
+    vao.link_attribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+
+
+
+    vao.unbind();
+    vbo.unbind();
+    ebo.unbind();
+
+
 
     log.logger.info(log.msg->get("graphics_engine.misc.init_success"));
     return 0;
