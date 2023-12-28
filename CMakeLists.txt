@@ -23,12 +23,22 @@ message(STATUS ${CMAKE_BUILD_TYPE})
 message(STATUS ${LIBS})
 
 set(src
+        src/Game/Graphics/GE.cpp
+        src/Game/Graphics/GE.h
         src/Game/Graphics/Shaders/Shader.cpp
         src/Game/Graphics/Shaders/Shader.h
         src/Game/InternalLogger.cpp
         src/Game/InternalLogger.h
         src/properties/MessageBoard.h
-        src/main.cpp src/Game/Graphics/VBO/VBO.cpp src/Game/Graphics/VBO/VBO.h src/Game/Graphics/EBO/EBO.cpp src/Game/Graphics/EBO/EBO.h src/Game/Graphics/VAO/VAO.cpp src/Game/Graphics/VAO/VAO.h)
+        src/main.cpp
+        src/Game/Graphics/VBO/VBO.cpp
+        src/Game/Graphics/VBO/VBO.h
+        src/Game/Graphics/EBO/EBO.cpp
+        src/Game/Graphics/EBO/EBO.h
+        src/Game/Graphics/VAO/VAO.cpp
+        src/Game/Graphics/VAO/VAO.h
+        src/properties/MessageBoard.cpp
+)
 
 add_executable(${PROJECT_NAME} ${src})
 

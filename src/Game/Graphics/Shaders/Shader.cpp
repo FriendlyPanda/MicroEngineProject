@@ -3,6 +3,11 @@
 //
 
 #include "Shader.h"
+#include <iostream>
+#include <fstream>
+#include <regex>
+#include <fstream>
+#include <spdlog/logger.h>
 
 std::string Shader::get_file_contents(const char *filename) {
     std::ifstream in(filename, std::ios::binary);
@@ -104,5 +109,42 @@ void Shader::clear() {
 
 Shader::Shader() {
     ID = 0;
+}
+
+std::vector<std::string> Shader::extractUniforms(const std::string& filename) {
+    std::vector<std::string> uniformVariables;
+
+    // Read shader source file
+    std::ifstream shaderFile(filename);
+    if (!shaderFile.is_open()) {
+        std::cerr << "Error opening shader file." << std::endl;
+        return uniformVariables;
+    }
+
+    // Read the entire file into a string
+    const std::string shaderSource((std::istreambuf_iterator<char>(shaderFile)),
+                                   std::istreambuf_iterator<char>());
+    shaderFile.close();
+
+    // Define a regular expression to match uniform declarations
+    const std::regex uniformRegex(R"(\buniform\s+\w+\s+(\w+);)");
+
+    // Search for matches in the shader source
+    std::smatch match;
+    auto it = shaderSource.cbegin();
+    const auto end = shaderSource.cend();
+
+    while (std::regex_search(it, end, match, uniformRegex)) {
+        // Extract the variable name from the match
+        std::string variableName = match[1].str();
+
+        // Add the variable name to the list
+        uniformVariables.push_back(variableName);
+
+        // Update iterator for the next search
+        it = match.suffix().first;
+    }
+
+    return uniformVariables;
 }
 

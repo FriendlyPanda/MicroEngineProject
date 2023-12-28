@@ -6,15 +6,8 @@
 #define MEP_SHADER_H
 
 #include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <cerrno>
 #include "GL/glew.h"
-#include <spdlog/logger.h>
 #include "../../InternalLogger.h"
-
-
 
 
 class Shader {
@@ -36,8 +29,9 @@ private:
 
     std::string get_file_contents(const char *filename);
 
-    void compile_shader(const std::string& sourceCode, GLuint shaderID, GLint result, int InforLogLength);
+    void compile_shader(const std::string &sourceCode, GLuint shaderID, GLint result, int InforLogLength);
 
+    static std::vector<std::string> extractUniforms(const std::string &filename);
 };
 
 

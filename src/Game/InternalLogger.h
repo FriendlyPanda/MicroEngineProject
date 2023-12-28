@@ -7,15 +7,13 @@
 
 #include "../properties/MessageBoard.h"
 #include <spdlog/spdlog.h>
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/basic_file_sink.h"
 
 class InternalLogger {
 public:
     MessageBoard * msg;
     spdlog::logger logger = spdlog::logger("");
 
-    explicit InternalLogger(string logger_name);
+    explicit InternalLogger(std::string logger_name);
     void clear();
 
 };

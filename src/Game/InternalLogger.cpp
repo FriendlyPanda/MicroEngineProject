@@ -3,8 +3,10 @@
 //
 
 #include "InternalLogger.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
-InternalLogger::InternalLogger(string logger_name) {
+InternalLogger::InternalLogger(std::string logger_name) {
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
 #ifdef NDEBUG
