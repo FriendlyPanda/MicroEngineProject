@@ -2,7 +2,6 @@
 // Created by User on 28/12/2023.
 //
 #include "MessageBoard.h"
-#include <iostream>
 #include <fstream>
 #include <sstream>
 
@@ -30,15 +29,12 @@ MessageBoard::MessageBoard(const string &filename) {
     while(getline(file, line)){
         if(line.rfind('#', 0) == 0){
             continue;
-        }else{
-            size_t pos = line.find('=');
-            if(pos != string::npos){
-                string key = line.substr(0, pos);
-                string value = line.substr(pos + 1);
-                messages[key] = value;
-            }
         }
-
+        if(const size_t pos = line.find('='); pos != string::npos){
+            const string key = line.substr(0, pos);
+            const string value = line.substr(pos + 1);
+            messages[key] = value;
+        }
     }
     file.close();
 }
@@ -48,12 +44,11 @@ string MessageBoard::get(const string &key) const {
 }
 
 string MessageBoard::get(const string &key, const vector<string> &params) const {
-    auto it = messages.find(key);
-    if(it != messages.end()){
+    if(const auto it = messages.find(key); it != messages.end()){
         string message = it->second;
         replacePlaceholders(message, params);
         return message;
-    }else{
-        return "ERROR: message (" + key + ") not found";
     }
+
+    return "ERROR: message (" + key + ") not found";
 }

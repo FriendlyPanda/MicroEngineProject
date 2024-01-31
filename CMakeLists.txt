@@ -38,6 +38,7 @@ set(src
         src/Game/Graphics/VAO/VAO.cpp
         src/Game/Graphics/VAO/VAO.h
         src/properties/MessageBoard.cpp
+        src/properties/MessageBoard.h
 )
 
 add_executable(${PROJECT_NAME} ${src})

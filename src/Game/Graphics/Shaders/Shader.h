@@ -18,9 +18,9 @@ public:
 
     Shader();
 
-    void activate();
+    void activate() const;
 
-    void clear();
+    void clear() const;
 
 private:
     InternalLogger log = InternalLogger("Shaders");
@@ -29,7 +29,7 @@ private:
 
     std::string get_file_contents(const char *filename);
 
-    void compile_shader(const std::string &sourceCode, GLuint shaderID, GLint result, int InforLogLength);
+    void compile_shader(const std::string &sourceCode, GLuint shaderID, GLint * result, int * InforLogLength);
 
     static std::vector<std::string> extractUniforms(const std::string &filename);
 };
