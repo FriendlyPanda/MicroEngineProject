@@ -11,17 +11,15 @@ add_subdirectory(libs/glew)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/spdlog)
 
-# spdlog version: 1.11.0
-# set(SPDLOG_INCLUDE_DIR libs/spdlog/include)
-if(NOT TARGET spdlog)
-    # Stand-alone build
-    find_package(spdlog REQUIRED)
-endif()
+## spdlog version: 1.11.0
+## set(SPDLOG_INCLUDE_DIR libs/spdlog/include)
+#if(NOT TARGET spdlog)
+#    # Stand-alone build
+#    find_package(spdlog REQUIRED)
+#endif()
 
-set(LIBS glfw libglew_static glm spdlog::spdlog)
+
 message(STATUS ${CMAKE_BUILD_TYPE})
-
-message(STATUS ${LIBS})
 
 set(src
         src/Game/Graphics/GE.cpp
@@ -43,7 +41,30 @@ set(src
 
 add_executable(${PROJECT_NAME} ${src})
 
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+message(${CMAKE_SYSTEM_NAME})
+
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    # Code specific to Linux
+    find_package(OpenGL REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+            libglew_static glfw glm spdlog::spdlog
+            # Add more static libraries as needed
+    )
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    # Code specific to Windows
+    set(LIBS glfw libglew_static glm spdlog::spdlog)
+    message(STATUS ${LIBS})
+    # set(CMAKE_EXE_LINKER_FLAGS "-static")
+    target_link_libraries(${PROJECT_NAME} -static PRIVATE ${LIBS} )
 
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS} )
+else()
+    message(FATAL_ERROR "Unsupported operating system: ${CMAKE_SYSTEM_NAME}")
+endif()
+
+
+
+
+
+
