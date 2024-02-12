@@ -9,6 +9,7 @@ project(
 add_subdirectory(libs/glfw)
 add_subdirectory(libs/glew)
 add_subdirectory(libs/glm)
+add_subdirectory(libs/spdlog)
 
 # spdlog version: 1.11.0
 # set(SPDLOG_INCLUDE_DIR libs/spdlog/include)
@@ -29,8 +30,6 @@ set(src
         src/Game/Graphics/Shaders/Shader.h
         src/Game/InternalLogger.cpp
         src/Game/InternalLogger.h
-        src/properties/MessageBoard.h
-        src/main.cpp
         src/Game/Graphics/VBO/VBO.cpp
         src/Game/Graphics/VBO/VBO.h
         src/Game/Graphics/EBO/EBO.cpp
@@ -39,12 +38,12 @@ set(src
         src/Game/Graphics/VAO/VAO.h
         src/properties/MessageBoard.cpp
         src/properties/MessageBoard.h
+        src/main.cpp
 )
 
 add_executable(${PROJECT_NAME} ${src})
 
-target_link_directories(${PROJECT_NAME} PUBLIC libs/glfw/include)
-target_link_directories(${PROJECT_NAME} PUBLIC libs/glew/include)
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS} )
