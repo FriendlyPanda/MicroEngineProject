@@ -11,14 +11,6 @@ add_subdirectory(libs/glew)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/spdlog)
 
-## spdlog version: 1.11.0
-## set(SPDLOG_INCLUDE_DIR libs/spdlog/include)
-#if(NOT TARGET spdlog)
-#    # Stand-alone build
-#    find_package(spdlog REQUIRED)
-#endif()
-
-
 message(STATUS ${CMAKE_BUILD_TYPE})
 
 set(src
@@ -56,7 +48,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
     set(LIBS glfw libglew_static glm spdlog::spdlog)
     message(STATUS ${LIBS})
     # set(CMAKE_EXE_LINKER_FLAGS "-static")
-    target_link_libraries(${PROJECT_NAME} -static PRIVATE ${LIBS} )
+    target_link_libraries(${PROJECT_NAME} PRIVATE -static ${LIBS} )
 
 
 else()
