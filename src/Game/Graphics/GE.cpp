@@ -38,7 +38,7 @@ GraphicsEngine::GraphicsEngine() {
 
     // uniform variable - to send data to shaders
 
-    uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+    uniID = shaderProgram.getUniform("scale");
 
     // set up Vertex Array Object and Vertex Buffer Object
 

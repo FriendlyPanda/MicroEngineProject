@@ -29,6 +29,8 @@ set(src
         src/properties/MessageBoard.cpp
         src/properties/MessageBoard.h
         src/main.cpp
+        src/Game/Graphics/UniformVarManager.cpp
+        src/Game/Graphics/UniformVarManager.h
 )
 
 add_executable(${PROJECT_NAME} ${src})
@@ -45,10 +47,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
     # Code specific to Windows
-    set(LIBS glfw libglew_static glm spdlog::spdlog)
     message(STATUS ${LIBS})
     # set(CMAKE_EXE_LINKER_FLAGS "-static")
-    target_link_libraries(${PROJECT_NAME} PRIVATE -static ${LIBS} )
+    target_link_libraries(${PROJECT_NAME} PRIVATE -static glfw libglew_static glm spdlog::spdlog)
 
 
 else()

@@ -8,6 +8,7 @@
 #include <string>
 #include "GL/glew.h"
 #include "../../InternalLogger.h"
+#include "../UniformVarManager.h"
 
 
 class Shader {
@@ -22,6 +23,8 @@ public:
 
     void clear() const;
 
+    GLuint getUniform(const std::string&);
+
 private:
     InternalLogger log = InternalLogger("Shaders");
 
@@ -32,6 +35,8 @@ private:
     void compile_shader(const std::string &sourceCode, GLuint shaderID, GLint * result, int * InforLogLength);
 
     static std::vector<std::string> extractUniforms(const std::string &filename);
+
+    UniformVarManager uniformVarManager;
 };
 
 

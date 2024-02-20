@@ -6,8 +6,6 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
-#include <fstream>
-#include <spdlog/logger.h>
 
 std::string Shader::get_file_contents(const char *filename) {
     if (std::ifstream in(filename, std::ios::binary); in) {
@@ -50,8 +48,8 @@ void Shader::compile_shader(const std::string& sourceCode, const GLuint shaderID
 
 GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_file_path) {
 
-    extractUniforms(vertex_file_path);
-    extractUniforms(fragment_file_path);
+    //extractUniforms(vertex_file_path);
+    //extractUniforms(fragment_file_path);
     GLint Result = GL_FALSE;
     int InfoLogLength = 0;
 
@@ -96,6 +94,9 @@ GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_fi
 
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);
+
+    uniformVarManager.scanFile(vertex_file_path, ProgramID);
+    uniformVarManager.scanFile(fragment_file_path, ProgramID);
 
     return ProgramID;
 }
@@ -149,5 +150,9 @@ std::vector<std::string> Shader::extractUniforms(const std::string& filename) {
     }
 
     return uniformVariables;
+}
+
+GLuint Shader::getUniform(const std::string& key) {
+    return uniformVarManager.getUniform(key);
 }
 
