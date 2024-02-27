@@ -34,8 +34,6 @@ private:
 
     void compile_shader(const std::string &sourceCode, GLuint shaderID, GLint * result, int * InforLogLength);
 
-    static std::vector<std::string> extractUniforms(const std::string &filename);
-
     UniformVarManager uniformVarManager;
 };
 

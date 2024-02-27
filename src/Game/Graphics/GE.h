@@ -30,9 +30,7 @@
 #include "VAO/VAO.h"
 #include "EBO/EBO.h"
 #include "../InternalLogger.h"
-
-#define DEFAULT_WIDTH 1280
-#define DEFAULT_HEIGHT 720
+#include "glm/vec2.hpp"
 
 class GraphicsEngine {
 private:
@@ -41,6 +39,9 @@ private:
     VAO vao;
     VBO vbo;
     EBO ebo;
+
+    int windowWidth = 1280;
+    int windowHeight = 720;
 
     Shader shaderProgram;
 
@@ -60,6 +61,29 @@ private:
         3, 2, 4,
         5, 4, 1
     };
+
+    static void framebuffer_size_callback(GLFWwindow * window, int width, int height) {
+        glViewport(0, 0, width, height);
+    }
+
+    static void windowResizeHandler(GLFWwindow * window, int windowWidth, int windowHeight){
+        const float aspectRatio = ((float)windowWidth) / ((float)windowHeight);
+        float xSpan = 1; // Feel free to change this to any xSpan you need.
+        float ySpan = 1; // Feel free to change this to any ySpan you need.
+
+        if (aspectRatio > 1){
+            // Width > Height, so scale xSpan accordinly.
+            xSpan *= aspectRatio;
+        }
+        else{
+            // Height >= Width, so scale ySpan accordingly.
+            ySpan = xSpan / aspectRatio;
+        }
+        glOrtho(-1*xSpan, xSpan, -1*ySpan, ySpan, -1, 1);
+
+        // Use the entire window for rendering.
+        glViewport(0, 0, windowWidth, windowHeight);
+    }
 
 
 public:

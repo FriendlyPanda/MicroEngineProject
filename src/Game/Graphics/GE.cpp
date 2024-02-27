@@ -14,13 +14,13 @@ GraphicsEngine::GraphicsEngine() {
     }
     // set glfw samples, version and mode
     glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // create a window using glfw
-    window = glfwCreateWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "BaseWindow", nullptr, nullptr);
+    window = glfwCreateWindow(windowWidth, windowHeight, "BaseWindow", nullptr, nullptr);
     if (window == nullptr) { // check if the window has successfully been created
         log.logger.error(log.msg->get("graphics_engine.glfw.failed_window"));
         return;
@@ -55,6 +55,9 @@ GraphicsEngine::GraphicsEngine() {
     vbo.unbind();
     ebo.unbind();
 
+    glViewport(0,0,windowWidth, windowHeight);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
     log.logger.info(log.msg->get("graphics_engine.misc.init_success"));
     init_success = true;
 }
@@ -73,6 +76,7 @@ int GraphicsEngine::_run() {
 
     GLfloat size = 0;
 
+    // bind FPS to the screen refresh rate
     glfwSwapInterval(1);
 
     do {

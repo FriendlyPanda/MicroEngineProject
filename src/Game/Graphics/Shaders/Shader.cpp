@@ -89,9 +89,6 @@ GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_fi
         log.logger.warn(log.msg->get("msg.empty", {&ProgramErrorMessage[0]}));
     }
 
-    glDetachShader(ProgramID, VertexShaderID);
-    glDetachShader(ProgramID, FragmentShaderID);
-
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);
 
@@ -111,45 +108,6 @@ void Shader::clear() const {
 
 Shader::Shader() {
     ID = 0;
-}
-
-std::vector<std::string> Shader::extractUniforms(const std::string& filename) {
-    std::vector<std::string> uniformVariables;
-
-    // Read shader source file
-    std::ifstream shaderFile(filename);
-    if (!shaderFile.is_open()) {
-        std::cerr << "Error opening shader file." << std::endl;
-        return uniformVariables;
-    }
-
-    // Read the entire file into a string
-    const std::string shaderSource((std::istreambuf_iterator<char>(shaderFile)),
-                                   std::istreambuf_iterator<char>());
-    shaderFile.close();
-
-    // Define a regular expression to match uniform declarations
-    const std::regex uniformRegex(R"(\buniform\s+\w+\s+(\w+);)");
-
-    // Search for matches in the shader source
-    std::smatch match;
-    auto it = shaderSource.cbegin();
-    const auto end = shaderSource.cend();
-
-    while (std::regex_search(it, end, match, uniformRegex)) {
-        // Extract the variable name from the match
-        std::string variableName = match[1].str();
-
-        std::cout << variableName << std::endl;
-
-        // Add the variable name to the list
-        uniformVariables.push_back(variableName);
-
-        // Update iterator for the next search
-        it = match.suffix().first;
-    }
-
-    return uniformVariables;
 }
 
 GLuint Shader::getUniform(const std::string& key) {
