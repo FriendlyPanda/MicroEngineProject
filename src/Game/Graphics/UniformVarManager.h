@@ -22,7 +22,7 @@ public:
     std::vector<std::string> getUniformList();
     int setUniform(const std::string&, GLuint);
 
-    GLuint getUniform(const std::string& uniformName);
+    GLint getUniform(const std::string& uniformName);
 };
 
 

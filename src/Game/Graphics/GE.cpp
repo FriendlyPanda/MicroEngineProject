@@ -2,6 +2,7 @@
 // Created by JFH on 03/01/2023.
 //
 
+#include <iostream>
 #include "GE.h"
 
 GraphicsEngine::GraphicsEngine() {
@@ -38,7 +39,7 @@ GraphicsEngine::GraphicsEngine() {
 
     // uniform variable - to send data to shaders
 
-    uniID = shaderProgram.getUniform("scale");
+    uniID = shaderProgram.getUniform("transforms");
 
     // set up Vertex Array Object and Vertex Buffer Object
 
@@ -79,6 +80,10 @@ int GraphicsEngine::_run() {
     // bind FPS to the screen refresh rate
     glfwSwapInterval(1);
 
+
+    // glm tests
+
+
     do {
 
 #ifdef NDEBUG
@@ -98,11 +103,12 @@ int GraphicsEngine::_run() {
 
         // clear the screen with clear color
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        size += 0.01f;
-        if(size > 2.0f) {
-            size = 0;
-        }
-        glUniform1f(uniID, size);
+
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(trans));
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);

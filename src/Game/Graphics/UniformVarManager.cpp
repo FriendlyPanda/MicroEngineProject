@@ -85,7 +85,7 @@ int UniformVarManager::setUniform(const std::string& key, GLuint ID) {
     }
 }
 
-GLuint UniformVarManager::getUniform(const std::string& uniformName) {
+GLint UniformVarManager::getUniform(const std::string& uniformName) {
     auto uniformKey = uniforms.find(uniformName);
     if (uniformKey != uniforms.end()){
         return uniformKey->second;

@@ -110,7 +110,27 @@ Shader::Shader() {
     ID = 0;
 }
 
-GLuint Shader::getUniform(const std::string& key) {
+GLint Shader::getUniform(const std::string& key) {
     return uniformVarManager.getUniform(key);
 }
 
+void Shader::setBool(const std::string &name, bool value) {
+    GLint uniID = getUniform(name);
+    if(uniID != -1){
+        glUniform1i(uniID, (int)value);
+    }
+}
+
+void Shader::setInt(const std::string &name, int value) {
+    GLint uniID = getUniform(name);
+    if(uniID != -1){
+        glUniform1i(uniID, value);
+    }
+}
+
+void Shader::setFloat(const std::string &name, float value) {
+    GLint uniID = getUniform(name);
+    if(uniID != -1){
+        glUniform1f(uniID, value);
+    }
+}

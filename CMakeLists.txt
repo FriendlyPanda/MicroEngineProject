@@ -31,6 +31,14 @@ set(src
         src/main.cpp
         src/Game/Graphics/UniformVarManager.cpp
         src/Game/Graphics/UniformVarManager.h
+        src/Game/NodeSystem/Nodes/BaseNode.h
+        src/Game/NodeSystem/Nodes/Node_Model3D.cpp
+        src/Game/NodeSystem/Nodes/Node_Model3D.h
+        src/Game/Graphics/Model/MeshPrerequesite.h
+#        src/Game/Graphics/Model/Model.cpp
+#        src/Game/Graphics/Model/Model.h
+#        src/Game/Graphics/Model/Mesh.cpp
+#        src/Game/Graphics/Model/Mesh.h
 )
 
 add_executable(${PROJECT_NAME} ${src})

@@ -30,7 +30,11 @@
 #include "VAO/VAO.h"
 #include "EBO/EBO.h"
 #include "../InternalLogger.h"
-#include "glm/vec2.hpp"
+
+// OpenGL Maths
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class GraphicsEngine {
 private:
@@ -40,8 +44,8 @@ private:
     VBO vbo;
     EBO ebo;
 
-    int windowWidth = 1280;
-    int windowHeight = 720;
+    const int windowWidth = DEFAULT_SCREEN_WIDTH;
+    const int windowHeight = DEFAULT_SCREEN_HEIGHT;
 
     Shader shaderProgram;
 

@@ -23,7 +23,12 @@ public:
 
     void clear() const;
 
-    GLuint getUniform(const std::string&);
+    GLint getUniform(const std::string&);
+
+    void setBool(const std::string &name, bool value);
+    void setInt(const std::string &name, int value);
+    void setFloat(const std::string &name, float value);
+
 
 private:
     InternalLogger log = InternalLogger("Shaders");
