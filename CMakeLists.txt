@@ -11,6 +11,15 @@ add_subdirectory(libs/glew)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/spdlog)
 
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    message(debug_mode)
+    # unit testing
+    add_subdirectory(Google_tests)
+else ()
+    message(release_mode)
+endif ()
+
+
 message(STATUS ${CMAKE_BUILD_TYPE})
 
 set(src
@@ -35,13 +44,16 @@ set(src
         src/Game/NodeSystem/Nodes/Node_Model3D.cpp
         src/Game/NodeSystem/Nodes/Node_Model3D.h
         src/Game/Graphics/Model/MeshPrerequesite.h
-#        src/Game/Graphics/Model/Model.cpp
+        #        src/Game/Graphics/Model/Model.cpp
 #        src/Game/Graphics/Model/Model.h
 #        src/Game/Graphics/Model/Mesh.cpp
 #        src/Game/Graphics/Model/Mesh.h
 )
 
+
 add_executable(${PROJECT_NAME} ${src})
+
+
 
 message(${CMAKE_SYSTEM_NAME})
 

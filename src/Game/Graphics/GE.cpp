@@ -6,11 +6,12 @@
 #include "GE.h"
 
 GraphicsEngine::GraphicsEngine() {
+    // load messages
     log.msg = new MessageBoard("Assets/properties/messages_en.properties");
-    log.logger.info(log.msg->get("msg.test"));
+
     // initialise glfw
     if (!glfwInit()) {
-        log.logger.error(log.msg->get("graphics_engine.glfw.failed_init"));
+        log.logger.error(log.msg->get("glfw.failed_init"));
         return;
     }
     // set glfw samples, version and mode
@@ -23,19 +24,24 @@ GraphicsEngine::GraphicsEngine() {
     // create a window using glfw
     window = glfwCreateWindow(windowWidth, windowHeight, "BaseWindow", nullptr, nullptr);
     if (window == nullptr) { // check if the window has successfully been created
-        log.logger.error(log.msg->get("graphics_engine.glfw.failed_window"));
+        log.logger.error(log.msg->get("glfw.failed_window"));
         return;
     }
     glfwMakeContextCurrent(window);
 
     if (glewInit() != GLEW_OK) { // initialise glew and check if it initialised correctly
-        log.logger.error(log.msg->get("graphics_engine.glew.failed_init"));
+        log.logger.error(log.msg->get("glew.failed_init"));
         return;
     }
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
     shaderProgram = Shader("Assets/Shaders/vertex.glsl", "Assets/Shaders/fragment.glsl");
+
+    if(!shaderProgram.success){
+        log.logger.error(log.msg->get("graphics_engine.init.fail"));
+        return;
+    }
 
     // uniform variable - to send data to shaders
 
@@ -59,7 +65,7 @@ GraphicsEngine::GraphicsEngine() {
     glViewport(0,0,windowWidth, windowHeight);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    log.logger.info(log.msg->get("graphics_engine.misc.init_success"));
+    log.logger.info(log.msg->get("graphics_engine.init.success"));
     init_success = true;
 }
 
@@ -79,10 +85,6 @@ int GraphicsEngine::_run() {
 
     // bind FPS to the screen refresh rate
     glfwSwapInterval(1);
-
-
-    // glm tests
-
 
     do {
 
@@ -124,7 +126,7 @@ void GraphicsEngine::_close() {
     ebo.clear();
     shaderProgram.clear();
     glfwTerminate();
-    log.logger.info(log.msg->get("graphics_engine.misc.close_success"));
+    log.logger.info(log.msg->get("graphics_engine.close"));
 
 }
 

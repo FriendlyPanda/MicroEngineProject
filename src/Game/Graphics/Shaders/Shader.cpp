@@ -17,7 +17,7 @@ std::string Shader::get_file_contents(const char *filename) {
         in.close();
         return contents;
     }
-    log.logger.error(log.msg->get("graphics_engine.shader.wrong_filepath", {filename}));
+    log.logger.error(log.msg->get("shader.wrong_filepath", {filename}));
     throw errno;
 }
 
@@ -26,6 +26,9 @@ Shader::Shader(const char *vertexFile, const char *fragmentFile) {
 
     } else {
         ID = loadShaders(vertexFile, fragmentFile);
+        if(ID == -1){
+            success = false;
+        }
     }
 
 }
@@ -42,8 +45,11 @@ void Shader::compile_shader(const std::string& sourceCode, const GLuint shaderID
     if (*InfoLogLength > 0) {
         std::vector<char> shaderErrorMessage(*InfoLogLength + 1);
         glGetShaderInfoLog(shaderID, *InfoLogLength, nullptr, &shaderErrorMessage[0]);
-        log.logger.warn(log.msg->get("msg.empty", {&shaderErrorMessage[0]}));
+        log.logger.error(log.msg->get("shader.compile.fail"));
+        log.logger.error(log.msg->get("msg.empty", {&shaderErrorMessage[0]}));
+        throw errno;
     }
+    log.logger.info(log.msg->get("shader.compile.success"));
 }
 
 GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_file_path) {
@@ -58,23 +64,37 @@ GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_fi
     const GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
     // Read the Vertex Shader code from the file
-    const std::string VertexShaderCode = get_file_contents(vertex_file_path);
+    std::string VertexShaderCode;
 
     // Read the Fragment Shader code from the file
-    const std::string FragmentShaderCode = get_file_contents(fragment_file_path);
+    std::string FragmentShaderCode;
 
+    try{
+        // Read the Vertex Shader code from the file
+        VertexShaderCode = get_file_contents(vertex_file_path);
 
-    // Compile Vertex Shader
-    log.logger.info(log.msg->get("graphics_engine.shader.compiling_shader", {vertex_file_path}));
-    compile_shader(VertexShaderCode, VertexShaderID, &Result, &InfoLogLength);
+        // Read the Fragment Shader code from the file
+        FragmentShaderCode = get_file_contents(fragment_file_path);
+    }catch(int e){
+        return -1;
+    }
 
-    // Compile Fragment Shader
-    log.logger.info(log.msg->get("graphics_engine.shader.compiling_shader", {fragment_file_path}));
-    compile_shader(FragmentShaderCode, FragmentShaderID, &Result, &InfoLogLength);
+    try{
+        // Compile Vertex Shader
+        log.logger.info(log.msg->get("shader.compile", {vertex_file_path}));
+        compile_shader(VertexShaderCode, VertexShaderID, &Result, &InfoLogLength);
+
+        // Compile Fragment Shader
+        log.logger.info(log.msg->get("shader.compile", {fragment_file_path}));
+        compile_shader(FragmentShaderCode, FragmentShaderID, &Result, &InfoLogLength);
+    } catch(int e){
+        return -1;
+    }
+
 
 
     // Link the program
-    log.logger.info(log.msg->get("graphics_engine.shader.linking"));
+    log.logger.info(log.msg->get("shader.linking"));
     const GLuint ProgramID = glCreateProgram();
     glAttachShader(ProgramID, VertexShaderID);
     glAttachShader(ProgramID, FragmentShaderID);
@@ -86,7 +106,8 @@ GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_fi
     if (InfoLogLength > 0) {
         std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
         glGetProgramInfoLog(ProgramID, InfoLogLength, nullptr, &ProgramErrorMessage[0]);
-        log.logger.warn(log.msg->get("msg.empty", {&ProgramErrorMessage[0]}));
+        log.logger.error(log.msg->get("msg.empty", {&ProgramErrorMessage[0]}));
+        return -1;
     }
 
     glDeleteShader(VertexShaderID);

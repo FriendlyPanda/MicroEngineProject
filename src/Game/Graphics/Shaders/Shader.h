@@ -23,6 +23,8 @@ public:
 
     void clear() const;
 
+    bool success = true;
+
     GLint getUniform(const std::string&);
 
     void setBool(const std::string &name, bool value);

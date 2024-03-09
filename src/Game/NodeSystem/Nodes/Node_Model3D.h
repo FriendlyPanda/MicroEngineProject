@@ -10,7 +10,7 @@
 #include "../../Graphics/VAO/VAO.h"
 
 class Node_Model3D : Node {
-
+//    Model model3D;
 };
 
 
