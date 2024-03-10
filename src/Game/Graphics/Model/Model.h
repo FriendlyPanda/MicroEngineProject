@@ -4,10 +4,10 @@
 
 #ifndef MEP_MODEL_H
 #define MEP_MODEL_H
-#import "MeshPrerequesite.h"
+#include "MeshPrerequesite.h"
 #include "../Shaders/Shader.h"
-#import <vector>
-#import "Mesh.h"
+#include <vector>
+#include "Mesh.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

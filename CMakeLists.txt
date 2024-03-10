@@ -11,6 +11,17 @@ add_subdirectory(libs/glew)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/spdlog)
 
+add_library(assimp STATIC IMPORTED)
+set_target_properties(assimp PROPERTIES
+        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/Assimp/lib/libassimp.a
+        INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/libs/Assimp/include
+)
+
+add_library(z STATIC IMPORTED)
+set_target_properties(z PROPERTIES
+        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/Assimp/lib/libzlibstatic.a
+)
+
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
     message(debug_mode)
     # unit testing
@@ -44,10 +55,10 @@ set(src
         src/Game/NodeSystem/Nodes/Node_Model3D.cpp
         src/Game/NodeSystem/Nodes/Node_Model3D.h
         src/Game/Graphics/Model/MeshPrerequesite.h
-        #        src/Game/Graphics/Model/Model.cpp
-#        src/Game/Graphics/Model/Model.h
-#        src/Game/Graphics/Model/Mesh.cpp
-#        src/Game/Graphics/Model/Mesh.h
+        src/Game/Graphics/Model/Model.cpp
+        src/Game/Graphics/Model/Model.h
+        src/Game/Graphics/Model/Mesh.cpp
+        src/Game/Graphics/Model/Mesh.h
 )
 
 
@@ -61,7 +72,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
     # Code specific to Linux
     find_package(OpenGL REQUIRED)
     target_link_libraries(${PROJECT_NAME} PRIVATE
-            libglew_static glfw glm spdlog::spdlog
+            libglew_static glfw glm spdlog::spdlog assimp
             # Add more static libraries as needed
     )
 
@@ -69,7 +80,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
     # Code specific to Windows
     message(STATUS ${LIBS})
     # set(CMAKE_EXE_LINKER_FLAGS "-static")
-    target_link_libraries(${PROJECT_NAME} PRIVATE -static glfw libglew_static glm spdlog::spdlog)
+    target_link_libraries(${PROJECT_NAME} PRIVATE -static glfw libglew_static glm spdlog::spdlog assimp z)
 
 
 else()

@@ -5,9 +5,9 @@
 #ifndef MEP_MESH_H
 #define MEP_MESH_H
 
-#import "MeshPrerequesite.h"
+#include "MeshPrerequesite.h"
 #include "../Shaders/Shader.h"
-#import <vector>
+#include <vector>
 
 class Mesh {
 public:
