@@ -81,6 +81,10 @@ set(src
         src/Game/Graphics/components/Model/Mesh.cpp
         src/Game/Graphics/components/Model/Mesh.h
         libs/stb/stb_image.h
+        src/Game/Graphics/components/FBO/FBO.cpp
+        src/Game/Graphics/components/FBO/FBO.h
+        src/Game/Graphics/components/camera/Camera.cpp
+        src/Game/Graphics/components/camera/Camera.h
 )
 
 

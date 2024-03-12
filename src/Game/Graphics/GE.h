@@ -45,11 +45,11 @@ class GraphicsEngine {
 private:
     GLFWwindow *window;
 
-//    VAO vao;
-//    VBO vbo;
-//    EBO ebo;
+    VAO vao;
+    VBO vbo;
+    EBO ebo;
 
-    Model mdl = Model("");
+//    Model mdl = Model("");
 
     const int windowWidth = DEFAULT_SCREEN_WIDTH;
     const int windowHeight = DEFAULT_SCREEN_HEIGHT;

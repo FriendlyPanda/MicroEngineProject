@@ -49,20 +49,20 @@ GraphicsEngine::GraphicsEngine() {
 
     // set up Vertex Array Object and Vertex Buffer Object
 
-//    vao.VAO_create();
-//    vao.bind();
-//
-//    vbo = VBO(vertices, sizeof(vertices));
-//    ebo = EBO(indices, sizeof(indices));
-//
-//    vao.link_attribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void *)(0 * sizeof(float)));
-//    vao.link_attribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void *)(3 * sizeof(float)));
-//
-//    vao.unbind();
-//    vbo.unbind();
-//    ebo.unbind();
+    vao.VAO_create();
+    vao.bind();
 
-    mdl = Model("C:/Users/janha/Documents/cube model/untitled.obj");
+    vbo = VBO(vertices, sizeof(vertices));
+    ebo = EBO(indices, sizeof(indices));
+
+    vao.link_attribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void *)(0 * sizeof(float)));
+    vao.link_attribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+
+    vao.unbind();
+    vbo.unbind();
+    ebo.unbind();
+
+//    mdl = Model("C:/Users/janha/Documents/cube model/untitled.obj");
 
     glViewport(0,0,windowWidth, windowHeight);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -83,7 +83,7 @@ int GraphicsEngine::_run() {
     double lastTime = glfwGetTime();
     int nbFrames = 0;
     shaderProgram.activate();
-//    vao.bind();
+    vao.bind();
 
     GLfloat size = 0;
 
@@ -115,19 +115,19 @@ int GraphicsEngine::_run() {
 
         shaderProgram.activate();
 
-//        glm::mat4 trans = glm::mat4(1.0f);
-//        trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
-//        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.5f, 0.5f));
-//
-//        glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(trans));
-//        glDrawElements( GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.5f, 0.5f));
+
+        glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(trans));
+        glDrawElements( GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
 //        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 //        glm::mat4 view = camera.GetViewMatrix();
 //        shaderProgram.setMat4("projection", projection);
 //        shaderProgram.setMat4("view", view);
 
-        mdl.Draw(shaderProgram);
+//        mdl.Draw(shaderProgram);
 
         guiUpdateEnd();
 
@@ -140,9 +140,9 @@ int GraphicsEngine::_run() {
 
 void GraphicsEngine::_close() {
     glfwDestroyWindow(window);
-//    vao.clear();
-//    vbo.clear();
-//    ebo.clear();
+    vao.clear();
+    vbo.clear();
+    ebo.clear();
     closeGUIcontext();
     shaderProgram.clear();
     glfwTerminate();
