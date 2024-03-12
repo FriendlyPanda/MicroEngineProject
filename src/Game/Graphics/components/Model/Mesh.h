@@ -11,14 +11,16 @@
 
 class Mesh {
 public:
-    std::vector<Vertex> vertices;
+    // mesh Data
+    std::vector<Vertex>       vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture> textures;
+    std::vector<Texture>      textures;
+    GLuint VAO;
 
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
     void Draw(Shader &shader);
 private:
-    unsigned int VAO, VBO, EBO;
+    GLuint VBO, EBO;
     void setupMesh();
 
 };

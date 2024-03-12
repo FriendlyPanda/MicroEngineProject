@@ -155,3 +155,13 @@ void Shader::setFloat(const std::string &name, float value) {
         glUniform1f(uniID, value);
     }
 }
+
+void Shader::setMat4(const std::string &name, const glm::mat4 &mat) {
+
+    GLint uniID = getUniform(name);
+    if(uniID != -1){
+        glUniformMatrix4fv(uniID, 1, GL_FALSE, &mat[0][0]);
+    }
+
+
+}

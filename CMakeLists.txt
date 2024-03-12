@@ -33,19 +33,40 @@ endif ()
 
 message(STATUS ${CMAKE_BUILD_TYPE})
 
+include_directories(libs/imgui)
+set(imgui_src
+        libs/imgui/imconfig.h
+        libs/imgui/imgui.cpp
+        libs/imgui/imgui.h
+        libs/imgui/imgui_demo.cpp
+        libs/imgui/imgui_draw.cpp
+        libs/imgui/imgui_internal.h
+        libs/imgui/imgui_tables.cpp
+        libs/imgui/imgui_widgets.cpp
+        libs/imgui/imstb_rectpack.h
+        libs/imgui/imstb_textedit.h
+        libs/imgui/imstb_truetype.h
+        libs/imgui/misc/cpp/imgui_stdlib.cpp
+        libs/imgui/misc/cpp/imgui_stdlib.h
+        libs/imgui/backends/imgui_impl_opengl3.cpp
+        libs/imgui/backends/imgui_impl_opengl3.h
+        libs/imgui/backends/imgui_impl_glfw.cpp
+        libs/imgui/backends/imgui_impl_glfw.h
+)
+
 set(src
         src/Game/Graphics/GE.cpp
         src/Game/Graphics/GE.h
-        src/Game/Graphics/Shaders/Shader.cpp
-        src/Game/Graphics/Shaders/Shader.h
+        src/Game/Graphics/components/Shaders/Shader.cpp
+        src/Game/Graphics/components/Shaders/Shader.h
         src/Game/InternalLogger.cpp
         src/Game/InternalLogger.h
-        src/Game/Graphics/VBO/VBO.cpp
-        src/Game/Graphics/VBO/VBO.h
-        src/Game/Graphics/EBO/EBO.cpp
-        src/Game/Graphics/EBO/EBO.h
-        src/Game/Graphics/VAO/VAO.cpp
-        src/Game/Graphics/VAO/VAO.h
+        src/Game/Graphics/components/VBO/VBO.cpp
+        src/Game/Graphics/components/VBO/VBO.h
+        src/Game/Graphics/components/EBO/EBO.cpp
+        src/Game/Graphics/components/EBO/EBO.h
+        src/Game/Graphics/components/VAO/VAO.cpp
+        src/Game/Graphics/components/VAO/VAO.h
         src/properties/MessageBoard.cpp
         src/properties/MessageBoard.h
         src/main.cpp
@@ -54,15 +75,16 @@ set(src
         src/Game/NodeSystem/Nodes/BaseNode.h
         src/Game/NodeSystem/Nodes/Node_Model3D.cpp
         src/Game/NodeSystem/Nodes/Node_Model3D.h
-        src/Game/Graphics/Model/MeshPrerequesite.h
-        src/Game/Graphics/Model/Model.cpp
-        src/Game/Graphics/Model/Model.h
-        src/Game/Graphics/Model/Mesh.cpp
-        src/Game/Graphics/Model/Mesh.h
+        src/Game/Graphics/components/Model/MeshPrerequesite.h
+        src/Game/Graphics/components/Model/Model.cpp
+        src/Game/Graphics/components/Model/Model.h
+        src/Game/Graphics/components/Model/Mesh.cpp
+        src/Game/Graphics/components/Model/Mesh.h
+        libs/stb/stb_image.h
 )
 
 
-add_executable(${PROJECT_NAME} ${src})
+add_executable(${PROJECT_NAME} ${src} ${imgui_src})
 
 
 

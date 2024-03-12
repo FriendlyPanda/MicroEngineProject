@@ -7,10 +7,10 @@
 
 
 #include "BaseNode.h"
-#include "../../Graphics/VAO/VAO.h"
+#include "../../Graphics/components/Model/Model.h"
 
 class Node_Model3D : Node {
-//    Model model3D;
+    Model model3D;
 };
 
 
