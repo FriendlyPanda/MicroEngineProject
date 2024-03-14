@@ -3,6 +3,7 @@
 //
 
 #include "Shader.h"
+#include "glm/gtc/type_ptr.hpp"
 #include <iostream>
 #include <fstream>
 #include <regex>
@@ -158,9 +159,11 @@ void Shader::setFloat(const std::string &name, float value) {
 
 void Shader::setMat4(const std::string &name, const glm::mat4 &mat) {
 
+    //        glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(trans));
+
     GLint uniID = getUniform(name);
     if(uniID != -1){
-        glUniformMatrix4fv(uniID, 1, GL_FALSE, &mat[0][0]);
+        glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(mat));
     }
 
 

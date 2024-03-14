@@ -13,8 +13,14 @@
 
 class MessageBoard {
 public:
+
     /**
-     * simple constructor, takes in the filepath to the .properties file containing the messages
+     * a simple empty constructor
+     */
+    MessageBoard();
+
+    /**
+     * explicit constructor, takes in the filepath to the .properties file containing the messages
      * @param filename file path to the messages
      */
     explicit MessageBoard(const std::string& filename);

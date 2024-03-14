@@ -52,3 +52,7 @@ string MessageBoard::get(const string &key, const vector<string> &params) const 
 
     return "ERROR: message (" + key + ") not found";
 }
+
+MessageBoard::MessageBoard() {
+
+}

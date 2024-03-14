@@ -4,10 +4,17 @@
 
 #include <iostream>
 #include "GE.h"
+#include "../../properties/SafeConversion.cpp"
 
 GraphicsEngine::GraphicsEngine() {
     // load messages
-    log.msg = new MessageBoard("Assets/properties/messages_en.properties");
+    config = MessageBoard("Assets/properties/config.properties");
+    log.msg = new MessageBoard(config.get("messages"));
+
+    // define screen width and height
+    windowWidth = stringToIntSafe(const_cast<char *>(config.get("window.width").c_str()), DEFAULT_SCREEN_WIDTH);
+    windowHeight = stringToIntSafe(const_cast<char *>(config.get("window.height").c_str()), DEFAULT_SCREEN_HEIGHT);
+
 
     // initialise glfw
     if (!glfwInit()) {
@@ -49,20 +56,20 @@ GraphicsEngine::GraphicsEngine() {
 
     // set up Vertex Array Object and Vertex Buffer Object
 
-    vao.VAO_create();
-    vao.bind();
+//    vao.VAO_create();
+//    vao.bind();
+//
+//    vbo = VBO(vertices, sizeof(vertices));
+//    ebo = EBO(indices, sizeof(indices));
+//
+//    vao.link_attribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void *)(0 * sizeof(float)));
+//    vao.link_attribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+//
+//    vao.unbind();
+//    vbo.unbind();
+//    ebo.unbind();
 
-    vbo = VBO(vertices, sizeof(vertices));
-    ebo = EBO(indices, sizeof(indices));
-
-    vao.link_attribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void *)(0 * sizeof(float)));
-    vao.link_attribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void *)(3 * sizeof(float)));
-
-    vao.unbind();
-    vbo.unbind();
-    ebo.unbind();
-
-//    mdl = Model("C:/Users/janha/Documents/cube model/untitled.obj");
+    mdl = Model((char *) config.get("test.model").c_str());
 
     glViewport(0,0,windowWidth, windowHeight);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -78,7 +85,7 @@ int GraphicsEngine::_run() {
         return -1;
     }
     // set the clear colour
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+    glClearColor(0.34f, 0.34f, 0.34f, 0.0f);
 
     double lastTime = glfwGetTime();
     int nbFrames = 0;
@@ -92,9 +99,15 @@ int GraphicsEngine::_run() {
 
     glEnable(GL_DEPTH_TEST);
 
+    rbo.RBO_create(windowWidth, windowHeight);
+    txt.texture_create(windowWidth, windowHeight);
+    fbo.FBO_create(rbo, txt);
+
     do {
         glfwPollEvents();
         guiUpdateStart();
+
+        fbo.bind();
 #ifdef NDEBUG
         // release version
 #else
@@ -113,22 +126,37 @@ int GraphicsEngine::_run() {
         // clear the screen with clear color
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        shaderProgram.activate();
 
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.5f, 0.5f));
+//
+//        glm::mat4 trans = glm::mat4(1.0f);
+//        trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+//        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.5f, 0.5f));
+//
+//        glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(trans));
+//        glDrawElements( GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-        glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(trans));
-        glDrawElements( GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+        glm::mat4 view = camera.getViewMatrix();
+        shaderProgram.setMat4("projection", projection);
+        shaderProgram.setMat4("view", view);
 
-//        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-//        glm::mat4 view = camera.GetViewMatrix();
-//        shaderProgram.setMat4("projection", projection);
+
+//        const float radius = 10.0f;
+//        float camX = sin(glfwGetTime()) * radius;
+//        float camZ = cos(glfwGetTime()) * radius;
+//        glm::mat4 view;
+//        view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 //        shaderProgram.setMat4("view", view);
 
-//        mdl.Draw(shaderProgram);
+        // render the loaded model
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        shaderProgram.setMat4("model", model);
+        mdl.Draw(shaderProgram);
 
+        fbo.unbind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         guiUpdateEnd();
 
         glfwSwapBuffers(window);
@@ -143,6 +171,9 @@ void GraphicsEngine::_close() {
     vao.clear();
     vbo.clear();
     ebo.clear();
+    fbo.clear();
+    txt.clear();
+    rbo.clear();
     closeGUIcontext();
     shaderProgram.clear();
     glfwTerminate();
@@ -160,16 +191,34 @@ void GraphicsEngine::guiUpdateStart() {
     ImGui_ImplGlfw_NewFrame();
 
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow(); // Show demo window! :)
+    //ImGui::ShowDemoWindow(); // Show demo window! :)
     ImGui::Begin("My Scene");
+
+    const float window_width = ImGui::GetContentRegionAvail().x;
+    const float window_height = ImGui::GetContentRegionAvail().y;
+
+    fbo.rescale(window_width, window_height);
+
+    glViewport(0,0,window_width, window_height);
+
+    ImVec2 pos = ImGui::GetCursorScreenPos();
+
+    ImGui::GetWindowDrawList()->AddImage(
+            (void *)fbo.texture.ID,
+            ImVec2(pos.x, pos.y),
+            ImVec2(pos.x + window_width, pos.y + window_height),
+            ImVec2(0, 1),
+            ImVec2(1, 0)
+            );
+
     // render gui widgets
     ImGui::End();
     ImGui::Render();
 }
 
 void GraphicsEngine::guiUpdateEnd() {
-    // render the objects in the window
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+//    // render the objects in the window
+//    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     // and we have to pass the render data further
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -209,5 +258,4 @@ void GraphicsEngine::closeGUIcontext() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
-
 

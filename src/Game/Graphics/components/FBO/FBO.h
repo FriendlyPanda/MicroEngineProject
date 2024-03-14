@@ -6,15 +6,23 @@
 #define MEP_FBO_H
 
 #include "GL/glew.h"
+#include "../RBO/RBO.h"
+#include "../Texture/Texture.h"
 
 class FBO {
+public:
     GLuint ID;
     FBO();
-    void FBO_create();
+    void FBO_create(RBO newRBO, Texture newTexture);
+    RBO rbo;
+    Texture texture;
 
     void bind();
     void unbind();
     void clear();
+    void linkRBO(RBO rbo);
+    void linkTexture(Texture txtr);
+    void rescale(int width, int height);
 };
 
 

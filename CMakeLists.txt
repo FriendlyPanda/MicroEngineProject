@@ -11,6 +11,10 @@ add_subdirectory(libs/glew)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/spdlog)
 
+message(${CMAKE_SOURCE_DIR})
+
+
+
 add_library(assimp STATIC IMPORTED)
 set_target_properties(assimp PROPERTIES
         IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/Assimp/lib/libassimp.a
@@ -24,10 +28,13 @@ set_target_properties(z PROPERTIES
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
     message(debug_mode)
+    file(COPY ${CMAKE_SOURCE_DIR}/Assets DESTINATION ${CMAKE_SOURCE_DIR}/cmake-build-debug)
     # unit testing
     add_subdirectory(Google_tests)
+
 else ()
     message(release_mode)
+    file(COPY ${CMAKE_SOURCE_DIR}/Assets DESTINATION ${CMAKE_SOURCE_DIR}/cmake-build-release)
 endif ()
 
 
@@ -85,6 +92,10 @@ set(src
         src/Game/Graphics/components/FBO/FBO.h
         src/Game/Graphics/components/camera/Camera.cpp
         src/Game/Graphics/components/camera/Camera.h
+        src/Game/Graphics/components/RBO/RBO.cpp
+        src/Game/Graphics/components/RBO/RBO.h
+        src/Game/Graphics/components/Texture/Texture.cpp
+        src/Game/Graphics/components/Texture/Texture.h
 )
 
 

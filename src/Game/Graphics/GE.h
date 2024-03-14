@@ -34,6 +34,8 @@
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
+#include "components/camera/Camera.h"
+#include "components/FBO/FBO.h"
 
 
 // OpenGL Maths
@@ -49,10 +51,15 @@ private:
     VBO vbo;
     EBO ebo;
 
-//    Model mdl = Model("");
+    FBO fbo;
+    RBO rbo;
+    Texture txt;
 
-    const int windowWidth = DEFAULT_SCREEN_WIDTH;
-    const int windowHeight = DEFAULT_SCREEN_HEIGHT;
+    Model mdl = Model("");
+    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+
+    int windowWidth;
+    int windowHeight;
 
     ImGuiIO io;
     ImGuiIO dockWindow;
@@ -62,6 +69,9 @@ private:
     Shader shaderProgram;
 
     GLuint uniID;
+
+
+    MessageBoard config;
 
     InternalLogger log = InternalLogger("Graphics");
 

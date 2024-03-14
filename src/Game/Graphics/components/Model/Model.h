@@ -19,24 +19,19 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, boo
 
 class Model {
 public:
-    Model(char *path)
-    {
-        if(path != ""){
-            loadModel(path);
-        }
-    }
+    Model(char * path);
     void Draw(Shader &shader);
 
 private:
     // model data
     std::vector<Mesh> meshes;
     std::string directory;
-    std::vector<Texture> textures_loaded;
+    std::vector<ModelTexture> textures_loaded;
 
     void loadModel(std::string path);
     void processNode(aiNode *node, const aiScene *scene);
     Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-    std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName);
+    std::vector<ModelTexture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName);
 };
 
 
