@@ -56,19 +56,6 @@ GraphicsEngine::GraphicsEngine() {
 
     // set up Vertex Array Object and Vertex Buffer Object
 
-//    vao.VAO_create();
-//    vao.bind();
-//
-//    vbo = VBO(vertices, sizeof(vertices));
-//    ebo = EBO(indices, sizeof(indices));
-//
-//    vao.link_attribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void *)(0 * sizeof(float)));
-//    vao.link_attribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void *)(3 * sizeof(float)));
-//
-//    vao.unbind();
-//    vbo.unbind();
-//    ebo.unbind();
-
     mdl = Model((char *) config.get("test.model").c_str());
 
     glViewport(0,0,windowWidth, windowHeight);
@@ -90,9 +77,6 @@ int GraphicsEngine::_run() {
     double lastTime = glfwGetTime();
     int nbFrames = 0;
     shaderProgram.activate();
-    vao.bind();
-
-    GLfloat size = 0;
 
     // bind FPS to the screen refresh rate
     glfwSwapInterval(1);
@@ -126,27 +110,10 @@ int GraphicsEngine::_run() {
         // clear the screen with clear color
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-//
-//        glm::mat4 trans = glm::mat4(1.0f);
-//        trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
-//        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.5f, 0.5f));
-//
-//        glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(trans));
-//        glDrawElements( GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
         glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
         glm::mat4 view = camera.getViewMatrix();
         shaderProgram.setMat4("projection", projection);
         shaderProgram.setMat4("view", view);
-
-
-//        const float radius = 10.0f;
-//        float camX = sin(glfwGetTime()) * radius;
-//        float camZ = cos(glfwGetTime()) * radius;
-//        glm::mat4 view;
-//        view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
-//        shaderProgram.setMat4("view", view);
 
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
@@ -168,9 +135,6 @@ int GraphicsEngine::_run() {
 
 void GraphicsEngine::_close() {
     glfwDestroyWindow(window);
-    vao.clear();
-    vbo.clear();
-    ebo.clear();
     fbo.clear();
     txt.clear();
     rbo.clear();
@@ -242,12 +206,12 @@ void GraphicsEngine::initGUIcontext() {
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-    ImGui::StyleColorsClassic();
-    style = ImGui::GetStyle();
-    if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable){
-        style.WindowRounding = 0.0f;
-        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-    }
+//    ImGui::StyleColorsClassic();
+//    style = ImGui::GetStyle();
+//    if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable){
+//        style.WindowRounding = 0.0f;
+//        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+//    }
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init();

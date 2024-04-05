@@ -40,6 +40,18 @@ public:
      */
     [[nodiscard]] std::string get(const std::string& key, const std::vector<std::string>& params) const;
 
+	/**
+	 * Update a value of the messages, used for settings and configs.
+	 * @param key the key of the message
+	 * @param newMessage new value of the message
+	 */
+	void update(std::string key, std::string newMessage);
+
+	/**
+	 * Save the config back to the
+	 */
+	void save();
+
     /**
      * basic destructor
      */
@@ -48,15 +60,17 @@ public:
     }
 
 private:
- /** all of the messages are paired with a key and saved as a map */
- std::pmr::unordered_map<std::string, std::string> messages;
+	/** all of the messages are paired with a key and saved as a map */
+	std::pmr::unordered_map<std::string, std::string> messages;
 
- /**
-  * replace the placeholders in the message with the following parameters
-  * @param message the message to replace the placeholders from
-  * @param params the vector of strings to replace the placeholders with
-  */
- static void replacePlaceholders(std::string& message, const std::vector<std::string>& params);
+	std::string pathToMessages;
+
+	/**
+	 * replace the placeholders in the message with the following parameters
+	 * @param message the message to replace the placeholders from
+	 * @param params the vector of strings to replace the placeholders with
+	 */
+	static void replacePlaceholders(std::string& message, const std::vector<std::string>& params);
 };
 
 

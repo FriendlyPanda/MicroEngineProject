@@ -13,8 +13,6 @@ add_subdirectory(libs/spdlog)
 
 message(${CMAKE_SOURCE_DIR})
 
-
-
 add_library(assimp STATIC IMPORTED)
 set_target_properties(assimp PROPERTIES
         IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/Assimp/lib/libassimp.a
@@ -66,8 +64,8 @@ set(src
         src/Game/Graphics/GE.h
         src/Game/Graphics/components/Shaders/Shader.cpp
         src/Game/Graphics/components/Shaders/Shader.h
-        src/Game/InternalLogger.cpp
-        src/Game/InternalLogger.h
+        src/Game/misc/InternalLogger.cpp
+        src/Game/misc/InternalLogger.h
         src/Game/Graphics/components/VBO/VBO.cpp
         src/Game/Graphics/components/VBO/VBO.h
         src/Game/Graphics/components/EBO/EBO.cpp
@@ -76,7 +74,7 @@ set(src
         src/Game/Graphics/components/VAO/VAO.h
         src/properties/MessageBoard.cpp
         src/properties/MessageBoard.h
-        src/main.cpp
+        main.cpp
         src/Game/Graphics/UniformVarManager.cpp
         src/Game/Graphics/UniformVarManager.h
         src/Game/NodeSystem/Nodes/BaseNode.h

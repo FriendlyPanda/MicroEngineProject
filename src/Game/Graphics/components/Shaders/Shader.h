@@ -6,9 +6,9 @@
 #define MEP_SHADER_H
 
 #include <string>
-#include "GL/glew.h"
-#include "../../../InternalLogger.h"
+#include "../../../misc/InternalLogger.h"
 #include "../../UniformVarManager.h"
+#include "GL/glew.h"
 #include "glm/glm.hpp"
 
 

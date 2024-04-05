@@ -24,6 +24,8 @@ void MessageBoard::replacePlaceholders(string &message, const vector<string> &pa
 
 MessageBoard::MessageBoard(const string &filename) {
 
+	pathToMessages = filename;
+
     std::ifstream file(filename);
     string line;
     while(getline(file, line)){
