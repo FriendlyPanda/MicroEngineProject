@@ -21,7 +21,7 @@ InternalLogger::InternalLogger(std::string logger_name) {
     file_sink->set_level(spdlog::level::trace);
 
     logger = spdlog::logger(std::move(logger_name), {console_sink, file_sink});
-    msg = new MessageBoard("Assets/properties/messages_en.properties");
+    msg = new MessageBoard("Assets/properties/sys_graphics_en.properties");
 }
 
 void InternalLogger::clear() {

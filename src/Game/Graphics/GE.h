@@ -21,6 +21,7 @@
 #define DEFAULT_SCREEN_HEIGHT 720
 
 #include <cstdio>
+#include <functional>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -33,6 +34,8 @@
 #include "components/VAO/VAO.h"
 #include "components/VBO/VBO.h"
 #include "components/camera/Camera.h"
+#include "modules/GUIBaseClass.h"
+
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
 #include "imgui/imgui.h"
@@ -44,29 +47,43 @@
 #include <glm/gtc/type_ptr.hpp>
 
 class GraphicsEngine {
-private:
-    GLFWwindow *window;
+public:
+	GraphicsEngine(GLFWwindow * window_ptr, FBO * fbo_ptr, MessageBoard * config_ptr, double * deltaTime);
+	int init_();
 
-    FBO fbo;
+	// temp testing function, remove before release
+	void setShaderProgram(Shader newShaderProgram);
+
+	void setUIRender(std::function<void()> * start, std::function<void()> * end);
+private:
+
+	// window settings
+    GLFWwindow *window;
+	int windowWidth;
+	int windowHeight;
+
+	// frame buffers
+    FBO * fbo;
     RBO rbo;
     Texture txt;
 
-    Model mdl = Model("");
+	// temp testing parameters
+    //Model mdl = Model("");
+
+	// world view
     Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
-    int windowWidth;
-    int windowHeight;
-
-    ImGuiIO io;
-
     Shader shaderProgram;
+	double * deltaTime;
 
-    GLuint uniID;
 
-
-    MessageBoard config;
-
+	// messages and logs
+    MessageBoard * config;
     InternalLogger log = InternalLogger("Graphics");
+
+	// UI
+	GUIBaseClass * ui = nullptr;
+
 
 
     static void framebuffer_size_callback(GLFWwindow * window, int width, int height) {
@@ -92,10 +109,10 @@ private:
         glViewport(0, 0, windowWidth, windowHeight);
     }
 
-    void guiUpdateStart();
-    void guiUpdateEnd();
-    void initGUIcontext();
-    void closeGUIcontext();
+//    void guiUpdateStart();
+//    void guiUpdateEnd();
+//    void initGUIcontext();
+//    void closeGUIcontext();
 
 
 public:

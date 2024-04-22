@@ -94,6 +94,7 @@ set(src
         src/Game/Graphics/components/RBO/RBO.h
         src/Game/Graphics/components/Texture/Texture.cpp
         src/Game/Graphics/components/Texture/Texture.h
+        src/Game/Graphics/modules/GUIBaseClass.h
 )
 
 
