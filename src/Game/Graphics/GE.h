@@ -55,6 +55,7 @@ public:
 	void setShaderProgram(Shader newShaderProgram);
 
 	void setUIRender(std::function<void()> * start, std::function<void()> * end);
+    void setMesh(Mesh * newMesh);
 private:
 
 	// window settings
@@ -69,6 +70,10 @@ private:
 
 	// temp testing parameters
     //Model mdl = Model("");
+    Mesh * mesh = nullptr;
+    glm::vec3 color = {0.8, 0.2, 0.1};
+    float transparency = 0.6;
+    ImGuiIO io;
 
 	// world view
     Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -83,6 +88,7 @@ private:
 
 	// UI
 	GUIBaseClass * ui = nullptr;
+
 
 
 
@@ -109,10 +115,11 @@ private:
         glViewport(0, 0, windowWidth, windowHeight);
     }
 
-//    void guiUpdateStart();
-//    void guiUpdateEnd();
-//    void initGUIcontext();
-//    void closeGUIcontext();
+    void guiUpdateStart();
+    void guiUpdateEnd();
+    void initGUIcontext();
+    void closeGUIcontext();
+    void showOptions();
 
 
 public:

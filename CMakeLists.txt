@@ -95,6 +95,7 @@ set(src
         src/Game/Graphics/components/Texture/Texture.cpp
         src/Game/Graphics/components/Texture/Texture.h
         src/Game/Graphics/modules/GUIBaseClass.h
+        src/generators/SplineGenerator3D.cpp
 )
 
 
@@ -108,7 +109,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
     # Code specific to Linux
     find_package(OpenGL REQUIRED)
     target_link_libraries(${PROJECT_NAME} PRIVATE
-            libglew_static glfw glm spdlog::spdlog assimp
+            libglew_static glfw glm spdlog::spdlog assimp assimp z
             # Add more static libraries as needed
     )
 

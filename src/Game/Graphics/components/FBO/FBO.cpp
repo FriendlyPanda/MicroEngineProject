@@ -6,10 +6,16 @@
 #include "iostream"
 
 FBO::FBO() {
+    ID = 0;
 }
 
 void FBO::FBO_create(RBO newRBO, Texture newTexture) {
     glGenFramebuffers(1, &ID);
+    GLenum error = glGetError();
+    if(error!=GL_NO_ERROR){
+        std::cout << "OpenGL Error: " << error;
+        return;
+    }
     bind();
     this->texture = newTexture;
     this->rbo = newRBO;

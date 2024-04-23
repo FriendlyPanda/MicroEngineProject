@@ -17,7 +17,7 @@ GraphicsEngine::GraphicsEngine() {
     //mdl = Model((char *) config->get("test.model").c_str());
 
 
-//    initGUIcontext();
+
 
 
 }
@@ -47,6 +47,7 @@ int GraphicsEngine::_run() {
 		if(ui != nullptr){
 			ui->gui_update_start();
 		}
+        guiUpdateStart();
 
 		*deltaTime = glfwGetTime() - lastTime;
 
@@ -78,6 +79,12 @@ int GraphicsEngine::_run() {
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         shaderProgram.setMat4("model", model);
+
+
+
+        glUniform3fv(shaderProgram.getUniform("color"), 1, glm::value_ptr(color));
+        glUniform1fv(shaderProgram.getUniform("transparency"), 1, &transparency);
+
         //mdl.Draw(shaderProgram);
 
         fbo->unbind();
@@ -85,6 +92,10 @@ int GraphicsEngine::_run() {
 		if(ui != nullptr){
 			ui->gui_update_end();
 		}
+
+        guiUpdateEnd();
+
+        mesh->Draw(shaderProgram);
 
         glfwSwapBuffers(window);
 
@@ -98,7 +109,7 @@ void GraphicsEngine::_close() {
     fbo = nullptr;
     txt.clear();
     rbo.clear();
-//    closeGUIcontext();
+    closeGUIcontext();
     shaderProgram.clear();
     glfwTerminate();
     log.logger.info(log.msg->get("graphics_engine.close"));
@@ -110,77 +121,98 @@ GraphicsEngine::~GraphicsEngine() {
     log.clear();
 }
 
-//void GraphicsEngine::guiUpdateStart() {
-//    // Start the Dear ImGui frame
-//    ImGui_ImplOpenGL3_NewFrame();
-//    ImGui_ImplGlfw_NewFrame();
-//
-//    ImGui::NewFrame();
-//    //ImGui::ShowDemoWindow(); // Show demo window! :)
-//    ImGui::Begin("My Scene");
-//
-//    const float window_width = ImGui::GetContentRegionAvail().x;
-//    const float window_height = ImGui::GetContentRegionAvail().y;
-//
-//    fbo->rescale(window_width, window_height);
-//
-//    glViewport(0,0,window_width, window_height);
-//
-//    ImVec2 pos = ImGui::GetCursorScreenPos();
-//
-//    ImGui::GetWindowDrawList()->AddImage(
-//            (void *)fbo->texture.ID,
-//            ImVec2(pos.x, pos.y),
-//            ImVec2(pos.x + window_width, pos.y + window_height),
-//            ImVec2(0, 1),
-//            ImVec2(1, 0)
-//            );
-//
-//    // render gui widgets
-//    ImGui::End();
-//    ImGui::Render();
-//}
+void GraphicsEngine::guiUpdateStart() {
+    // Start the Dear ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
 
-//void GraphicsEngine::guiUpdateEnd() {
-////    // render the objects in the window
-////    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-//
-//    // and we have to pass the render data further
+    ImGui::NewFrame();
+    //ImGui::ShowDemoWindow(); // Show demo window! :)
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
+    ImGui::Begin("My Scene");
+
+    const float window_width = ImGui::GetContentRegionAvail().x;
+    const float window_height = ImGui::GetContentRegionAvail().y;
+
+    fbo->rescale(window_width, window_height);
+
+    glViewport(0,0,window_width, window_height);
+
+    ImVec2 pos = ImGui::GetCursorScreenPos();
+
+    ImGui::GetWindowDrawList()->AddImage(
+            (void *)fbo->texture.ID,
+            ImVec2(pos.x, pos.y),
+            ImVec2(pos.x + window_width, pos.y + window_height),
+            ImVec2(0, 1),
+            ImVec2(1, 0)
+            );
+
+    // render gui widgets
+    ImGui::End();
+    showOptions();
+
+    ImGui::Render();
+}
+
+void GraphicsEngine::guiUpdateEnd() {
+//    // render the objects in the window
 //    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-//    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-//    {
-//        GLFWwindow* backup_current_context = glfwGetCurrentContext();
-//        ImGui::UpdatePlatformWindows();
-//        ImGui::RenderPlatformWindowsDefault();
-//        glfwMakeContextCurrent(backup_current_context);
+
+    // and we have to pass the render data further
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
+    }
+    ImGui::EndFrame();
+}
+
+void GraphicsEngine::showOptions() {
+    float rotationSpeed = 0.1f;
+    ImGui::Begin("Options");
+    if(ImGui::CollapsingHeader("Config")){
+        if(ImGui::TreeNode("Options")){
+            ImGui::SliderFloat("Rotation speed", &rotationSpeed, 0.00f, 0.1f);
+            ImGui::Dummy(ImVec2(0.0f, 20.0f));
+            ImGui::TreePop();
+        }
+
+    }
+    ImGui::End();
+
+
+}
+
+
+void GraphicsEngine::initGUIcontext() {
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+//    ImGui::StyleColorsClassic();
+//    style = ImGui::GetStyle();
+//    if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable){
+//        style.WindowRounding = 0.0f;
+//        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 //    }
-//}
 
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init();
+}
 
-//void GraphicsEngine::initGUIcontext() {
-//    IMGUI_CHECKVERSION();
-//    ImGui::CreateContext();
-//    io = ImGui::GetIO();
-//    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-//    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-//    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-//
-////    ImGui::StyleColorsClassic();
-////    style = ImGui::GetStyle();
-////    if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable){
-////        style.WindowRounding = 0.0f;
-////        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-////    }
-//
-//    ImGui_ImplGlfw_InitForOpenGL(window, true);
-//    ImGui_ImplOpenGL3_Init();
-//}
-
-//void GraphicsEngine::closeGUIcontext() {
-//    ImGui_ImplOpenGL3_Shutdown();
-//    ImGui_ImplGlfw_Shutdown();
-//    ImGui::DestroyContext();
-//}
+void GraphicsEngine::closeGUIcontext() {
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+}
 
 GraphicsEngine::GraphicsEngine(GLFWwindow *window_ptr, FBO *fbo_ptr, MessageBoard *config_ptr, double * deltaTime) {
 	this->window = window_ptr;
@@ -191,6 +223,7 @@ GraphicsEngine::GraphicsEngine(GLFWwindow *window_ptr, FBO *fbo_ptr, MessageBoar
 	this->fbo = fbo_ptr;
 	this->deltaTime = deltaTime;
 }
+
 int GraphicsEngine::init_() {
 	// initialise glfw
 	if (!glfwInit()) {
@@ -224,6 +257,7 @@ int GraphicsEngine::init_() {
 
 	log.logger.info(log.msg->get("graphics_engine.init.success"));
 	init_success = true;
+    initGUIcontext();
 	return 0;
 }
 void GraphicsEngine::setShaderProgram(Shader newShaderProgram) {
@@ -232,6 +266,11 @@ void GraphicsEngine::setShaderProgram(Shader newShaderProgram) {
 		log.logger.error(log.msg->get("graphics_engine.init.fail"));
 		init_success = false;
 	}
+}
+
+void GraphicsEngine::setMesh(Mesh *newMesh) {
+    mesh = newMesh;
+
 }
 //void GraphicsEngine::setUIRender(std::function<void()> * start, std::function<void()> * end) {
 //	this->uiStart = start;
