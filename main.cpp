@@ -7,7 +7,7 @@
 using namespace glm;
 
 int main(int argc, char * args[]) {
-	GLFWwindow *mainWindow;
+	GLFWwindow * mainWindow = nullptr;
 	FBO fbo = FBO();
 	MessageBoard config = MessageBoard("Assets/properties/config.properties");
 
@@ -18,15 +18,16 @@ int main(int argc, char * args[]) {
     vec3 pointC{-1.0, 1.0, 1.0};
     vec3 pointD{-1.0, 0.0, 0.0};
 
-    SplineGenerator3D spl{pointA, pointB, pointC, pointD};
+    SplineGenerator3D spl{pointA, pointB, pointC, pointD, 20};
 
 
-    GraphicsEngine ge(mainWindow, &fbo, &config, &deltaTime);
+    GraphicsEngine ge(&fbo, &config, &deltaTime);
 	ge.init_();
+    mainWindow = ge.getWindow();
 
     spl.generateBezierCurve(20, 0.2f);
 
-	Shader shaderProgram = Shader("Assets/Shaders/temp/vertex.glsl", "Assets/Shaders/temp/fragment.glsl");
+	auto * shaderProgram = new Shader(&config,"Assets/Shaders/temp/vertex.glsl", "Assets/Shaders/temp/fragment.glsl");
 
 
 	ge.setShaderProgram(shaderProgram);

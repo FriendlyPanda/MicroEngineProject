@@ -23,7 +23,7 @@ public:
         nextNode.erase(std::find(nextNode.begin(), nextNode.end(), getNode(id)));
     }
 
-    unsigned int getID(){
+    [[nodiscard]] unsigned int getID() const{
         return ID;
     }
 
@@ -31,9 +31,12 @@ public:
         if(ID == nodeID){
             return this;
         }else{
-            Node * nextNodePtr;
+            Node * nextNodePtr = getNode(nodeID);
+            if(nextNodePtr != nullptr){
+                return nextNodePtr;
+            }
             for(Node* node : nextNode){
-                nextNodePtr = node->findNode(ID);
+                nextNodePtr = node->findNode(nodeID);
                 if(nextNodePtr != nullptr){
                     return nextNodePtr;
                 }
@@ -44,7 +47,6 @@ public:
 
     Node * getNode(unsigned int id){
         for(Node* node : nextNode){
-            node->getID();
             if(node->getID() == id){
                 return node;
             }

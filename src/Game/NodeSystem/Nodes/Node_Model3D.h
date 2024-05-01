@@ -10,7 +10,13 @@
 #include "../../Graphics/components/Model/Model.h"
 
 class Node_Model3D : Node {
-    Model model3D;
+private:
+    Model * model3D;
+public:
+    explicit Node_Model3D(unsigned int id);
+
+    void setModel(Model * newModel);
+    void draw(Shader * shader);
 };
 
 

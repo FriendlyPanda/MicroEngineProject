@@ -14,7 +14,8 @@
 #include "GL/glew.h"
 
 class UniformVarManager {
-    std::pmr::unordered_map<std::string, GLuint> uniforms;
+private:
+    std::pmr::unordered_map<std::string, GLuint> * uniforms;
     int uniformLength;
 public:
     UniformVarManager();
@@ -24,6 +25,8 @@ public:
     int setUniform(const std::string&, GLuint);
 
     GLint getUniform(const std::string& uniformName);
+
+    virtual ~UniformVarManager();
 };
 
 
