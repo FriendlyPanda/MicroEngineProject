@@ -9,6 +9,7 @@
 
 UniformVarManager::UniformVarManager() {
     uniformLength = 0;
+    uniforms = new std::pmr::unordered_map<std::string, GLuint>();
 }
 
 void UniformVarManager::scanFile(const std::string& filename, GLuint shaderID) {
@@ -40,8 +41,8 @@ void UniformVarManager::scanFile(const std::string& filename, GLuint shaderID) {
         variableName = match[1].str().c_str();
 
         // check if the uniform already exists, skip if so
-        auto uniformKey = uniforms.find(variableName);
-        if (uniformKey != uniforms.end()){
+        auto uniformKey = uniforms->find(variableName);
+        if (uniformKey != uniforms->end()){
             continue;
         }
 
@@ -66,7 +67,7 @@ std::vector<std::string> UniformVarManager::getUniformList() {
     keys.reserve(uniformLength);
 
     // iterate each key and add it to the vector
-    for(const auto& pair : uniforms){
+    for(const auto& pair : *uniforms){
         keys.push_back(pair.first);
     }
 
@@ -74,21 +75,26 @@ std::vector<std::string> UniformVarManager::getUniformList() {
 }
 
 int UniformVarManager::setUniform(const std::string& key, GLuint ID) {
-    auto uniformKey = uniforms.find(key);
-    if (uniformKey != uniforms.end()){
+    auto uniformKey = uniforms->find(key);
+    if (uniformKey != uniforms->end()){
         uniformKey->second = ID;
         return 0;
     }else{
-        uniforms[key] = ID;
+        (*uniforms)[key] = ID;
         uniformLength++;
         return 1;
     }
 }
 
 GLint UniformVarManager::getUniform(const std::string& uniformName) {
-    auto uniformKey = uniforms.find(uniformName);
-    if (uniformKey != uniforms.end()){
+    auto uniformKey = uniforms->find(uniformName);
+    if (uniformKey != uniforms->end()){
         return uniformKey->second;
     }
     return -1;
+}
+
+UniformVarManager::~UniformVarManager() {
+    uniforms->clear();
+    delete(uniforms);
 }

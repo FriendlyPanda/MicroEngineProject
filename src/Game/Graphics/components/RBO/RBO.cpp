@@ -12,6 +12,7 @@ void RBO::RBO_create(int width, int height) {
     resizeStorage(width, height);
 }
 
+
 void RBO::bind() {
     glBindRenderbuffer(GL_RENDERBUFFER, ID);
 }

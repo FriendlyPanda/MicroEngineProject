@@ -18,14 +18,18 @@ std::string Shader::get_file_contents(const char *filename) {
         in.close();
         return contents;
     }
-    log.logger.error(log.msg->get("shader.wrong_filepath", {filename}));
+    log->errorMsg("shader.wrong_filepath", {filename});
+//    log->logger.error(log->msg->get("shader.wrong_filepath", {filename}));
     throw errno;
 }
 
-Shader::Shader(const char *vertexFile, const char *fragmentFile) {
+Shader::Shader(MessageBoard * config, const char *vertexFile, const char *fragmentFile) {
     if (vertexFile == nullptr || fragmentFile == nullptr) {
 
     } else {
+        log = new InternalLogger("Shader");
+        log->setupMessageBoard(config->get("messages.shader"));
+        uniformVarManager = new UniformVarManager();
         ID = loadShaders(vertexFile, fragmentFile);
         if(ID == -1){
             success = false;
@@ -46,11 +50,14 @@ void Shader::compile_shader(const std::string& sourceCode, const GLuint shaderID
     if (*InfoLogLength > 0) {
         std::vector<char> shaderErrorMessage(*InfoLogLength + 1);
         glGetShaderInfoLog(shaderID, *InfoLogLength, nullptr, &shaderErrorMessage[0]);
-        log.logger.error(log.msg->get("shader.compile.fail"));
-        log.logger.error(log.msg->get("msg.empty", {&shaderErrorMessage[0]}));
+        log->errorMsg("shader.compile.fail");
+        log->errorMsg("msg.empty", {&shaderErrorMessage[0]});
+//        log->logger.error(log->msg->get("shader.compile.fail"));
+//        log->logger.error(log->msg->get("msg.empty", {&shaderErrorMessage[0]}));
         throw errno;
     }
-    log.logger.info(log.msg->get("shader.compile.success"));
+    log->infoMsg("shader.compile.success");
+//    log->logger.info(log->msg->get("shader.compile.success"));
 }
 
 GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_file_path) {
@@ -82,11 +89,13 @@ GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_fi
 
     try{
         // Compile Vertex Shader
-        log.logger.info(log.msg->get("shader.compile", {vertex_file_path}));
+        log->infoMsg("shader.compile", {vertex_file_path});
+//        log->logger.info(log->msg->get("shader.compile", {vertex_file_path}));
         compile_shader(VertexShaderCode, VertexShaderID, &Result, &InfoLogLength);
 
         // Compile Fragment Shader
-        log.logger.info(log.msg->get("shader.compile", {fragment_file_path}));
+        log->infoMsg("shader.compile", {fragment_file_path});
+//        log->logger.info(log->msg->get("shader.compile", {fragment_file_path}));
         compile_shader(FragmentShaderCode, FragmentShaderID, &Result, &InfoLogLength);
     } catch(int e){
         return -1;
@@ -95,7 +104,8 @@ GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_fi
 
 
     // Link the program
-    log.logger.info(log.msg->get("shader.linking"));
+    log->infoMsg("shader.linking");
+//    log->logger.info(log->msg->get("shader.linking"));
     const GLuint ProgramID = glCreateProgram();
     glAttachShader(ProgramID, VertexShaderID);
     glAttachShader(ProgramID, FragmentShaderID);
@@ -107,15 +117,16 @@ GLuint Shader::loadShaders(const char *vertex_file_path, const char *fragment_fi
     if (InfoLogLength > 0) {
         std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
         glGetProgramInfoLog(ProgramID, InfoLogLength, nullptr, &ProgramErrorMessage[0]);
-        log.logger.error(log.msg->get("msg.empty", {&ProgramErrorMessage[0]}));
+        log->errorMsg("msg.empty", {&ProgramErrorMessage[0]});
+//        log->logger.error(log->msg->get("msg.empty", {&ProgramErrorMessage[0]}));
         return -1;
     }
 
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);
 
-    uniformVarManager.scanFile(vertex_file_path, ProgramID);
-    uniformVarManager.scanFile(fragment_file_path, ProgramID);
+    uniformVarManager->scanFile(vertex_file_path, ProgramID);
+    uniformVarManager->scanFile(fragment_file_path, ProgramID);
 
     return ProgramID;
 }
@@ -133,7 +144,7 @@ Shader::Shader() {
 }
 
 GLint Shader::getUniform(const std::string& key) {
-    return uniformVarManager.getUniform(key);
+    return uniformVarManager->getUniform(key);
 }
 
 void Shader::setBool(const std::string &name, bool value) {
@@ -167,4 +178,17 @@ void Shader::setMat4(const std::string &name, const glm::mat4 &mat) {
     }
 
 
+}
+
+bool Shader::checkSuccess() const {
+    return success;
+}
+
+GLuint Shader::getID() const {
+    return ID;
+}
+
+Shader::~Shader() {
+    delete(uniformVarManager);
+    delete (log);
 }
