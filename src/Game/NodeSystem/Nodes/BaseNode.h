@@ -19,9 +19,9 @@ public:
         nextNode.push_back(newNodePtr);
     }
 
-    void removeNode(unsigned int id){
-        nextNode.erase(std::find(nextNode.begin(), nextNode.end(), getNode(id)));
-    }
+//    void removeNode(unsigned int id){
+//        nextNode.erase(std::find(nextNode.begin(), nextNode.end(), getNode(id)));
+//    }
 
     [[nodiscard]] unsigned int getID() const{
         return ID;
@@ -53,6 +53,42 @@ public:
         }
         return nullptr;
     }
+
+    Node * getParentNode(unsigned int id, Node * parent = nullptr){
+        if(ID == id){
+            return parent;
+        }else{
+            for(Node * node : nextNode){
+                Node * locatedParent = node->getParentNode(id, this);
+                if(locatedParent != nullptr){
+                    return locatedParent;
+                }
+            }
+        }
+        return nullptr;
+    }
+
+    void removeNode(unsigned int id){
+        Node * parent = getParentNode(id);
+        if(parent == nullptr){
+            return;
+        }
+        auto it = std::find_if(parent->nextNode.begin(), parent->nextNode.end(), [&](Node * n) {return n->getID() == id;});
+        if(it != parent->nextNode.end()){
+            Node * node = *it;
+            parent->nextNode.erase(it);
+            delete node;
+        }
+    }
+
+    virtual ~Node() {
+        for (auto node : nextNode){
+            delete node;
+        }
+        nextNode.clear();
+    }
+
+
 };
 
 #endif //MEP_BASENODE_H

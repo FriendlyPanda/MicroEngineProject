@@ -34,6 +34,7 @@ int GraphicsEngine::init_() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // create a window using glfw
     window = glfwCreateWindow(windowWidth, windowHeight, "BaseWindow", nullptr, nullptr);
@@ -213,4 +214,42 @@ void GraphicsEngine::setUI(GUIBaseClass *gui) {
         this->ui = gui;
         ui->init_ImGUI_window(window);
     }
+}
+
+void GraphicsEngine::addNode(Node *newNode) {
+    if(std::find(nodeIDs.begin(), nodeIDs.end(), newNode->getID()) != nodeIDs.end()){
+        log.warning("The ID of a node is already reserved");
+    }else{
+        rootNode.addNode(newNode);
+        nodeIDs.push_back(newNode->getID());
+    }
+}
+
+void GraphicsEngine::removeNode(int ID) {
+
+    auto it = std::find(nodeIDs.begin(), nodeIDs.end(), ID);
+
+    if(it != nodeIDs.end()){
+        rootNode.removeNode(ID);
+        nodeIDs.erase(it);
+    }else{
+        log.warning("The ID does not exist");
+    }
+}
+
+Node * GraphicsEngine::getNode(int ID) {
+    return rootNode.getNode(ID);
+}
+
+Node_Object * GraphicsEngine::getNodeObject(const std::string& name) {
+    for(unsigned int i : nodeIDs){
+        Node * node = rootNode.getNode(i);
+        if(typeid(*node) == typeid(Node_Object)){
+            auto * node_obj = dynamic_cast<Node_Object *>(node);
+            if(node_obj->getName() == name){
+                return node_obj;
+            }
+        }
+    }
+    return nullptr;
 }

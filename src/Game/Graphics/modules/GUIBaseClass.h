@@ -1,5 +1,5 @@
 //
-// Created by User on 22/04/2024.
+// Created by janha on 22/04/2024.
 //
 
 #ifndef MEP_GUIBASECLASS_H
@@ -9,6 +9,7 @@
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
 #include "imgui/imgui.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 #include "../components/FBO/FBO.h"
 #include "../../misc/InternalLogger.h"
 
