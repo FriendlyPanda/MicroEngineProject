@@ -6,7 +6,7 @@
 #define MEP_MESSAGEBOARDCONVERSION_H
 #include <cstdlib>
 
-int stringToIntSafe(char *str, int backup) {
+int stringToIntSafe(const char *str, int backup) {
     int endValue;
     char * conversionError = nullptr;
     endValue = strtol(str, &conversionError, 10);

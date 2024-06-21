@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24.1)
+cmake_minimum_required(VERSION 3.22.1)
 set(CMAKE_CXX_STANDARD 20)
 
 #set(CMAKE_SKIP_BUILD_RPATH  FALSE)
@@ -7,88 +7,96 @@ set(CMAKE_CXX_STANDARD 20)
 #set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 option(SHARED_LIB "build the project as a shared library" OFF)
+option(BUILD_SAMPLE_PLUGIN "Build Sample Plugin" ON)
 
 project(
         "MEP"
         VERSION 1.0.0
         LANGUAGES CXX)
 
-#add_subdirectory(lib/glfw)
-#add_subdirectory(lib/glew)
 add_subdirectory(lib/glm)
-#add_subdirectory(lib/spdlog)
-
+message(STATUS ${CMAKE_SYSTEM_NAME})
 message(${CMAKE_SOURCE_DIR})
 
-# GLFW
-
-include_directories(lib/glfw/include)
-link_directories(lib/glfw/lib)
-
-add_library(glfw SHARED IMPORTED)
-set_target_properties(glfw PROPERTIES
-        IMPORTED_IMPLIB ${CMAKE_SOURCE_DIR}/lib/glfw/lib/libglfw3dll.a
-        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/lib/glfw/lib/libglfw3.a
-        INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/lib/glfw/include
-)
-
-# GLEW
-
-include_directories(lib/glew/include)
-link_directories(lib/glew/lib)
-
-add_library(glew SHARED IMPORTED)
-set_target_properties(glew PROPERTIES
-        IMPORTED_IMPLIB ${CMAKE_SOURCE_DIR}/lib/glew/lib/libglew32.dll.a
-        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/lib/glew/lib/libglew32.a
-        INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/lib/glew/include
-)
-
-# ASSIMP
-
-include_directories(lib/assimp/include)
-link_directories(lib/assimp/lib)
-
-add_library(assimp SHARED IMPORTED)
-set_target_properties(assimp PROPERTIES
-        IMPORTED_IMPLIB ${CMAKE_SOURCE_DIR}/lib/assimp/lib/libassimp.dll.a
-        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/lib/assimp/lib/libassimp.a
-        INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/lib/assimp/include
-)
-
-add_library(z STATIC IMPORTED)
-set_target_properties(z PROPERTIES
-        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/lib/assimp/lib/libzlibstatic.a
-)
-
-include_directories(lib/spdlog/include)
-link_directories(lib/spdlog/lib)
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    # Code specific to Linux
 
 
-if(NOT TARGET spdlog)
-    # Stand-alone build
-#    find_package(spdlog REQUIRED)
-    add_library(spdlog SHARED IMPORTED)
-    set_target_properties(spdlog PROPERTIES
-            IMPORTED_IMPLIB ${CMAKE_SOURCE_DIR}/lib/spdlog/lib/libspdlog.dll.a
-            INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/lib/spdlog/include
+    find_package(GLEW REQUIRED)
+    find_package(glfw3 REQUIRED)
+    find_package(glm REQUIRED)
+    find_package(spdlog REQUIRED)
+    find_library(DL_LIBRARY dl)
+
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    # Code specific to Windows
+
+    # NOTE:
+    # if the libraries were installed without changing from the default installation directory, everything should work as is
+    # otherwise please remember to change the directories
+
+    # GLFW : developed on -> 3.4
+    set(GLFW_DIR "C:/Program Files (x86)/GLFW/")
+    set(glfw3_DIR "${GLFW_DIR}lib/cmake/glfw3")
+    set(glfw3_INCLUDE_DIRS "${GLFW_DIR}include")
+    set(glfw3_bin "${GLFW_DIR}bin/glfw3.dll")
+
+    find_package(glfw3 REQUIRED)
+    if(glfw3_FOUND)
+        message(STATUS "GLFW3 was found.")
+        get_target_property(GLFW3_LOCATION glfw LOCATION)
+        message(STATUS "GLFW3 location: ${GLFW3_LOCATION}")
+    else()
+        message(STATUS "GLFW3 wasn't found.")
+    endif()
+
+
+    # GLEW : developed on -> 2.1.0
+    find_package(GLEW REQUIRED)
+
+    if(GLEW_FOUND)
+        message(STATUS "GLEW was found.")
+        get_target_property(GLEW_LOCATION GLEW::glew LOCATION)
+        message(STATUS "GLEW location: ${GLEW_LOCATION}")
+    else()
+        message(STATUS "GLEW wasn't found.")
+    endif()
+
+
+    # spdlog : developed on -> 1.14.1
+    if(NOT TARGET spdlog)
+        # Stand-alone build
+        find_package(spdlog REQUIRED)
+        if(spdlog_FOUND)
+            message(STATUS "spdlog was found.")
+            get_target_property(spdlog_LOCATION spdlog::spdlog LOCATION)
+            message(STATUS "spdlog location: ${spdlog_LOCATION}")
+        else()
+            message(STATUS "spdlog wasn't found.")
+        endif()
+    endif()
+
+
+
+    #   Include the dll files in the build folder
+
+    set(DLL_FILES_LOC
+#            lib/assimp/bin/libassimp-5.dll
+            ${GLFW3_LOCATION}
+            ${GLEW_LOCATION}
+            ${spdlog_LOCATION}
     )
-endif()
+
+    foreach (file ${DLL_FILES_LOC})
+        file(COPY ${file} DESTINATION ${CMAKE_BINARY_DIR})
+    endforeach ()
+
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+
+endif ()
 
 
-
-#   Include the dll files in the build folder
-
-set(DLL_FILES_LOC
-        lib/assimp/bin/libassimp-5.dll
-        lib/glew/bin/glew32.dll
-        lib/glfw/bin/glfw3.dll
-        lib/spdlog/bin/libspdlog.dll
-)
-
-foreach (file ${DLL_FILES_LOC})
-    file(COPY ${file} DESTINATION ${CMAKE_BINARY_DIR})
-endforeach ()
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
     message(debug_mode)
@@ -132,78 +140,61 @@ add_library("imgui" STATIC ${IMGUI_GLOB})
 target_include_directories("imgui" PUBLIC ${IMGUI_PATH})
 target_link_libraries("imgui" PRIVATE glfw)
 
-#set(imgui_src
-#        lib/imgui/imconfig.h
-#        lib/imgui/imgui.cpp
-#        lib/imgui/imgui.h
-#        lib/imgui/imgui_demo.cpp
-#        lib/imgui/imgui_draw.cpp
-#        lib/imgui/imgui_internal.h
-#        lib/imgui/imgui_tables.cpp
-#        lib/imgui/imgui_widgets.cpp
-#        lib/imgui/imstb_rectpack.h
-#        lib/imgui/imstb_textedit.h
-#        lib/imgui/imstb_truetype.h
-#        lib/imgui/misc/cpp/imgui_stdlib.cpp
-#        lib/imgui/misc/cpp/imgui_stdlib.h
-#        lib/imgui/backends/imgui_impl_opengl3.cpp
-#        lib/imgui/backends/imgui_impl_opengl3.h
-#        lib/imgui/backends/imgui_impl_glfw.cpp
-#        lib/imgui/backends/imgui_impl_glfw.h
-#)
-
 
 set(src_headers
-        src/Game/Graphics/GE.h
-        src/Game/Graphics/components/Shaders/Shader.h
-        src/Game/misc/InternalLogger.h
-        src/Game/Graphics/components/VBO/VBO.h
-        src/Game/Graphics/components/EBO/EBO.h
-        src/Game/Graphics/components/VAO/VAO.h
+        src/Engine/Graphics/GE.h
+        src/Engine/Graphics/components/Shaders/Shader.h
+        src/Engine/misc/InternalLogger.h
+        src/Engine/Graphics/components/VBO/VBO.h
+        src/Engine/Graphics/components/EBO/EBO.h
+        src/Engine/Graphics/components/VAO/VAO.h
         src/properties/MessageBoard.h
-        src/Game/Graphics/UniformVarManager.h
-        src/Game/NodeSystem/Nodes/BaseNode.h
-        src/Game/NodeSystem/Nodes/Node_Model3D.h
-        src/Game/Graphics/components/Model/MeshPrerequesite.h
-        src/Game/Graphics/components/Model/Model.h
-        src/Game/Graphics/components/Model/Mesh.h
+        src/Engine/Graphics/UniformVarManager.h
+        src/Engine/NodeSystem/Nodes/BaseNode.h
+        src/Engine/NodeSystem/Nodes/Node_Model3D.h
+        src/Engine/Graphics/components/Model/MeshPrerequesite.h
+        src/Engine/Graphics/components/Model/Model.h
+        src/Engine/Graphics/components/Model/Mesh.h
         lib/stb/stb_image.h
-        src/Game/Graphics/components/FBO/FBO.h
-        src/Game/Graphics/components/camera/Camera.h
-        src/Game/Graphics/components/RBO/RBO.h
-        src/Game/Graphics/components/Texture/Texture.h
-        src/Game/Graphics/modules/GUIBaseClass.h
+        src/Engine/Graphics/components/FBO/FBO.h
+        src/Engine/Graphics/components/camera/Camera.h
+        src/Engine/Graphics/components/RBO/RBO.h
+        src/Engine/Graphics/components/Texture/Texture.h
+        src/Engine/Graphics/modules/GUIBaseClass.h
         src/properties/MessageBoardConversion.h
-        src/Game/NodeSystem/Nodes/Node_Object.h
-        src/Game/NodeSystem/Nodes/Node_Mesh.h
+        src/Engine/NodeSystem/Nodes/Node_Object.h
+        src/Engine/NodeSystem/Nodes/Node_Mesh.h
 )
-
-#foreach (header_file ${src_headers})
-#    file(COPY ${header_file} DESTINATION include/)
-#endforeach ()
 
 set(src
-        src/Game/Graphics/GE.cpp
-        src/Game/Graphics/components/Shaders/Shader.cpp
-        src/Game/misc/InternalLogger.cpp
-        src/Game/Graphics/components/VBO/VBO.cpp
-        src/Game/Graphics/components/EBO/EBO.cpp
-        src/Game/Graphics/components/VAO/VAO.cpp
+        src/Engine/Graphics/GE.cpp
+        src/Engine/Graphics/components/Shaders/Shader.cpp
+        src/Engine/misc/InternalLogger.cpp
+        src/Engine/Graphics/components/VBO/VBO.cpp
+        src/Engine/Graphics/components/EBO/EBO.cpp
+        src/Engine/Graphics/components/VAO/VAO.cpp
         src/properties/MessageBoard.cpp
-        src/Game/Graphics/UniformVarManager.cpp
-        src/Game/NodeSystem/Nodes/Node_Model3D.cpp
-        src/Game/Graphics/components/Model/Model.cpp
-        src/Game/Graphics/components/Model/Mesh.cpp
-        src/Game/Graphics/components/FBO/FBO.cpp
-        src/Game/Graphics/components/camera/Camera.cpp
-        src/Game/Graphics/components/RBO/RBO.cpp
-        src/Game/Graphics/components/Texture/Texture.cpp
+        src/Engine/Graphics/UniformVarManager.cpp
+        src/Engine/NodeSystem/Nodes/Node_Model3D.cpp
+        src/Engine/Graphics/components/Model/Model.cpp
+        src/Engine/Graphics/components/Model/Mesh.cpp
+        src/Engine/Graphics/components/FBO/FBO.cpp
+        src/Engine/Graphics/components/camera/Camera.cpp
+        src/Engine/Graphics/components/RBO/RBO.cpp
+        src/Engine/Graphics/components/Texture/Texture.cpp
         src/generators/SplineGenerator3D.cpp
-        src/Game/NodeSystem/Nodes/Node_Object.cpp
-        src/Game/NodeSystem/Nodes/Node_Mesh.cpp
+        src/Engine/NodeSystem/Nodes/Node_Object.cpp
+        src/Engine/NodeSystem/Nodes/Node_Mesh.cpp
+        src/PluginManager/PluginInterface.h
+        src/PluginManager/PluginManager.cpp
+        src/PluginManager/PluginManager.h
 )
 
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+if(${BUILD_SAMPLE_PLUGIN})
+    message("Building sample library")
+    add_subdirectory(src/PluginManager/SamplePlugin)
+endif ()
+
 find_package(OpenGL REQUIRED)
 if(NOT OPENGL_FOUND)
     message(ERROR " OPENGL not found!")
@@ -213,7 +204,6 @@ if(${SHARED_LIB})
     add_library(${PROJECT_NAME} SHARED
             ${src}
             ${src_headers}
-#            ${imgui_src}
     )
     target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_INSTALL_PREFIX}/include)
     target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_INSTALL_PREFIX}/bin/libMEP.dll)
@@ -237,30 +227,33 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
     # Code specific to Linux
 
     target_link_libraries(${PROJECT_NAME} PRIVATE
-            glfw glew glm spdlog assimp assimp z
+            GL glfw GLEW glm spdlog::spdlog ${DL_LIBRARY}
             # Add more static libraries as needed
     )
+
+    target_link_libraries(${PROJECT_NAME} PUBLIC imgui)
+    target_include_directories(${PROJECT_NAME} PUBLIC imgui)
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
     # Code specific to Windows
     message(STATUS ${LIBS})
     # set(CMAKE_EXE_LINKER_FLAGS "-static")
     target_link_libraries(${PROJECT_NAME} PRIVATE -static
-            gcc
+#            gcc
             glm
-            z
+#            z
     )
 
     target_link_libraries(${PROJECT_NAME} PRIVATE
-            assimp
+#            assimp
             glfw
-            glew
-            spdlog $<$<BOOL:${MINGW}>:ws2_32>
-            ${OPENGL_gl_LIBRARY})
+            GLEW::glew
+            spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>
+            ${OPENGL_gl_LIBRARY}
+    )
 
     target_link_libraries(${PROJECT_NAME} PUBLIC imgui)
     target_include_directories(${PROJECT_NAME} PUBLIC imgui)
-
 else()
     message(FATAL_ERROR "Unsupported operating system: ${CMAKE_SYSTEM_NAME}")
 endif()

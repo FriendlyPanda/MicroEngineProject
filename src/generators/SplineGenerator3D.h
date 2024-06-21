@@ -5,7 +5,7 @@
 #ifndef MEP_SPLINEGENERATOR3D_H
 #define MEP_SPLINEGENERATOR3D_H
 
-#include "../Game/Graphics/components/Model/Mesh.h"
+#include "../Engine//Graphics/components/Model/Mesh.h"
 
 
 class SplineGenerator3D {

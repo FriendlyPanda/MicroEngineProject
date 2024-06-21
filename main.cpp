@@ -1,12 +1,17 @@
 
 
 #include <fstream>
-#include "src/Game/Graphics/GE.h"
+#include "src/Engine/Graphics/GE.h"
 #include "src/generators/SplineGenerator3D.h"
+#include "src/PluginManager/PluginManager.h"
 
 using namespace glm;
 
 int main(int argc, char * args[]) {
+    PluginManager pluginManager;
+
+    pluginManager.loadPlugin("Assets/Plugins/libSamplePlugin.dll");
+
 	GLFWwindow * mainWindow = nullptr;
 	FBO fbo = FBO();
 	MessageBoard config = MessageBoard("Assets/properties/config.properties");
