@@ -7,6 +7,7 @@ set(src
         SafeConversionTest.cpp
         ../src/properties/MessageBoard.cpp
         ../src/properties/MessageBoard.h
+        ../src/properties/MessageBoardConversion.h
 
 )
 
