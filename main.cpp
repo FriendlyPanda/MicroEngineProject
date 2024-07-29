@@ -8,13 +8,23 @@
 using namespace glm;
 
 int main(int argc, char * args[]) {
+
     PluginManager pluginManager;
 
-    pluginManager.loadPlugin("Assets/Plugins/libSamplePlugin.dll");
+    pluginManager.loadPlugin("libSamplePlugin.so");
+    auto samplePlugin = pluginManager.getPlugin("SamplePlugin");
+    std::cout << samplePlugin->get_name_() << std::endl;
+    samplePlugin->setData("sampleKey", 10);
+    samplePlugin = nullptr;
+    pluginManager.unloadPlugins();
+
+
 
 	GLFWwindow * mainWindow = nullptr;
 	FBO fbo = FBO();
 	MessageBoard config = MessageBoard("Assets/properties/config.properties");
+    config.update("window.enable_vsync", "0");
+    config.save();
 
     double deltaTime = 0.0f;
 

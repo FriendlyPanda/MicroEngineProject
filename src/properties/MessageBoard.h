@@ -45,7 +45,7 @@ public:
 	 * @param key the key of the message
 	 * @param newMessage new value of the message
 	 */
-	void update(std::string key, std::string newMessage);
+	void update(const std::string& key, std::string newMessage);
 
 	/**
 	 * Save the config back to the
@@ -62,7 +62,6 @@ public:
 private:
 	/** all of the messages are paired with a key and saved as a map */
 	std::pmr::unordered_map<std::string, std::string> messages;
-
 	std::string pathToMessages;
 
 	/**

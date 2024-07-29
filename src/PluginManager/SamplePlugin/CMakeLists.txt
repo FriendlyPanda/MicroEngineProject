@@ -9,6 +9,7 @@ project(
 set(src
         PluginInterface.h
         SamplePlugin.cpp
+        SamplePlugin.h
 )
 
 message("Generating Sample Plugin 2")

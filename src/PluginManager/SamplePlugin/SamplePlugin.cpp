@@ -1,56 +1,50 @@
 //
 // Created by janha on 15/06/2024.
 //
-#include "PluginInterface.h"
+#include "SamplePlugin.h"
 #include <iostream>
 
-class SamplePlugin : public PluginInterface {
-public:
+extern "C" SamplePlugin* createPlugin(){
+    return new SamplePlugin;
+}
 
-    PluginInterface* createPlugin(){
-        return this;
-    };
+extern "C" void destroyPlugin(SamplePlugin* object){
+    delete object;
+}
 
-    void destroyPlugin(PluginInterface* plugin){
-        if(plugin == this){
-            shutdown_();
-        }
-    };
+void SamplePlugin::init_() {
+    plugin_error = PLUGIN_OK;
+    plugin_step_mode = PLUGIN_SYNC;
+    std::cout << "plugin init" << std::endl;
+}
 
-    void init_() override{
-        plugin_error = PLUGIN_OK;
-        plugin_step_mode = PLUGIN_SYNC;
-        std::cout << "plugin init" << std::endl;
-    }
-    void shutdown_() override{
-        std::cout << "plugin shutdown" << std::endl;
-    }
-    void step_(double delta_time) override{
-        std::cout << "plugin " << steps << " step" << std::endl;
-    }
-    int get_error_() override{
-        std::cout << "plugin get error" << std::endl;
-        return plugin_error;
-    }
-    const char* get_error_message_() override{
-        std::cout << "plugin get error message" << std::endl;
-    }
-     const char* get_name_() override{
-         std::cout << "plugin get name" << std::endl;
-         return "SamplePlugin";
-    }
+void SamplePlugin::shutdown_() {
+    std::cout << "plugin shutdown" << std::endl;
+}
+void SamplePlugin::step_(double delta_time) {
+    std::cout << "plugin " << steps << " step" << std::endl;
+}
+int SamplePlugin::get_error_() {
+    std::cout << "plugin get error" << std::endl;
+    return plugin_error;
+}
+const char* SamplePlugin::get_error_message_() {
+    std::cout << "plugin get error message" << std::endl;
+    return "Sample error";
+}
 
-    // data exchange
-    bool setData(const std::string& key, const std::any& data) override{
-        std::cout << "plugin set data: " << data.type().name() << " at key: " << key << std::endl;
-        return true;
-    }
-    [[nodiscard]] std::any getData(const std::string& key) const override{
-        std::cout << "plugin get data at key: " << key << std::endl;
-        return nullptr;
-    }
+ const char* SamplePlugin::get_name_() {
+     std::cout << "plugin get name" << std::endl;
+     return PLUGIN_NAME;
+}
 
+// data exchange
+bool SamplePlugin::setData(const std::string& key, const std::any& data){
+    std::cout << "plugin set data: " << data.type().name() << " at key: " << key << std::endl;
+    return true;
+}
 
-private:
-    int steps = 0;
-};
+std::any SamplePlugin::getData(const std::string& key) const{
+    std::cout << "plugin get data at key: " << key << std::endl;
+    return nullptr;
+}

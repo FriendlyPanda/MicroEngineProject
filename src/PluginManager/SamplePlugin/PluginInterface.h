@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <any>
+#include <cstring>
 
 // plugin state
 #define PLUGIN_OK                       0
@@ -21,7 +22,7 @@
 
 class PluginInterface{
 public:
-    virtual ~PluginInterface() {}
+    virtual ~PluginInterface() = default;
     virtual void init_() = 0;
     virtual void shutdown_() = 0;
     virtual void step_(double delta_time) = 0;
@@ -37,7 +38,9 @@ public:
     int plugin_step_mode;
 };
 
-extern "C" PluginInterface* createPlugin();
-extern "C" void destroyPlugin(PluginInterface* plugin);
+//extern "C" PluginInterface* createPlugin();
+//extern "C" void destroyPlugin(PluginInterface* plugin);
+
+
 
 #endif //MEP_PLUGININTERFACE_H

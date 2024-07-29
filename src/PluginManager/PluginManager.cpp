@@ -11,10 +11,13 @@
 #include <dlfcn.h>
 #endif
 
-bool PluginManager::loadPlugin(const std::string &path) {
+bool PluginManager::loadPlugin(const std::string &pluginName) {
+    const std::string path = "Assets/Plugins/" + pluginName;
     PluginHandle pluginHandle;
 
 #ifdef _WIN32
+    //TODO: Add the create and destroy plugin checks for windows release
+
     pluginHandle.handle = LoadLibrary(path.c_str());
     if(!pluginHandle.handle){
         std::cerr << "Failed to load plugins: " << path << std::endl;
@@ -27,31 +30,44 @@ bool PluginManager::loadPlugin(const std::string &path) {
             GetProcAddress(pluginHandle.handle, "destroyPlugin"));
 #else
     pluginHandle.handle = dlopen(path.c_str(), RTLD_LAZY);
-    if(!pluginHandle.handle){
+    if (!pluginHandle.handle) {
         std::cerr << "Failed to load plugin: " << dlerror() << std::endl;
         return false;
     }
 
-    auto createPlugin = reinterpret_cast<PluginInterface*(*)()>(
+    dlerror();
+
+    auto createPlugin = (PluginInterface *(*)())(
             dlsym(pluginHandle.handle, "createPlugin"));
-    auto destroyPlugin = reinterpret_cast<void(*)(PluginInterface*)>(
-            dlsym(pluginHandle.handle, "destroyPlugin"));
-
-#endif
-
-    if(!createPlugin || !destroyPlugin) {
-        std::cerr << "Failed to find plugin functions: " << path << std::endl;
-#ifdef _WIN32
-        FreeLibrary(pluginHandle.handle);
-#else
+    if (!createPlugin) {
+        std::cerr << "Failed to find plugin functions: " << dlerror() << std::endl;
         dlclose(pluginHandle.handle);
-#endif
         return false;
     }
 
-    pluginHandle.instance.reset(createPlugin());
-    plugins.push_back(std::move(pluginHandle));
-    return true;
+    auto destroyPlugin = (void (*)(PluginInterface *))(dlsym(pluginHandle.handle, "destroyPlugin"));
+    if (!destroyPlugin) {
+        std::cerr << "Failed to find plugin functions: " << dlerror() << std::endl;
+        dlclose(pluginHandle.handle);
+        return false;
+    }
+
+#endif
+
+    //TODO: Remove this section due to lack of error info return
+//    if(!createPlugin || !destroyPlugin) {
+//        std::cerr << "Failed to find plugin functions: " << path << ": " << dlerror() << std::endl;
+//#ifdef _WIN32
+//        FreeLibrary(pluginHandle.handle);
+//#else
+//        dlclose(pluginHandle.handle);
+//#endif
+//        return false;
+//    }
+
+            pluginHandle.instance.reset(createPlugin());
+            plugins.push_back(std::move(pluginHandle));
+            return true;
 }
 
 void PluginManager::unloadPlugins() {

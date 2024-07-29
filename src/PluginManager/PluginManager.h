@@ -20,12 +20,34 @@
 
 class PluginManager {
 public:
-    bool loadPlugin(const std::string& path);
+    /**
+     * Load a specific plugin by filename
+     * @param pluginName the name of the plugin with the .so/.dll extension
+     * @return the success of loading the plugin
+     */
+    bool loadPlugin(const std::string& pluginName);
+
+    /**
+     * unload all plugins previously loaded, the plugin manager is not unloaded
+     */
     void unloadPlugins();
 
+    /**
+     * Scan the default plugin location (Assets\\Plugins\\*.so/.dll) for plugins and load them depending on the operating system will load .so for linux and .dll for windows
+     */
+    void scanForPlugins();
+
+    /**
+     * returns the pointer to a plugin to be used in the code, the plugin needs a specified name for this to work
+     * @param name name of the plugin/library
+     * @return the pluginInterface pointer
+     */
     PluginInterface* getPlugin(const std::string& name) const;
 
 private:
+    /**
+     * plugin handler and instance struct
+     */
     struct PluginHandle{
 #ifdef _WIN32
         HMODULE handle;
@@ -36,6 +58,9 @@ private:
         std::unique_ptr<PluginInterface> instance;
     };
 
+    /**
+     * the plugins used successfully loaded
+     */
     std::vector<PluginHandle> plugins;
 
 };

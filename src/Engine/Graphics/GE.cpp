@@ -35,7 +35,6 @@ int GraphicsEngine::init_() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, stringToIntSafe(config->get("window.config.resize").c_str(), 0));
-    std::cout << GL_FALSE << "\n" << GL_TRUE << std::endl;
 
     // create a window using glfw
     window = glfwCreateWindow(windowWidth, windowHeight, "BaseWindow", nullptr, nullptr);
