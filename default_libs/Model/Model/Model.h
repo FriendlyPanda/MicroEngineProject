@@ -6,10 +6,10 @@
 #ifndef MEP_MODEL_H
 #define MEP_MODEL_H
 #define STB_IMAGE_IMPLEMENTATION
-#include "MeshPrerequesite.h"
-#include "../Shaders/Shader.h"
+#include "../Mesh/MeshPrerequesite.h"
+#include "Shaders/Shader.h"
 #include <vector>
-#include "Mesh.h"
+#include "../Mesh/Mesh.h"
 
 //#include <assimp/Importer.hpp>
 //#include <assimp/scene.h>

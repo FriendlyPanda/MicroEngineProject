@@ -5,9 +5,9 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 set(src
         MessageBoardTest.cpp
         SafeConversionTest.cpp
-        ../src/properties/MessageBoard.cpp
-        ../src/properties/MessageBoard.h
-        ../src/properties/MessageBoardConversion.h
+        ../default_libs/MessageBoard/MesageBoard/MessageBoard.cpp
+        ../default_libs/MessageBoard/MesageBoard/MessageBoard.h
+        ../default_libs/MessageBoard/MesageBoard/MessageBoardConversion.h
 
 )
 

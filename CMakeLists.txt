@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 option(SHARED_LIB "build the project as a shared library" OFF)
 option(BUILD_SAMPLE_PLUGIN "Build Sample Plugin" ON)
+option(BUILD_DEFAULT_PLUGINS "Build Default Plugins bundled with the MEP" ON)
 
 project(
         "MEP"
@@ -15,6 +16,11 @@ project(
         LANGUAGES CXX)
 
 add_subdirectory(lib/glm)
+add_subdirectory(default_libs/MessageBoard)
+add_subdirectory(default_libs/Shader)
+add_subdirectory(default_libs/Model)
+add_subdirectory(default_libs/PluginManager)
+
 message(STATUS ${CMAKE_SYSTEM_NAME})
 message(${CMAKE_SOURCE_DIR})
 
@@ -143,56 +149,59 @@ target_link_libraries("imgui" PRIVATE glfw)
 
 set(src_headers
         src/Engine/Graphics/GE.h
-        src/Engine/Graphics/components/Shaders/Shader.h
-        src/Engine/misc/InternalLogger.h
+        default_libs/MessageBoard/InternalLogger/InternalLogger.h
         src/Engine/Graphics/components/VBO/VBO.h
         src/Engine/Graphics/components/EBO/EBO.h
         src/Engine/Graphics/components/VAO/VAO.h
-        src/properties/MessageBoard.h
-        src/Engine/Graphics/UniformVarManager.h
         src/Engine/NodeSystem/Nodes/BaseNode.h
         src/Engine/NodeSystem/Nodes/Node_Model3D.h
-        src/Engine/Graphics/components/Model/MeshPrerequesite.h
-        src/Engine/Graphics/components/Model/Model.h
-        src/Engine/Graphics/components/Model/Mesh.h
-        lib/stb/stb_image.h
+        default_libs/Model/Mesh/MeshPrerequesite.h
+        default_libs/Model/Model/Model.h
+        default_libs/Model/Mesh/Mesh.h
+        default_libs/Model/Model/stb/stb_image.h
         src/Engine/Graphics/components/FBO/FBO.h
         src/Engine/Graphics/components/camera/Camera.h
         src/Engine/Graphics/components/RBO/RBO.h
         src/Engine/Graphics/components/Texture/Texture.h
         src/Engine/Graphics/modules/GUIBaseClass.h
-        src/properties/MessageBoardConversion.h
         src/Engine/NodeSystem/Nodes/Node_Object.h
         src/Engine/NodeSystem/Nodes/Node_Mesh.h
 )
 
 set(src
         src/Engine/Graphics/GE.cpp
-        src/Engine/Graphics/components/Shaders/Shader.cpp
-        src/Engine/misc/InternalLogger.cpp
+        default_libs/MessageBoard/InternalLogger/InternalLogger.cpp
         src/Engine/Graphics/components/VBO/VBO.cpp
         src/Engine/Graphics/components/EBO/EBO.cpp
         src/Engine/Graphics/components/VAO/VAO.cpp
-        src/properties/MessageBoard.cpp
-        src/Engine/Graphics/UniformVarManager.cpp
         src/Engine/NodeSystem/Nodes/Node_Model3D.cpp
-        src/Engine/Graphics/components/Model/Model.cpp
-        src/Engine/Graphics/components/Model/Mesh.cpp
+        default_libs/Model/Model/Model.cpp
+        default_libs/Model/Mesh/Mesh.cpp
         src/Engine/Graphics/components/FBO/FBO.cpp
         src/Engine/Graphics/components/camera/Camera.cpp
         src/Engine/Graphics/components/RBO/RBO.cpp
         src/Engine/Graphics/components/Texture/Texture.cpp
-        src/generators/SplineGenerator3D.cpp
+        default_plugins/SplineGen3D/SplineGen3D/SplineGenerator3D.cpp
         src/Engine/NodeSystem/Nodes/Node_Object.cpp
         src/Engine/NodeSystem/Nodes/Node_Mesh.cpp
-        src/PluginManager/PluginInterface.h
-        src/PluginManager/PluginManager.cpp
-        src/PluginManager/PluginManager.h
+        default_libs/PluginManager/PluginManager/PluginInterface.h
+        default_libs/PluginManager/PluginManager/PluginManager.cpp
+        default_libs/PluginManager/PluginManager/PluginManager.h
 )
 
 if(${BUILD_SAMPLE_PLUGIN})
     message("Building sample library")
     add_subdirectory(src/PluginManager/SamplePlugin)
+    set_target_properties(SamplePlugin PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Assets/Plugins
+    )
+endif ()
+
+if(${BUILD_DEFAULT_PLUGINS})
+    add_subdirectory(default_plugins/SplineGen3D)
+    set_target_properties(SplineGen3D PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Assets/Plugins
+    )
 endif ()
 
 find_package(OpenGL REQUIRED)
@@ -218,6 +227,21 @@ else ()
 #            ${imgui_src}
     )
 endif ()
+
+
+target_link_libraries(${PROJECT_NAME} PRIVATE MessageBoard Shader Model3D PluginManager)
+set_target_properties(MessageBoard PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
+set_target_properties(Shader PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
+set_target_properties(Model3D PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
+set_target_properties(PluginManager PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${OPENGL_INCLUDE_DIR})
 

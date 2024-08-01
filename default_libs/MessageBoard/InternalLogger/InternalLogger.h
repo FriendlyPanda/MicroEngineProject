@@ -5,7 +5,7 @@
 #ifndef MEP_INTERNALLOGGER_H
 #define MEP_INTERNALLOGGER_H
 
-#include "../../properties/MessageBoard.h"
+#include "../MesageBoard//MessageBoard.h"
 #include "spdlog/spdlog.h"
 
 class InternalLogger {

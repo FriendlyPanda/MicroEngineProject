@@ -7,7 +7,7 @@
 
 
 #include "BaseNode.h"
-#include "../../Graphics/components/Model/Mesh.h"
+#include "../../../../default_libs/Model/Mesh/Mesh.h"
 
 class Node_Mesh : public Node{
 private:

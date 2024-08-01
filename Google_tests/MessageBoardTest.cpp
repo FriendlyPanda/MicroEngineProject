@@ -2,7 +2,7 @@
 // Created by janha on 09/03/2024.
 //
 #include "gtest/gtest.h"
-#include "../src/properties/MessageBoard.h"
+#include "../default_libs/MessageBoard/MesageBoard/MessageBoard.h"
 
 TEST(MessageBoardTestSuite, TestMessage){
     auto * msgs = new MessageBoard(R"(E:\DEV\C\MicroEngineProject\Assets\properties\messages_en.properties)");

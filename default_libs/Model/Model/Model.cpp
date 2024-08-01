@@ -5,8 +5,6 @@
 #include "Model.h"
 #include "stb/stb_image.h"
 
-
-
 unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma)
 {
 

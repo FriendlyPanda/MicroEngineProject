@@ -5,14 +5,25 @@
 #ifndef MEP_SPLINEGENERATOR3D_H
 #define MEP_SPLINEGENERATOR3D_H
 
-#include "../Engine//Graphics/components/Model/Mesh.h"
+#include "Mesh/Mesh.h"
+#include "PluginManager/PluginInterface.h"
+
+#define PLUGIN_NAME "SplineGen3D"
 
 
-class SplineGenerator3D {
+class SplineGenerator3D : public PluginInterface{
 public:
-
-
     SplineGenerator3D(const glm::vec3 &pointA, const glm::vec3 &pointB, const glm::vec3 &pointC, const glm::vec3 &pointD, int resolution);
+
+    void init_(const std::vector<std::any> &data) override;
+
+    std::vector<std::any> step_(const std::vector<std::any> &data) override;
+
+    const char *get_name_() override;
+
+
+private:
+
 
     glm::vec3 CalculateBezierPoint(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
     void computeBezierCurvePointsAndNormals(int resolution);
@@ -20,9 +31,10 @@ public:
 
     void generateBezierCurve(int resolution, float width);
 
-    void draw(Shader shader);
+    void draw(Shader * shader);
 
     Mesh * getMesh();
+
 
 private:
     glm::vec3 pointA;
@@ -40,6 +52,10 @@ private:
 
     glm::vec3 Tangent(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, float t);
     glm::vec3 Normal(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, float t, int list_pos);
+
+
+
+private:
 
     Mesh * mesh = nullptr;
 };

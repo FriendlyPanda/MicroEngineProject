@@ -7,7 +7,7 @@
 
 
 #include "BaseNode.h"
-#include "../../Graphics/components/Model/Model.h"
+#include "../../../../default_libs/Model/Model/Model.h"
 
 class Node_Model3D : Node {
 private:

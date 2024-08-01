@@ -7,7 +7,7 @@
 #define MEP_MESH_H
 
 #include "MeshPrerequesite.h"
-#include "../Shaders/Shader.h"
+#include "Shaders/Shader.h"
 #include <vector>
 
 class Mesh {
@@ -32,7 +32,7 @@ public:
      *
      * @param shader The shader program to use for rendering.
      */
-    void Draw(Shader &shader);
+    void Draw(Shader * shader);
 private:
     GLuint VBO, EBO;
     /**

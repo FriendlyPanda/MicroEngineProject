@@ -5,7 +5,7 @@
 #include <iostream>
 #include <utility>
 #include "GE.h"
-#include "../../properties/MessageBoardConversion.h"
+#include "MesageBoard/MessageBoardConversion.h"
 
 GraphicsEngine::GraphicsEngine(FBO * fbo_ptr, MessageBoard * config_ptr, double * deltaTime) {
     this->config = config_ptr;

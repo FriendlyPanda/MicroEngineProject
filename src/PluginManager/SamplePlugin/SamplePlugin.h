@@ -5,7 +5,7 @@
 #ifndef MEP_SAMPLEPLUGIN_H
 #define MEP_SAMPLEPLUGIN_H
 
-#include "PluginInterface.h"
+#include "PluginManager/PluginInterface.h"
 #include "iostream"
 
 #define PLUGIN_NAME "SamplePlugin"

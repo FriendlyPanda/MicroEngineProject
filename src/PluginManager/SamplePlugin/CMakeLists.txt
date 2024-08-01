@@ -7,9 +7,7 @@ project(
         LANGUAGES CXX)
 
 set(src
-        PluginInterface.h
         SamplePlugin.cpp
-        SamplePlugin.h
 )
 
 message("Generating Sample Plugin 2")
@@ -22,6 +20,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
+target_link_libraries(${PROJECT_NAME} PRIVATE PluginManager)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_INSTALL_PREFIX}/Sample/bin/SamplePlugin.dll)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION Sample/bin)

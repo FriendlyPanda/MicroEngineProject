@@ -7,8 +7,8 @@
 #define MEP_SHADER_H
 
 #include <string>
-#include "../../../misc/InternalLogger.h"
-#include "../../UniformVarManager.h"
+#include "InternalLogger/InternalLogger.h"
+#include "UVM//UniformVarManager.h"
 #include "GL/glew.h"
 #include "glm/glm.hpp"
 

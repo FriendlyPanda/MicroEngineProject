@@ -2,8 +2,8 @@
 
 #include <fstream>
 #include "src/Engine/Graphics/GE.h"
-#include "src/generators/SplineGenerator3D.h"
-#include "src/PluginManager/PluginManager.h"
+#include "default_plugins/SplineGen3D/SplineGen3D/SplineGenerator3D.h"
+#include "PluginManager/PluginManager.h"
 
 using namespace glm;
 
@@ -11,10 +11,10 @@ int main(int argc, char * args[]) {
 
     PluginManager pluginManager;
 
-    pluginManager.loadPlugin("libSamplePlugin.so");
-    auto samplePlugin = pluginManager.getPlugin("SamplePlugin");
+    pluginManager.loadPlugin("libSplineGen3D.so");
+    auto samplePlugin = pluginManager.getPlugin("SplineGen3D");
     std::cout << samplePlugin->get_name_() << std::endl;
-    samplePlugin->setData("sampleKey", 10);
+    samplePlugin->setData("sampleKey", {10});
     samplePlugin = nullptr;
     pluginManager.unloadPlugins();
 

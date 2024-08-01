@@ -2,7 +2,7 @@
 // Created by janha on 14/03/2024.
 //
 #include "gtest/gtest.h"
-#include "../src/properties/MessageBoardConversion.h"
+#include "../default_libs/MessageBoard/MesageBoard/MessageBoardConversion.h"
 
 TEST(SafeConversionInt, CorrectStringToIntegerTest){
     std::string str = "2002";

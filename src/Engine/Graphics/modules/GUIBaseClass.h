@@ -11,7 +11,7 @@
 #include "imgui/imgui.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 #include "../components/FBO/FBO.h"
-#include "../../misc/InternalLogger.h"
+#include "InternalLogger/InternalLogger.h"
 
 
 class GUIBaseClass {

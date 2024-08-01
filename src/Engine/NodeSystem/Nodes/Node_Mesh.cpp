@@ -11,5 +11,5 @@ void Node_Mesh::setMesh3D(Mesh * newMesh) {
 }
 
 void Node_Mesh::draw(Shader *shader) {
-    this->mesh3D->Draw(*shader);
+    //this->mesh3D->Draw(*shader);
 }

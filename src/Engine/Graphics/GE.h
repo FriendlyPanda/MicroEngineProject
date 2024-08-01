@@ -29,12 +29,11 @@
 #include "GL/glew.h"
 #include <GLFW/glfw3.h>
 
-
-#include "../misc/InternalLogger.h"
+#include "InternalLogger/InternalLogger.h"
 #include "components/EBO/EBO.h"
 #include "components/FBO/FBO.h"
-#include "components/Model/Model.h"
-#include "components/Shaders/Shader.h"
+#include "Model/Model.h"
+#include "Shaders/Shader.h"
 #include "components/VAO/VAO.h"
 #include "components/VBO/VBO.h"
 #include "components/camera/Camera.h"

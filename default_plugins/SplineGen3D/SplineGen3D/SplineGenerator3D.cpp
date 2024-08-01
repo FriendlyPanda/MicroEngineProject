@@ -130,10 +130,31 @@ void SplineGenerator3D::generateBezierCurve(int resolution ,float width) {
     generateMesh(width);
 }
 
-void SplineGenerator3D::draw(Shader shader) {
+void SplineGenerator3D::draw(Shader * shader) {
     mesh->Draw(shader);
 }
 
 Mesh *SplineGenerator3D::getMesh() {
     return mesh;
+}
+
+void SplineGenerator3D::init_(const std::vector<std::any> &data) {
+    pointA = std::any_cast<glm::vec3>(data[0]);         //point A
+    pointB = std::any_cast<glm::vec3>(data[1]);         //point B
+    pointC = std::any_cast<glm::vec3>(data[2]);         //point A
+    pointD = std::any_cast<glm::vec3>(data[3]);         //point B
+    auto resolution= std::any_cast<int>(data[4]);   //resolution
+    SplineGenerator3D(pointA, pointB, pointC, pointD, resolution);
+}
+
+std::vector<std::any> SplineGenerator3D::step_(const std::vector<std::any> &data) {
+    return std::vector<std::any>();
+}
+
+const char *SplineGenerator3D::get_name_() {
+    return PLUGIN_NAME;
+}
+
+SplineGenerator3D::~SplineGenerator3D() {
+
 }
