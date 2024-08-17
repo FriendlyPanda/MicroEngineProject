@@ -17,4 +17,9 @@ add_library(${PROJECT_NAME} SHARED
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::glew glm spdlog::spdlog)
+endif()
+
+# windows requires that you include all the libraries used in the previous libs
 target_link_libraries(${PROJECT_NAME} PRIVATE MessageBoard Shader)

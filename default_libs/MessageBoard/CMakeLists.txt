@@ -15,4 +15,8 @@ add_library(${PROJECT_NAME} SHARED
         ${src}
 )
 
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog)
+endif()
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -48,7 +48,7 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, boo
 
 void Model::Draw(Shader &shader) {
     for(auto & mesh : meshes)
-        mesh.Draw(shader);
+        mesh.Draw(&shader);
 }
 
 //void Model::loadModel(std::string path)

@@ -144,7 +144,6 @@ void SplineGenerator3D::init_(const std::vector<std::any> &data) {
     pointC = std::any_cast<glm::vec3>(data[2]);         //point A
     pointD = std::any_cast<glm::vec3>(data[3]);         //point B
     auto resolution= std::any_cast<int>(data[4]);   //resolution
-    SplineGenerator3D(pointA, pointB, pointC, pointD, resolution);
 }
 
 std::vector<std::any> SplineGenerator3D::step_(const std::vector<std::any> &data) {
@@ -153,8 +152,4 @@ std::vector<std::any> SplineGenerator3D::step_(const std::vector<std::any> &data
 
 const char *SplineGenerator3D::get_name_() {
     return PLUGIN_NAME;
-}
-
-SplineGenerator3D::~SplineGenerator3D() {
-
 }

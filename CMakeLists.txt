@@ -16,10 +16,7 @@ project(
         LANGUAGES CXX)
 
 add_subdirectory(lib/glm)
-add_subdirectory(default_libs/MessageBoard)
-add_subdirectory(default_libs/Shader)
-add_subdirectory(default_libs/Model)
-add_subdirectory(default_libs/PluginManager)
+
 
 message(STATUS ${CMAKE_SYSTEM_NAME})
 message(${CMAKE_SOURCE_DIR})
@@ -101,6 +98,11 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
 endif ()
+
+add_subdirectory(default_libs/MessageBoard)
+add_subdirectory(default_libs/Shader)
+add_subdirectory(default_libs/Model)
+add_subdirectory(default_libs/PluginManager)
 
 
 
@@ -229,19 +231,7 @@ else ()
 endif ()
 
 
-target_link_libraries(${PROJECT_NAME} PRIVATE MessageBoard Shader Model3D PluginManager)
-set_target_properties(MessageBoard PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-)
-set_target_properties(Shader PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-)
-set_target_properties(Model3D PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-)
-set_target_properties(PluginManager PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-)
+
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${OPENGL_INCLUDE_DIR})
 
@@ -281,6 +271,22 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 else()
     message(FATAL_ERROR "Unsupported operating system: ${CMAKE_SYSTEM_NAME}")
 endif()
+
+target_link_libraries(${PROJECT_NAME} PRIVATE MessageBoard Shader Model3D PluginManager)
+
+target_link_libraries(MessageBoard PRIVATE spdlog::spdlog)
+set_target_properties(MessageBoard PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
+set_target_properties(Shader PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
+set_target_properties(Model3D PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
+set_target_properties(PluginManager PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
 
 
 
